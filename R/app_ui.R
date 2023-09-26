@@ -54,17 +54,28 @@ app_ui <- function(request) {
                     tabsetPanel(
                         tabPanel(
                             title = "Onglet 1",
-                            tags$div(
-                                class = "sub-tabpanel",
-                                tabsetPanel(
-                                    tabPanel(
-                                        title = "Sous-onglet 1"
-                                    ),
-                                    tabPanel(
-                                        title = "Sous-onglet 2"
-                                    )
+                            fluidRow(
+                              column(
+                                width = 7,
+                                mod_carte_ui(
+                                  id = "carte"
                                 )
+                              ),
+                              column(
+                                width = 5
+                              )
                             )
+                            # tags$div(
+                            #     class = "sub-tabpanel",
+                            #     tabsetPanel(
+                            #         tabPanel(
+                            #             title = "Sous-onglet 1"
+                            #         ),
+                            #         tabPanel(
+                            #             title = "Sous-onglet 2"
+                            #         )
+                            #     )
+                            # )
                         ),
                         tabPanel(
                             title = "Onglet 2"
