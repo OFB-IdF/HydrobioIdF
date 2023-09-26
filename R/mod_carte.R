@@ -184,7 +184,8 @@ mod_carte_server <- function(id, limites){
           lat1 = BboxMap[["ymin"]],
           lng2 = BboxMap[["xmax"]],
           lat2 = BboxMap[["ymax"]]
-        )
+        ) %>%
+        leaflet.extras::addResetMapButton()
     )
 
   })
