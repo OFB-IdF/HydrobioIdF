@@ -13,7 +13,7 @@ app_ui <- function(request) {
             div(
                 h1(
                     class = "TitreAppli",
-                    "Titre du tableau de bord"
+                    "Suivis hydrobiologiques en Île-de-France"
                 ),
                 img(
                     src = knitr::image_uri(
@@ -53,7 +53,7 @@ app_ui <- function(request) {
                     width = 9,
                     tabsetPanel(
                         tabPanel(
-                            title = "Onglet 1",
+                            title = "Carte des stations",
                             fluidRow(
                               column(
                                 width = 7,
