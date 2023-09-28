@@ -47,7 +47,33 @@ app_ui <- function(request) {
             sidebarLayout(
                 sidebarPanel = sidebarPanel(
                     width = 3,
-                    h2("Panneau de sélection")
+                    h2("Panneau de sélection"),
+                    mod_selecteur_ui(
+                      id = "departements",
+                      titre = "Départements",
+                      texte = "Tous les départements",
+                      choix = c(
+                        `Essonne` = 91,
+                        `Seine-et-Marne` = 77,
+                        `Val-d'Oise` = 95,
+                        `Yvelines` = 78,
+                        `Paris et Petite Couronne` = "PPC"
+                        ),
+                      choix_multiple = TRUE
+                    ),
+                    mod_selecteur_ui(
+                      id = "eqb",
+                      titre = "Eléments de qualité biologique",
+                      texte = "Tous les éléments de qualité",
+                      choix = c(
+                        "Diatomées", "Macrophytes", "Macroinvertébrés", "Poissons"
+                      ),
+                      choix_multiple = TRUE
+                    ),
+                    mod_checkbox_ui(
+                      id = "regie",
+                      titre = "Suivis en régie"
+                    )
                 ),
                 mainPanel = mainPanel(
                     width = 9,
@@ -114,7 +140,7 @@ golem_add_external_resources <- function(){
         ),
         bundle_resources(
             path = app_sys('app/www'),
-            app_title = 'Titre de l\'appli'
+            app_title = 'Hydrobio IdF'
         )
         # Add here other external resources
         # for example, you can add shinyalert::useShinyalert()
