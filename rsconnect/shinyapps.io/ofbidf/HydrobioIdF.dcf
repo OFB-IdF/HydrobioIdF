@@ -1,0 +1,14 @@
+name: HydrobioIdF
+title: HydrobioIdF
+username:
+account: ofbidf
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 9990696
+bundleId: 7728742
+url: https://ofbidf.shinyapps.io/HydrobioIdF/
+when: 1695724453.89852
+lastSyncTime: 1695724453.89853
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: dev/01_start.R|dev/02_dev.R|dev/03_deploy.R|dev/prep_data_ref.R|dev/run_dev.R

@@ -7,6 +7,7 @@
 #' @noRd
 #'
 #' @importFrom shiny NS tagList
+#' @importFrom leaflet leafletOutput
 mod_carte_ui <- function(id){
   ns <- NS(id)
 
@@ -45,12 +46,8 @@ mod_carte_ui <- function(id){
         selectizeInput(
           inputId = ns("station"),
           label = "",
-          # choices = c(
-          #     "Localiser une station" = "",
-          #     sort(unique(pop_geo$pop_libelle))
-          # ),
           choices = c(
-            "Localiser un point de prélèvement" = ""
+            "Localiser une station" = ""
           ),
           multiple = FALSE
         )
@@ -67,6 +64,12 @@ mod_carte_ui <- function(id){
 #' carte Server Functions
 #'
 #' @noRd
+#' @importFrom dplyr mutate select
+#' @importFrom htmltools HTML
+#' @importFrom leaflet renderLeaflet leaflet addMapPane addTiles WMSTileOptions providerTileOptions addPolygons pathOptions addPolylines addLayersControl layersControlOptions fitBounds
+#' @importFrom leaflet.extras addResetMapButton
+#' @importFrom sf st_bbox
+#' @importFrom dplyr `%>%`
 mod_carte_server <- function(id, limites){
   moduleServer( id, function(input, output, session){
     ns <- session$ns

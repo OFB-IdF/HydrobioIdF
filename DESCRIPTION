@@ -2,18 +2,25 @@ Package: HydrobioIdF
 Title: An Amazing Shiny App
 Version: 0.0.0.9000
 Authors@R: 
-    person(given = "firstname",
-           family = "lastname",
-           role = c("aut", "cre"),
-           email = "your@email.com")
+    person("firstname", "lastname", , "your@email.com", role = c("aut", "cre"))
 Description: What the package does (one paragraph).
 License: What license is it under?
+Depends: 
+    R (>= 2.10)
 Imports: 
     config (>= 0.3.1),
+    dplyr,
     golem (>= 0.4.1),
+    htmltools,
+    hubeau,
+    knitr,
+    leaflet,
+    leaflet.extras,
+    lubridate,
+    pkgload,
+    rmapshaper,
+    sf,
     shiny (>= 1.7.5)
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.1.1
-Depends: 
-    R (>= 2.10)
+RoxygenNote: 7.2.3
