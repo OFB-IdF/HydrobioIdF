@@ -104,7 +104,7 @@ app_ui <- function(request) {
                               ),
                               column(
                                 width = 5,
-                                mod_synthese_station_ui(id = "station")
+                                mod_synthese_station_ui(id = "synthese_station")
                               )
                             )
                         ),
