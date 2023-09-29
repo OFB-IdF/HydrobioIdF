@@ -91,3 +91,23 @@ filtrer_listes <- function(choix_station, choix_eqb) {
   }
 
 }
+
+#' Title
+#'
+#' @param choix_station
+#' @param choix_eqb
+#'
+#' @return
+#' @export
+#'
+#' @examples
+filtrer_resumes <- function(choix_station, choix_eqb) {
+  if(is.null(choix_station)) choix_station <- unique(resumes_listes$code_station_hydrobio)
+  if (is.null(choix_eqb)) choix_eqb <- unique(resumes_listes$code_support)
+
+  resumes_listes %>%
+    dplyr::filter(
+      code_station_hydrobio %in% choix_station,
+      code_support %in% choix_eqb
+      )
+}

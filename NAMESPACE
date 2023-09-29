@@ -2,6 +2,7 @@
 
 export(filtrer_indices)
 export(filtrer_listes)
+export(filtrer_resumes)
 export(filtrer_station)
 export(importer_suivis_regie)
 export(resumer_listes)

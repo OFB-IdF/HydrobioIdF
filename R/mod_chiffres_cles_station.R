@@ -23,15 +23,12 @@ mod_chiffres_cles_station_server <- function(id, choix_station, choix_eqb){
     ns <- session$ns
 
     observe({
-      station <- filtrer_station(choix_station())
-      indices_station <- filtrer_indices(choix_station(), choix_eqb())
-      listes_station <- filtrer_listes(choix_station(), choix_eqb())
-
-      resume_listes <- resumer_listes(listes_station)
+      resume_listes <- filtrer_resumes(choix_station(), choix_eqb()) %>%
+        dplyr::select(-code_station_hydrobio, -code_support)
 
       output$tableau <- renderTable(resume_listes)
       output$titre <- renderText(with(
-        station,
+        filtrer_station(choix_station()),
         paste0('<a href="', uri_station_hydrobio, '" target=”_blank”><b>',
                libelle_station_hydrobio, '</b></a>')
         ))
