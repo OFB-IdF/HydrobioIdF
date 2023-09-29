@@ -66,7 +66,10 @@ app_ui <- function(request) {
                       titre = "Eléments de qualité biologique",
                       texte = "Tous les éléments de qualité",
                       choix = c(
-                        "Diatomées", "Macrophytes", "Macroinvertébrés", "Poissons"
+                        "Diatomées" = 10,
+                        "Macrophytes" = 27,
+                        "Macroinvertébrés" = 13,
+                        "Poissons" = 4
                       ),
                       choix_multiple = TRUE
                     ),
@@ -83,25 +86,27 @@ app_ui <- function(request) {
                             fluidRow(
                               column(
                                 width = 7,
-                                mod_carte_ui(
-                                  id = "carte"
+                                  mod_carte_ui(
+                                  id = "carte",
+                                  hauteur = "500px"
+                                ),
+                                tags$div(
+                                  class = "sub-tabpanel",
+                                  tabsetPanel(
+                                    tabPanel(
+                                      title = "Chroniques"
+                                    ),
+                                    tabPanel(
+                                      title = "Qualité"
+                                    )
+                                  )
                                 )
                               ),
                               column(
-                                width = 5
+                                width = 5,
+                                mod_synthese_station_ui(id = "station")
                               )
                             )
-                            # tags$div(
-                            #     class = "sub-tabpanel",
-                            #     tabsetPanel(
-                            #         tabPanel(
-                            #             title = "Sous-onglet 1"
-                            #         ),
-                            #         tabPanel(
-                            #             title = "Sous-onglet 2"
-                            #         )
-                            #     )
-                            # )
                         ),
                         tabPanel(
                             title = "Onglet 2"
