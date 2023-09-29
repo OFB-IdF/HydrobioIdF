@@ -41,11 +41,13 @@ edl <- sf::st_read("C:/QGIS-CUSTOM/DATA/VECTEUR/surveillance/edl_sn.gpkg") %>%
   ) %>%
   rmapshaper::ms_simplify()
 
+regie <- HydrobioIdF::importer_suivis_regie("dev/Historique prog labo.xlsx")
+
 usethis::use_data(
   limites_region, limites_region_l,
   limites_bassin, limites_bassin_l,
   masque_metropole,
   reseau_hydro,
-  edl,
+  edl, regie,
   internal = TRUE, overwrite = TRUE
   )
