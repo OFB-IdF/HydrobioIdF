@@ -157,16 +157,27 @@ mod_carte_server <- function(id, stations, departements, eqb, suivi_regie){
           weight = 1,
           options = leaflet::pathOptions(pane = "background")
         ) %>%
-        leaflet::addPolylines(
-          data = reseau_hydro,
+        leaflet::addWMSTiles(
+          baseUrl = "https://services.sandre.eaufrance.fr/geo/topage",
+          layers = "CoursEau_FXX",
           group = "Réseau hydrographique",
-          color = "#00B2EE",
-          weight = 1,
-          label = ~TopoOH,
-          popup = NULL,
-          opacity = 1,
-          options = leaflet::pathOptions(pane = "masks")
+          options = leaflet::WMSTileOptions(
+            pane = "masks",
+            format = "image/png",
+            transparent = TRUE,
+            crs = 4326
+            )
         ) %>%
+        # leaflet::addPolylines(
+        #   data = reseau_hydro,
+        #   group = "Réseau hydrographique",
+        #   color = "#00B2EE",
+        #   weight = 1,
+        #   label = ~TopoOH,
+        #   popup = NULL,
+        #   opacity = 1,
+        #   options = leaflet::pathOptions(pane = "masks")
+        # ) %>%
         leaflet::addPolygons(
           data = masque_metropole,
           fillColor = "white",

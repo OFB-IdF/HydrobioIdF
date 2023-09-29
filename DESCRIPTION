@@ -17,10 +17,15 @@ Imports:
     leaflet,
     leaflet.extras,
     lubridate,
-    pkgload,
-    rmapshaper,
+    purrr,
     sf,
-    shiny (>= 1.7.5)
+    shiny (>= 1.7.5),
+    stringr,
+    tidyr,
+    pkgload
+Suggests:
+    openxlsx2,
+    janitor
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.2.3
