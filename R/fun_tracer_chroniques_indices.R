@@ -12,6 +12,21 @@
 #' @importFrom purrr map
 #' @importFrom stringr str_replace_na
 tracer_chroniques_indices <- function(DonneesGraphique) {
+  integer_breaks <- function(n = 5, ...) {
+    fxn <- function(x) {
+      if (length(unique(na.omit(x))) == 1) {
+        breaks <- unique(na.omit(x))
+      } else {
+        breaks <- floor(pretty(x, n, ...))
+      }
+
+      names(breaks) <- attr(breaks, "labels")
+      unique(breaks)
+    }
+    return(fxn)
+  }
+
+
   x_lims <- range(na.omit(DonneesGraphique$annee))
   x_breaks <- integer_breaks(n = 3)(DonneesGraphique$annee)
 
