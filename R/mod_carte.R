@@ -8,12 +8,12 @@
 #'
 #' @importFrom shiny NS tagList
 #' @importFrom leaflet leafletOutput
-mod_carte_ui <- function(id){
+mod_carte_ui <- function(id, hauteur){
   ns <- NS(id)
 
   css <- HTML(
     paste0(
-      paste0("#", ns("carte_op"), " {height: calc(100vh - 200px) !important;}"),
+      # paste0("#", ns("carte_op"), " {height: calc(100vh - 200px) !important;}"),
       ".search-station {
             position: absolute;
             top: 0px;
@@ -54,7 +54,8 @@ mod_carte_ui <- function(id){
       ),
       leaflet::leafletOutput(
         ns("carte_op"),
-        width = '100%'
+        width = '100%',
+        height = hauteur
       )
     )
 
@@ -70,10 +71,21 @@ mod_carte_ui <- function(id){
 #' @importFrom leaflet.extras addResetMapButton
 #' @importFrom sf st_bbox
 #' @importFrom dplyr `%>%`
-mod_carte_server <- function(id, limites){
+mod_carte_server <- function(id, stations, departements, eqb, suivi_regie){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
-    BboxMap <- sf::st_bbox(limites)
+
+    radius_pal <- function(x) {
+      approx(
+        x = sqrt(range(stations$nb_annees, na.rm = TRUE)),
+        y = c(5, 10),
+        xout = sqrt(x),
+        yleft = 5,
+        yright = 10
+      )$y
+    }
+
+    BboxMap <- sf::st_bbox(stations)
 
     couleurs_etat <- c(
       `indéterminé` = "#CDC0B0",
@@ -191,6 +203,137 @@ mod_carte_server <- function(id, limites){
         leaflet.extras::addResetMapButton()
     )
 
+    observe({
+      req(stations, departements, eqb, suivi_regie)
+
+      deps <- departements()
+      if (is.null(deps))
+        deps <- unique(stations$code_departement)
+      if ("PPC" %in% deps)
+        deps <- c(deps[deps != "PPC"], 75, 92, 93, 94)
+
+      choix_eqb <- eqb()
+      if (is.null(choix_eqb))
+        choix_eqb <- stations$code_support
+
+      DonneesCarte <- stations %>%
+        dplyr::filter(
+          code_departement %in% deps,
+          code_support %in% choix_eqb
+          )
+
+      if (suivi_regie())
+        DonneesCarte <- DonneesCarte %>%
+        dplyr::filter(regie & choix_eqb != 4)
+
+      DonneesCarte <- DonneesCarte %>%
+        dplyr::group_by(code_station_hydrobio, libelle_station_hydrobio) %>%
+        dplyr::summarise(
+          derniers_resultats = paste(derniers_resultats, collapse = "<br>"),
+          nb_annees = max(nb_annees),
+          .groups = "drop"
+        ) %>%
+        dplyr::mutate(
+          hover = paste0(
+            "<b>", libelle_station_hydrobio, "</b><br><br>",
+            derniers_resultats
+          )
+        )
+
+      updateSelectizeInput(
+        session = session,
+        inputId = "station",
+        choices = c(
+          "Localiser une station" = "",
+          DonneesCarte$libelle_station_hydrobio
+        ),
+        server = TRUE
+      )
+
+      BboxMap <- sf::st_bbox(DonneesCarte)
+
+      leaflet::leafletProxy("carte_op") %>%
+        leaflet::fitBounds(
+          map = .,
+          lng1 = BboxMap[["xmin"]],
+          lat1 = BboxMap[["ymin"]],
+          lng2 = BboxMap[["xmax"]],
+          lat2 = BboxMap[["ymax"]]
+        )
+
+
+      if (nrow(DonneesCarte) == 0) {
+        leaflet::leafletProxy("carte_op") %>%
+          leaflet::clearMarkers(map = .)
+      } else {
+        leaflet::leafletProxy("carte_op") %>%
+          leaflet::clearMarkers(map = .) %>%
+          leaflet::addCircleMarkers(
+            map = .,
+            data = DonneesCarte,
+            layerId = ~code_station_hydrobio,
+            radius = ~radius_pal(nb_annees),
+            stroke = TRUE,
+            color = "black",
+            fillColor = "white",
+            fillOpacity = .75,
+            weight = 2,
+            label = ~lapply(hover, shiny::HTML),
+            options = pathOptions(pane = "foreground")
+          )
+      }
+
+      observe({
+
+        if (input$station != "") {
+
+          CoordsStation <- DonneesCarte %>%
+            dplyr::filter(libelle_station_hydrobio == input$station) %>%
+            dplyr::summarise() %>%
+            sf::st_centroid() %>%
+            sf::st_coordinates()
+
+          leaflet::leafletProxy("carte_op") %>%
+            leaflet::setView(
+              lng = unname(CoordsStation[,"X"]),
+              lat = unname(CoordsStation[,"Y"]),
+              zoom = 15
+            )
+        } else {
+
+          leaflet::leafletProxy("carte_op") %>%
+            leaflet::fitBounds(
+              map = .,
+              lng1 = BboxMap[["xmin"]],
+              lat1 = BboxMap[["ymin"]],
+              lng2 = BboxMap[["xmax"]],
+              lat2 = BboxMap[["ymax"]]
+            )
+        }
+
+      })
+
+
+    })
+
+    SelectionPoint <- reactiveValues(clickedMarker=NULL)
+
+    # observe the marker click info and print to console when it is changed.
+    observeEvent(input$carte_op_marker_click,{
+      SelectionPoint$clickedMarker <- input$carte_op_marker_click$id
+    })
+
+    # POUR UNE RAISON QUE JE NE COMPRENDS PAS
+    # CELA NE FONCTIONNE PAS
+    # REINITIALISE LA VALEUR AU CLIC MEME SUR MARQUEUR ET
+    # PAS QUE SUR FOND DE CARTE
+    # observeEvent(input$carte_op_click,{
+    #   SelectionPoint$clickedMarker <- NULL
+    #   print("reset")
+    # })
+
+
+    reactive(SelectionPoint$clickedMarker)
   })
 }
 
