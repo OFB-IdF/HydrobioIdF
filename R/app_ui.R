@@ -88,7 +88,7 @@ app_ui <- function(request) {
                                 width = 7,
                                   mod_carte_ui(
                                   id = "carte",
-                                  hauteur = "410px"
+                                  hauteur = "450px"
                                 ),
                                 mod_synthese_toutes_stations_ui(
                                   id = "bilan_stations"

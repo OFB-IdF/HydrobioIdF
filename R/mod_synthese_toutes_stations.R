@@ -10,16 +10,16 @@
 mod_synthese_toutes_stations_ui <- function(id){
   ns <- NS(id)
 
-  css <- HTML(
-    paste0(".sub-tabpanel {
-               margin-top: 420px;
-           }")
-  )
+  # css <- HTML(
+  #   paste0(".sub-tabpanel {
+  #              margin-top: 455px;
+  #          }")
+  # )
 
   tagList(
-    tags$head(
-      tags$style(css)
-    ),
+    # tags$head(
+    #   tags$style(css)
+    # ),
     uiOutput(ns("synthese_stations"))
   )
 }

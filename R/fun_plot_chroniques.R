@@ -42,6 +42,7 @@ plot_chroniques <- function(donnees_graphique, interactive = FALSE) {
       position = ggplot2::position_dodge(preserve = "single")
     ) +
     ggplot2::scale_fill_manual(
+      name = "",
       values = c(
         "Poissons" = "#8DB6CD",
         "Macroinvertébrés" = "#CD6600",
@@ -59,14 +60,14 @@ plot_chroniques <- function(donnees_graphique, interactive = FALSE) {
       panel.grid.major.x = ggplot2::element_blank(),
       panel.grid.minor.x = ggplot2::element_blank(),
       axis.title = ggplot2::element_text(hjust = .95),
-      legend.position = "bottom"
+      legend.position = "right"
     )
 
   if (interactive) {
     plotly::ggplotly(PlotChroniques) %>%
       plotly::layout(
         legend = list(
-          orientation = 'h',
+          orientation = 'v',
           title = list(
             side = 'top'
           )
@@ -79,13 +80,13 @@ plot_chroniques <- function(donnees_graphique, interactive = FALSE) {
       ) %>%
       plotly::add_annotations(
         xref = "paper", yref = "paper",
-        x = 1, y = -.15,
+        x = 1, y = -.175,
         text = "Années de suivi",
         showarrow = FALSE
       ) %>%
       plotly::add_annotations(
         xref = "paper", yref = "paper",
-        x = -.15, y = 1,
+        x = -.2, y = 1,
         text = "Nombre de stations",
         showarrow = FALSE,
         textangle = -90

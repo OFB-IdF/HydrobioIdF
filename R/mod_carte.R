@@ -13,11 +13,11 @@ mod_carte_ui <- function(id, hauteur){
 
   css <- HTML(
     paste0(
-      # paste0("#", ns("carte_op"), " {height: calc(100vh - 200px) !important;}"),
+      paste0("#", ns("carte_op"), " {margin-bottom:10px !important;}"),
       ".search-station {
             position: absolute;
-            top: 0px;
-            left: 80px;
+            top: -5px;
+            left: 100px;
           }
 
            .leaflet {
