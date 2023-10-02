@@ -25,7 +25,8 @@ listes_taxo <- telecharger_listes(
     libelle_taxon = libelle_appel_taxon %>%
       stringr::str_remove_all(pattern = " var\\. .*$") %>%
       stringr::str_remove_all(pattern = " abnormal form.*$") %>%
-      stringr::str_remove_all(pattern = " f\\. .*$")
+      stringr::str_remove_all(pattern = " f\\. .*$") %>%
+      stringr::str_remove_all(pattern = " ssp\\. .*$")
   )
 
 acronymes_indices <- c(
