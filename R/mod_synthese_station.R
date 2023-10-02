@@ -36,6 +36,11 @@ mod_synthese_station_server <- function(id, choix_station, choix_eqb){
           choix_station, choix_eqb
         )
 
+        mod_chronique_taxons_server(
+          id = "chronique_taxons",
+          choix_station, choix_eqb
+        )
+
         if (is.null(choix_station())) {
           div()
         } else {
@@ -50,7 +55,8 @@ mod_synthese_station_server <- function(id, choix_station, choix_eqb){
                   mod_chronique_indices_ui(id = ns("chronique_indices"))
                 ),
                 tabPanel(
-                  title = "Taxons"
+                  title = "Taxons",
+                  mod_chronique_taxons_ui(id = ns("chronique_taxons"))
                 )
               )
             )

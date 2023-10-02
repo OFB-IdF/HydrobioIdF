@@ -51,9 +51,6 @@ mod_synthese_toutes_stations_server <- function(id, choix_departement, choix_eqb
       if (is.null(eqb))
         eqb <- unique(indices_dep$code_support)
 
-      print(deps)
-      print(eqb)
-
       resume_indices <- indices_dep %>%
         dplyr::filter(
           code_departement %in% deps,
