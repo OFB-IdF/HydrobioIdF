@@ -7,10 +7,11 @@
 #' @noRd
 #'
 #' @importFrom shiny NS tagList
+#' @importFrom shinydashboard box
 mod_chronique_indices_ui <- function(id){
   ns <- NS(id)
   tagList(
-    box(
+    shinydashboard::box(
       style = 'width:350px;height:510px;overflow-y: scroll;',
       plotOutput(ns("indices"), height = 500)
     )

@@ -22,6 +22,7 @@ Imports:
     purrr,
     sf,
     shiny (>= 1.7.5),
+    shinydashboard,
     stringr,
     tidyr
 Suggests:
