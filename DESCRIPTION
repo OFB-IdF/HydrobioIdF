@@ -19,6 +19,7 @@ Imports:
     lubridate,
     patchwork,
     pkgload,
+    plotly,
     purrr,
     sf,
     shiny (>= 1.7.5),

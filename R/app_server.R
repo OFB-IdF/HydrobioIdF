@@ -24,4 +24,10 @@ app_server <- function(input, output, session) {
     choix_station = station,
     choix_eqb = eqb
     )
+
+  mod_synthese_toutes_stations_server(
+    id = "bilan_stations",
+    choix_departement = departements,
+    choix_eqb = eqb
+  )
 }

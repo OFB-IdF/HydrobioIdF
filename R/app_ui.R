@@ -88,18 +88,10 @@ app_ui <- function(request) {
                                 width = 7,
                                   mod_carte_ui(
                                   id = "carte",
-                                  hauteur = "500px"
+                                  hauteur = "410px"
                                 ),
-                                tags$div(
-                                  class = "sub-tabpanel",
-                                  tabsetPanel(
-                                    tabPanel(
-                                      title = "Chroniques"
-                                    ),
-                                    tabPanel(
-                                      title = "Qualité"
-                                    )
-                                  )
+                                mod_synthese_toutes_stations_ui(
+                                  id = "bilan_stations"
                                 )
                               ),
                               column(
