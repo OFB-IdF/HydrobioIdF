@@ -30,12 +30,6 @@ tracer_chroniques_indices <- function(DonneesGraphique) {
   x_lims <- range(na.omit(DonneesGraphique$annee))
   x_breaks <- integer_breaks(n = 3)(DonneesGraphique$annee)
 
-  if (dplyr::n_distinct(DonneesGraphique$code_indice) > 2) {
-    nb_col <- 2
-  } else {
-    nb_col <- 1
-  }
-
   DonneesGraphique %>%
     dplyr::mutate(
       libelle_indice = acronymes_indices[as.character(code_indice)] %>%
@@ -122,5 +116,5 @@ tracer_chroniques_indices <- function(DonneesGraphique) {
         p
       }
     ) %>%
-    patchwork::wrap_plots(ncol = nb_col, byrow = TRUE)
+    patchwork::wrap_plots(ncol = 1, byrow = TRUE)
 }

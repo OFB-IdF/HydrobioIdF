@@ -17,12 +17,13 @@ Imports:
     leaflet,
     leaflet.extras,
     lubridate,
+    patchwork,
+    pkgload,
     purrr,
     sf,
     shiny (>= 1.7.5),
     stringr,
-    tidyr,
-    pkgload
+    tidyr
 Suggests:
     openxlsx2,
     janitor

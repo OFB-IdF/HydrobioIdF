@@ -10,7 +10,10 @@
 mod_chronique_indices_ui <- function(id){
   ns <- NS(id)
   tagList(
-    plotOutput(ns("indices"), height = 500)
+    box(
+      style = 'width:350px;height:510px;overflow-y: scroll;',
+      plotOutput(ns("indices"), height = 500)
+    )
   )
 }
 
@@ -28,7 +31,9 @@ mod_chronique_indices_server <- function(id, choix_station, choix_eqb){
 
       output$indices <- renderPlot({
         tracer_chroniques_indices(DonneesGraphique)
-      })
+      },
+      height = dplyr::n_distinct(DonneesGraphique$code_indice) * 250
+      )
     })
   })
 }
