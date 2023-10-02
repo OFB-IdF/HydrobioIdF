@@ -20,6 +20,12 @@ listes_taxo <- telecharger_listes(
 ) %>%
   dplyr::filter(
     code_station_hydrobio %in% stations$code_station_hydrobio
+  ) %>%
+  dplyr::mutate(
+    libelle_taxon = libelle_appel_taxon %>%
+      stringr::str_remove_all(pattern = " var\\. .*$") %>%
+      stringr::str_remove_all(pattern = " abnormal form.*$") %>%
+      stringr::str_remove_all(pattern = " f\\. .*$")
   )
 
 acronymes_indices <- c(

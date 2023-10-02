@@ -14,7 +14,7 @@ resumer_listes <- function(listes_stations) {
   listes_stations %>%
     dplyr::mutate(annee = lubridate::year(date_prelevement)) %>%
     dplyr::group_by(code_station_hydrobio, code_support, libelle_support, annee) %>%
-    dplyr::summarise(nb_taxa = dplyr::n_distinct(code_appel_taxon)) %>%
+    dplyr::summarise(nb_taxa = dplyr::n_distinct(libelle_taxon), .groups = "drop") %>%
     dplyr::group_by(code_station_hydrobio, code_support, libelle_support) %>%
     dplyr::summarise(
       periode = paste0(
