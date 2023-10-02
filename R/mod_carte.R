@@ -22,6 +22,7 @@ mod_carte_ui <- function(id, hauteur){
 
            .leaflet {
                 margin-top:0px;
+                padding:0px;
            }
 
            .leaflet-control-zoom, .leaflet-top, .leaflet-bottom {

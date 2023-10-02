@@ -42,7 +42,7 @@ mod_chronique_indices_server <- function(id, choix_station, choix_eqb){
       DonneesGraphique <- filtrer_indices(choix_station(), choix_eqb())
 
       output$indices <- renderPlot({
-        tracer_chroniques_indices(DonneesGraphique)
+        tracer_chroniques_indices(DonneesGraphique, interactive = FALSE)
       },
       height = dplyr::n_distinct(DonneesGraphique$code_indice) * 250
       )

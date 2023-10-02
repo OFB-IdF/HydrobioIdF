@@ -11,7 +11,7 @@
 #' @importFrom patchwork wrap_plots
 #' @importFrom purrr map
 #' @importFrom stringr str_replace_na
-tracer_chroniques_indices <- function(DonneesGraphique) {
+tracer_chroniques_indices <- function(DonneesGraphique, interactive = FALSE) {
   integer_breaks <- function(n = 5, ...) {
     fxn <- function(x) {
       if (length(unique(na.omit(x))) == 1) {
@@ -30,7 +30,7 @@ tracer_chroniques_indices <- function(DonneesGraphique) {
   x_lims <- range(na.omit(DonneesGraphique$annee))
   x_breaks <- integer_breaks(n = 3)(DonneesGraphique$annee)
 
-  DonneesGraphique %>%
+  graphique <- DonneesGraphique %>%
     dplyr::mutate(
       libelle_indice = acronymes_indices[as.character(code_indice)] %>%
         factor(levels = acronymes_indices)
@@ -117,4 +117,10 @@ tracer_chroniques_indices <- function(DonneesGraphique) {
       }
     ) %>%
     patchwork::wrap_plots(ncol = 1, byrow = TRUE)
+
+  if (interactive) {
+    plotly::ggplotly(graphique)
+  } else {
+    graphique
+  }
 }
