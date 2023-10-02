@@ -10,11 +10,12 @@
 #' @importFrom shinydashboard box
 mod_chronique_indices_ui <- function(id){
   ns <- NS(id)
+  h <- 525
 
   css <- HTML(
     paste0(".box-body {
-               max-height: 500px !important;
-               min-width: 350px !important;
+               max-height: ", h, "px !important;
+               min-width: 450px !important;
                overflow-y: scroll;
            }")
   )
@@ -24,7 +25,7 @@ mod_chronique_indices_ui <- function(id){
       tags$style(css)
     ),
     shinydashboard::box(
-      plotOutput(ns("indices"), height = 500)
+      plotOutput(ns("indices"), height = h)
     )
   )
 }

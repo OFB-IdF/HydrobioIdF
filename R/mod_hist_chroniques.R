@@ -11,7 +11,7 @@
 mod_hist_chroniques_ui <- function(id){
   ns <- NS(id)
   tagList(
-    plotly::plotlyOutput(ns("chroniques"))
+    plotly::plotlyOutput(ns("chroniques"), height = "350px")
   )
 }
 

@@ -12,7 +12,7 @@ mod_synthese_toutes_stations_ui <- function(id){
 
   # css <- HTML(
   #   paste0(".sub-tabpanel {
-  #              margin-top: 455px;
+  #              height-max: 350px;
   #          }")
   # )
 

@@ -9,11 +9,12 @@
 #' @importFrom shiny NS tagList
 mod_chronique_taxons_ui <- function(id){
   ns <- NS(id)
+  h <- 500
 
   css <- HTML(
     paste0(".box-body {
-               max-height: 500px !important;
-               min-width: 350px !important;
+               max-height: ", h, "px !important;
+               min-width: 450px !important;
                overflow-y: scroll;
            }")
   )
@@ -29,29 +30,29 @@ mod_chronique_taxons_ui <- function(id){
         tabPanel(
           title = HTML("<p style='font-size:14px;color:black;margin:0px;'>Diatomées</p>"),
           shinydashboard::box(
-            plotOutput(outputId = ns("diatomees")),
-            height = 500
+            plotOutput(outputId = ns("diatomees"),
+                       height = h)
             )
         ),
         tabPanel(
           title = HTML("<p style='font-size:14px;color:black;margin:0px;'>Macrophytes</p>"),
           shinydashboard::box(
-            plotOutput(outputId = ns("macrophytes")),
-            height = 500
+            plotOutput(outputId = ns("macrophytes"),
+                       height = h)
           )
         ),
         tabPanel(
           title = HTML("<p style='font-size:14px;color:black;margin:0px;'>Macroinvertébrés</p>"),
           shinydashboard::box(
-            plotOutput(outputId = ns("invertebres")),
-            height = 500
+            plotOutput(outputId = ns("invertebres"),
+                       height = h)
           )
         ),
         tabPanel(
           title = HTML("<p style='font-size:14px;color:black;margin:0px;'>Poissons</p>"),
           shinydashboard::box(
-            plotOutput(outputId = ns("poissons")),
-            height = 500
+            plotOutput(outputId = ns("poissons"),
+                       height = h)
           )
         )
       )

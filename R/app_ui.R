@@ -46,12 +46,12 @@ app_ui <- function(request) {
             ),
             sidebarLayout(
                 sidebarPanel = sidebarPanel(
-                    width = 3,
+                    width = 2,
                     h2("Panneau de sélection"),
                     mod_selecteur_ui(
                       id = "departements",
                       titre = "Départements",
-                      texte = "Tous les départements",
+                      texte = "Tous",
                       choix = c(
                         `Essonne` = 91,
                         `Seine-et-Marne` = 77,
@@ -64,7 +64,7 @@ app_ui <- function(request) {
                     mod_selecteur_ui(
                       id = "eqb",
                       titre = "Eléments de qualité biologique",
-                      texte = "Tous les éléments de qualité",
+                      texte = "Tous",
                       choix = c(
                         "Diatomées" = 10,
                         "Macrophytes" = 27,
@@ -79,23 +79,23 @@ app_ui <- function(request) {
                     )
                 ),
                 mainPanel = mainPanel(
-                    width = 9,
+                    width = 10,
                     tabsetPanel(
                         tabPanel(
                             title = "Carte des stations",
                             fluidRow(
                               column(
-                                width = 7,
+                                width = 6,
                                   mod_carte_ui(
                                   id = "carte",
-                                  hauteur = "450px"
+                                  hauteur = "500px"
                                 ),
                                 mod_synthese_toutes_stations_ui(
                                   id = "bilan_stations"
                                 )
                               ),
                               column(
-                                width = 5,
+                                width = 6,
                                 mod_synthese_station_ui(id = "synthese_station")
                               )
                             )
