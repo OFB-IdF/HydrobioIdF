@@ -30,4 +30,12 @@ app_server <- function(input, output, session) {
     choix_departement = departements,
     choix_eqb = eqb
   )
+
+  mod_repartition_taxons_server(
+    id = "carte_taxons",
+    listes = donnees_carte_taxons,
+    departements = departements,
+    eqb = eqb,
+    suivi_regie = regie_seule
+  )
 }

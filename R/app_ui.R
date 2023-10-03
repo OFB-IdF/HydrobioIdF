@@ -82,7 +82,7 @@ app_ui <- function(request) {
                     width = 10,
                     tabsetPanel(
                         tabPanel(
-                            title = "Carte des stations",
+                            title = "Communautés",
                             fluidRow(
                               column(
                                 width = 6,
@@ -101,7 +101,13 @@ app_ui <- function(request) {
                             )
                         ),
                         tabPanel(
-                            title = "Onglet 2"
+                            title = "Taxons",
+                            fluidRow(
+                              column(
+                                width = 6,
+                                mod_repartition_taxons_ui(id = "carte_taxons")
+                              )
+                            )
                         ),
                         tabPanel(
                             title = p(

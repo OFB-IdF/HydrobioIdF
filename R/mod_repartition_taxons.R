@@ -1,4 +1,4 @@
-#' carte UI Function
+#' repartition_taxons UI Function
 #'
 #' @description A shiny Module.
 #'
@@ -8,13 +8,13 @@
 #'
 #' @importFrom shiny NS tagList
 #' @importFrom leaflet leafletOutput
-mod_carte_ui <- function(id, hauteur){
+mod_repartition_taxons_ui <- function(id){
   ns <- NS(id)
 
   css <- HTML(
     paste0(
-      paste0("#", ns("carte_op"), " {margin-bottom:10px !important;}"),
-      ".search-station {
+      paste0("#", ns("carte_taxon"), " {margin-bottom:10px !important;height: calc(100vh - 200px) !important;}"),
+      ".search-taxon {
             position: absolute;
             top: -5px;
             left: 100px;
@@ -43,50 +43,49 @@ mod_carte_ui <- function(id, hauteur){
     column(
       width = 12,
       tags$div(
-        class = "search-station",
+        class = "search-taxon",
         selectizeInput(
-          inputId = ns("station"),
+          inputId = ns("taxon"),
           label = "",
           choices = c(
-            "Localiser une station" = ""
+            "Choisir un taxon" = ""
           ),
           multiple = FALSE
         )
       ),
       leaflet::leafletOutput(
-        ns("carte_op"),
-        width = '100%',
-        height = hauteur
+        ns("carte_taxon"),
+        width = '100%'
       )
     )
 
   )
 }
 
-#' carte Server Functions
+#' repartition_taxons Server Functions
 #'
 #' @noRd
-#' @importFrom dplyr mutate select
+#' @importFrom dplyr mutate select filter pull
 #' @importFrom htmltools HTML
-#' @importFrom leaflet renderLeaflet leaflet addMapPane addTiles WMSTileOptions providerTileOptions addPolygons pathOptions addPolylines addLayersControl layersControlOptions fitBounds
+#' @importFrom leaflet renderLeaflet leaflet addMapPane addTiles WMSTileOptions providerTileOptions addPolygons pathOptions addWMSTiles addPolylines addLayersControl layersControlOptions fitBounds leafletProxy clearMarkers addCircleMarkers
 #' @importFrom leaflet.extras addResetMapButton
 #' @importFrom sf st_bbox
-#' @importFrom dplyr `%>%`
-mod_carte_server <- function(id, stations, departements, eqb, suivi_regie){
+#' @importFrom shiny HTML
+mod_repartition_taxons_server <- function(id, listes, departements, eqb, suivi_regie){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
 
-    radius_pal <- function(x) {
-      approx(
-        x = sqrt(range(stations$nb_annees, na.rm = TRUE)),
-        y = c(5, 10),
-        xout = sqrt(x),
-        yleft = 5,
-        yright = 10
-      )$y
-    }
+    # radius_pal <- function(x) {
+    #   approx(
+    #     x = sqrt(range(listes$ab_moyen, na.rm = TRUE)),
+    #     y = c(5, 10),
+    #     xout = sqrt(x),
+    #     yleft = 5,
+    #     yright = 10
+    #   )$y
+    # }
 
-    BboxMap <- sf::st_bbox(stations)
+    BboxMap <- sf::st_bbox(listes)
 
     couleurs_etat <- c(
       `indéterminé` = "#CDC0B0",
@@ -97,7 +96,7 @@ mod_carte_server <- function(id, stations, departements, eqb, suivi_regie){
       `très bon` = "#1874CD"
     )
 
-    output$carte_op <- leaflet::renderLeaflet(
+    output$carte_taxon <- leaflet::renderLeaflet(
       leaflet::leaflet() %>%
         leaflet::addMapPane("background", zIndex = 400) %>%
         leaflet::addMapPane("masks", zIndex = 450) %>%
@@ -167,7 +166,7 @@ mod_carte_server <- function(id, stations, departements, eqb, suivi_regie){
             format = "image/png",
             transparent = TRUE,
             crs = 4326
-            )
+          )
         ) %>%
         # leaflet::addPolylines(
         #   data = reseau_hydro,
@@ -216,55 +215,53 @@ mod_carte_server <- function(id, stations, departements, eqb, suivi_regie){
     )
 
     observe({
-      req(stations, departements, eqb, suivi_regie)
-
-      deps <- departements()
-      if (is.null(deps))
-        deps <- unique(stations$code_departement)
-      if ("PPC" %in% deps)
-        deps <- c(deps[deps != "PPC"], 75, 92, 93, 94)
+      req(eqb)
 
       choix_eqb <- eqb()
       if (is.null(choix_eqb))
-        choix_eqb <- stations$code_support
-
-      DonneesCarte <- stations %>%
-        dplyr::filter(
-          code_departement %in% deps,
-          code_support %in% choix_eqb
-          )
-
-      if (suivi_regie())
-        DonneesCarte <- DonneesCarte %>%
-        dplyr::filter(regie & choix_eqb != 4)
-
-      DonneesCarte <- DonneesCarte %>%
-        dplyr::group_by(code_station_hydrobio, libelle_station_hydrobio) %>%
-        dplyr::summarise(
-          derniers_resultats = paste(derniers_resultats, collapse = "<br>"),
-          nb_annees = max(nb_annees),
-          .groups = "drop"
-        ) %>%
-        dplyr::mutate(
-          hover = paste0(
-            "<b>", libelle_station_hydrobio, "</b><br><br>",
-            derniers_resultats
-          )
-        )
+        choix_eqb <- unique(listes$code_support)
 
       updateSelectizeInput(
         session = session,
-        inputId = "station",
+        inputId = "taxon",
         choices = c(
-          "Localiser une station" = "",
-          DonneesCarte$libelle_station_hydrobio
+          "Choisir un taxon" = "",
+          listes %>%
+            dplyr::filter(code_support %in% choix_eqb) %>%
+            dplyr::pull(libelle_taxon) %>%
+            unique()
         ),
         server = TRUE
       )
 
-      BboxMap <- sf::st_bbox(DonneesCarte)
+    })
+    observe({
+      req(listes, departements, input$taxon, suivi_regie)
 
-      leaflet::leafletProxy("carte_op") %>%
+      deps <- departements()
+      if (is.null(deps))
+        deps <- unique(listes$code_departement)
+      if ("PPC" %in% deps)
+        deps <- c(deps[deps != "PPC"], 75, 92, 93, 94)
+
+      # if (suivi_regie())
+      #   DonneesCarte <- DonneesCarte %>%
+      #   dplyr::filter(regie & choix_eqb != 4)
+
+      DonneesCarte <- listes %>%
+        dplyr::filter(
+          code_departement %in% deps,
+          libelle_taxon == input$taxon
+        )
+
+      print(colnames(DonneesCarte))
+
+      BboxMap <- sf::st_bbox(
+        DonneesCarte %>%
+          dplyr::filter(libelle_taxon == input$taxon)
+        )
+
+      leaflet::leafletProxy("carte_taxon") %>%
         leaflet::fitBounds(
           map = .,
           lng1 = BboxMap[["xmin"]],
@@ -274,20 +271,22 @@ mod_carte_server <- function(id, stations, departements, eqb, suivi_regie){
         )
 
 
-      if (nrow(DonneesCarte) == 0) {
-        leaflet::leafletProxy("carte_op") %>%
+      if (nrow(DonneesCarte %>% dplyr::filter(libelle_taxon == input$taxon)) == 0) {
+        leaflet::leafletProxy("carte_taxon") %>%
           leaflet::clearMarkers(map = .)
       } else {
-        leaflet::leafletProxy("carte_op") %>%
+        leaflet::leafletProxy("carte_taxon") %>%
           leaflet::clearMarkers(map = .) %>%
           leaflet::addCircleMarkers(
             map = .,
-            data = DonneesCarte,
+            data = DonneesCarte %>%
+              dplyr::filter(libelle_taxon == input$taxon),
             layerId = ~code_station_hydrobio,
-            radius = ~radius_pal(nb_annees),
+            # radius = ~radius_pal(ab_moyen),
+            radius = 5,
             stroke = TRUE,
             color = "black",
-            fillColor = "white",
+            fillColor = c("#1874CD"),
             fillOpacity = 1,
             weight = 2,
             label = ~lapply(hover, shiny::HTML),
@@ -295,62 +294,15 @@ mod_carte_server <- function(id, stations, departements, eqb, suivi_regie){
           )
       }
 
-      observe({
-
-        if (input$station != "") {
-
-          CoordsStation <- DonneesCarte %>%
-            dplyr::filter(libelle_station_hydrobio == input$station) %>%
-            dplyr::summarise() %>%
-            sf::st_centroid() %>%
-            sf::st_coordinates()
-
-          leaflet::leafletProxy("carte_op") %>%
-            leaflet::setView(
-              lng = unname(CoordsStation[,"X"]),
-              lat = unname(CoordsStation[,"Y"]),
-              zoom = 15
-            )
-        } else {
-
-          leaflet::leafletProxy("carte_op") %>%
-            leaflet::fitBounds(
-              map = .,
-              lng1 = BboxMap[["xmin"]],
-              lat1 = BboxMap[["ymin"]],
-              lng2 = BboxMap[["xmax"]],
-              lat2 = BboxMap[["ymax"]]
-            )
-        }
-
-      })
-
 
     })
 
-    SelectionPoint <- reactiveValues(clickedMarker=NULL)
 
-    # observe the marker click info and print to console when it is changed.
-    observeEvent(input$carte_op_marker_click,{
-      SelectionPoint$clickedMarker <- input$carte_op_marker_click$id
-    })
-
-    # POUR UNE RAISON QUE JE NE COMPRENDS PAS
-    # CELA NE FONCTIONNE PAS
-    # REINITIALISE LA VALEUR AU CLIC MEME SUR MARQUEUR ET
-    # PAS QUE SUR FOND DE CARTE
-    # observeEvent(input$carte_op_click,{
-    #   SelectionPoint$clickedMarker <- NULL
-    #   print("reset")
-    # })
-
-
-    reactive(SelectionPoint$clickedMarker)
   })
 }
 
 ## To be copied in the UI
-# mod_carte_ui("carte_1")
+# mod_repartition_taxons_ui("repartition_taxons_1")
 
 ## To be copied in the server
-# mod_carte_server("carte_1")
+# mod_repartition_taxons_server("repartition_taxons_1")

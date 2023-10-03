@@ -74,8 +74,39 @@ donnees_carte <- stations %>%
   dplyr::filter(!is.na(libelle_support)) %>%
   sf::st_transform(crs = 4326)
 
+donnees_carte_taxons <- listes_taxo %>%
+  dplyr::group_by(code_station_hydrobio, libelle_station_hydrobio, code_support, libelle_taxon) %>%
+  dplyr::summarise(
+    derniers_resultats = max(date_prelevement),
+    ab_moy = mean(resultat_taxon),
+    resume = paste0(
+      "abondance: ",
+      unique(range(resultat_taxon)) %>%
+        paste(collapse = "-"),
+      " (",
+      unique(range(lubridate::year(date_prelevement))) %>%
+        paste(collapse = "-"),
+      ")"
+    ),
+    .groups = "drop"
+  ) %>%
+  dplyr::mutate(
+    hover = paste0(
+      "<b>", libelle_taxon, "</b><br>",
+      "<em>", libelle_station_hydrobio, "</em><br><br>",
+      resume
+    )
+  ) %>%
+  dplyr::left_join(
+    stations %>%
+      dplyr::select(code_departement, code_station_hydrobio),
+    .,
+    by = "code_station_hydrobio", multiple = "all"
+  ) %>%
+  sf::st_transform(crs = 4326)
+
 resumes_listes <- resumer_listes(listes_taxo)
 
-usethis::use_data(stations, indices, listes_taxo, resumes_listes, acronymes_indices, donnees_carte, overwrite = TRUE)
+usethis::use_data(stations, indices, listes_taxo, resumes_listes, acronymes_indices, donnees_carte, donnees_carte_taxons, overwrite = TRUE)
 
 
