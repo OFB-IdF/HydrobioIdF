@@ -106,6 +106,10 @@ app_ui <- function(request) {
                               column(
                                 width = 6,
                                 mod_repartition_taxons_ui(id = "carte_taxons")
+                              ),
+                              column(
+                                width = 6,
+                                mod_synthese_taxon_ui(id = "synthese_taxon")
                               )
                             )
                         ),

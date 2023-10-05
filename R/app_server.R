@@ -31,11 +31,19 @@ app_server <- function(input, output, session) {
     choix_eqb = eqb
   )
 
-  mod_repartition_taxons_server(
+  taxon <- mod_repartition_taxons_server(
     id = "carte_taxons",
     listes = donnees_carte_taxons,
     departements = departements,
     eqb = eqb,
+    suivi_regie = regie_seule
+  )
+
+  mod_synthese_taxon_server(
+    id = "synthese_taxon",
+    listes = listes_taxo,
+    departements = departements,
+    taxon = taxon,
     suivi_regie = regie_seule
   )
 }

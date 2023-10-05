@@ -283,10 +283,10 @@ mod_repartition_taxons_server <- function(id, listes, departements, eqb, suivi_r
               dplyr::filter(libelle_taxon == input$taxon),
             layerId = ~code_station_hydrobio,
             # radius = ~radius_pal(ab_moyen),
-            radius = 5,
+            radius = 7,
             stroke = TRUE,
             color = "black",
-            fillColor = c("#1874CD"),
+            fillColor = c("#FFB90F"),
             fillOpacity = 1,
             weight = 2,
             label = ~lapply(hover, shiny::HTML),
@@ -298,6 +298,7 @@ mod_repartition_taxons_server <- function(id, listes, departements, eqb, suivi_r
     })
 
 
+    reactive(input$taxon)
   })
 }
 
