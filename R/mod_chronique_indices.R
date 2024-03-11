@@ -33,17 +33,17 @@ mod_chronique_indices_ui <- function(id){
 #' chronique_indices Server Functions
 #'
 #' @noRd
-mod_chronique_indices_server <- function(id, choix_station, choix_eqb){
+mod_chronique_indices_server <- function(id, stations, indices, acronymes_indices, choix_station, choix_eqb){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
 
     observe({
       req(choix_station, choix_eqb)
 
-      DonneesGraphique <- filtrer_indices(choix_station(), choix_eqb())
+      DonneesGraphique <- filtrer_indices(stations, indices, choix_station(), choix_eqb())
 
       output$indices <- renderPlot({
-        tracer_chroniques_indices(DonneesGraphique, interactive = FALSE)
+        tracer_chroniques_indices(DonneesGraphique, acronymes_indices, interactive = FALSE)
       },
       height = dplyr::n_distinct(DonneesGraphique$code_indice) * 250
       )

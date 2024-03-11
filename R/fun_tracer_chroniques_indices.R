@@ -11,7 +11,7 @@
 #' @importFrom patchwork wrap_plots
 #' @importFrom purrr map
 #' @importFrom stringr str_replace_na
-tracer_chroniques_indices <- function(DonneesGraphique, interactive = FALSE) {
+tracer_chroniques_indices <- function(DonneesGraphique, acronymes_indices, interactive = FALSE) {
   integer_breaks <- function(n = 5, ...) {
     fxn <- function(x) {
       if (length(unique(na.omit(x))) == 1) {

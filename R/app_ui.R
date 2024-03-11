@@ -17,7 +17,7 @@ app_ui <- function(request) {
                 ),
                 div(
                   div("Date d'accès aux données:"),
-                  div(date_donnees),
+                  mod_load_data_ui("donnees"),
                   style = "position: absolute; bottom: 0, width: 10%;"
                 ),
                 img(
