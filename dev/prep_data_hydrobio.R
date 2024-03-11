@@ -109,6 +109,9 @@ donnees_carte_taxons <- listes_taxo %>%
 
 resumes_listes <- resumer_listes(listes_taxo)
 
-usethis::use_data(date_donnees, stations, indices, listes_taxo, resumes_listes, acronymes_indices, donnees_carte, donnees_carte_taxons, overwrite = TRUE)
+
+
+save(date_donnees, stations, indices, listes_taxo, resumes_listes, acronymes_indices, donnees_carte, donnees_carte_taxons,
+     file = "dev/data_hydrobio.rda")
 
 
