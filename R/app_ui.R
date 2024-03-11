@@ -13,7 +13,12 @@ app_ui <- function(request) {
             div(
                 h1(
                     class = "TitreAppli",
-                    "Titre du tableau de bord"
+                    "Suivis hydrobiologiques en Île-de-France"
+                ),
+                div(
+                  div("Date d'accès aux données:"),
+                  div(date_donnees),
+                  style = "position: absolute; bottom: 0, width: 10%;"
                 ),
                 img(
                     src = knitr::image_uri(
@@ -46,28 +51,72 @@ app_ui <- function(request) {
             ),
             sidebarLayout(
                 sidebarPanel = sidebarPanel(
-                    width = 3,
-                    h2("Panneau de sélection")
+                    width = 2,
+                    h2("Panneau de sélection"),
+                    mod_selecteur_ui(
+                      id = "departements",
+                      titre = "Départements",
+                      texte = "Tous",
+                      choix = c(
+                        `Essonne` = 91,
+                        `Seine-et-Marne` = 77,
+                        `Val-d'Oise` = 95,
+                        `Yvelines` = 78,
+                        `Paris et Petite Couronne` = "PPC"
+                        ),
+                      choix_multiple = TRUE
+                    ),
+                    mod_selecteur_ui(
+                      id = "eqb",
+                      titre = "Eléments de qualité biologique",
+                      texte = "Tous",
+                      choix = c(
+                        "Diatomées" = 10,
+                        "Macrophytes" = 27,
+                        "Macroinvertébrés" = 13,
+                        "Poissons" = 4
+                      ),
+                      choix_multiple = TRUE
+                    ),
+                    mod_checkbox_ui(
+                      id = "regie",
+                      titre = "Suivis en régie"
+                    )
                 ),
                 mainPanel = mainPanel(
-                    width = 9,
+                    width = 10,
                     tabsetPanel(
                         tabPanel(
-                            title = "Onglet 1",
-                            tags$div(
-                                class = "sub-tabpanel",
-                                tabsetPanel(
-                                    tabPanel(
-                                        title = "Sous-onglet 1"
-                                    ),
-                                    tabPanel(
-                                        title = "Sous-onglet 2"
-                                    )
+                            title = "Communautés",
+                            fluidRow(
+                              column(
+                                width = 6,
+                                  mod_carte_ui(
+                                  id = "carte",
+                                  hauteur = "500px"
+                                ),
+                                mod_synthese_toutes_stations_ui(
+                                  id = "bilan_stations"
                                 )
+                              ),
+                              column(
+                                width = 6,
+                                mod_synthese_station_ui(id = "synthese_station")
+                              )
                             )
                         ),
                         tabPanel(
-                            title = "Onglet 2"
+                            title = "Taxons",
+                            fluidRow(
+                              column(
+                                width = 6,
+                                mod_repartition_taxons_ui(id = "carte_taxons")
+                              ),
+                              column(
+                                width = 6,
+                                mod_synthese_taxon_ui(id = "synthese_taxon")
+                              )
+                            )
                         ),
                         tabPanel(
                             title = p(
@@ -103,7 +152,7 @@ golem_add_external_resources <- function(){
         ),
         bundle_resources(
             path = app_sys('app/www'),
-            app_title = 'Titre de l\'appli'
+            app_title = 'Hydrobio IdF'
         )
         # Add here other external resources
         # for example, you can add shinyalert::useShinyalert()
