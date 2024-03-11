@@ -18,16 +18,9 @@ mod_synthese_taxon_ui <- function(id){
 #' synthese_taxon Server Functions
 #'
 #' @noRd
-mod_synthese_taxon_server <- function(id, listes, departements, taxon, suivi_regie){
+mod_synthese_taxon_server <- function(id, listes, stations, departements, taxon, suivi_regie){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
-
-    listes <- listes %>%
-            dplyr::left_join(
-              stations %>%
-                dplyr::select(code_station_hydrobio, code_departement),
-              by = c("code_station_hydrobio"), multiple = "all"
-            )
 
     integer_breaks <- function(n = 5, ...) {
       fxn <- function(x) {
@@ -42,6 +35,14 @@ mod_synthese_taxon_server <- function(id, listes, departements, taxon, suivi_reg
       }
       return(fxn)
     }
+
+    listes <- listes %>%
+            dplyr::left_join(
+              stations %>%
+                dplyr::select(code_station_hydrobio, code_departement),
+              by = c("code_station_hydrobio"), multiple = "all"
+            )
+
 
     observe({
       req(departements, taxon, suivi_regie)

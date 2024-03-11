@@ -75,16 +75,6 @@ mod_repartition_taxons_server <- function(id, listes, departements, eqb, suivi_r
   moduleServer( id, function(input, output, session){
     ns <- session$ns
 
-    # radius_pal <- function(x) {
-    #   approx(
-    #     x = sqrt(range(listes$ab_moyen, na.rm = TRUE)),
-    #     y = c(5, 10),
-    #     xout = sqrt(x),
-    #     yleft = 5,
-    #     yright = 10
-    #   )$y
-    # }
-
     BboxMap <- sf::st_bbox(listes)
 
     couleurs_etat <- c(
@@ -168,16 +158,6 @@ mod_repartition_taxons_server <- function(id, listes, departements, eqb, suivi_r
             crs = 4326
           )
         ) %>%
-        # leaflet::addPolylines(
-        #   data = reseau_hydro,
-        #   group = "Réseau hydrographique",
-        #   color = "#00B2EE",
-        #   weight = 1,
-        #   label = ~TopoOH,
-        #   popup = NULL,
-        #   opacity = 1,
-        #   options = leaflet::pathOptions(pane = "masks")
-        # ) %>%
         leaflet::addPolygons(
           data = masque_metropole,
           fillColor = "white",
@@ -282,7 +262,6 @@ mod_repartition_taxons_server <- function(id, listes, departements, eqb, suivi_r
             data = DonneesCarte %>%
               dplyr::filter(libelle_taxon == input$taxon),
             layerId = ~code_station_hydrobio,
-            # radius = ~radius_pal(ab_moyen),
             radius = 7,
             stroke = TRUE,
             color = "black",

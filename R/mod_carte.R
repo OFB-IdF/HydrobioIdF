@@ -72,13 +72,13 @@ mod_carte_ui <- function(id, hauteur){
 #' @importFrom leaflet.extras addResetMapButton
 #' @importFrom sf st_bbox
 #' @importFrom dplyr `%>%`
-mod_carte_server <- function(id, stations, departements, eqb, suivi_regie){
+mod_carte_server <- function(id, donnees_carte, departements, eqb, suivi_regie){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
 
     radius_pal <- function(x) {
       approx(
-        x = sqrt(range(stations$nb_annees, na.rm = TRUE)),
+        x = sqrt(range(donnees_carte$nb_annees, na.rm = TRUE)),
         y = c(5, 10),
         xout = sqrt(x),
         yleft = 5,
@@ -86,7 +86,7 @@ mod_carte_server <- function(id, stations, departements, eqb, suivi_regie){
       )$y
     }
 
-    BboxMap <- sf::st_bbox(stations)
+    BboxMap <- sf::st_bbox(donnees_carte)
 
     couleurs_etat <- c(
       `indéterminé` = "#CDC0B0",
@@ -169,16 +169,6 @@ mod_carte_server <- function(id, stations, departements, eqb, suivi_regie){
             crs = 4326
             )
         ) %>%
-        # leaflet::addPolylines(
-        #   data = reseau_hydro,
-        #   group = "Réseau hydrographique",
-        #   color = "#00B2EE",
-        #   weight = 1,
-        #   label = ~TopoOH,
-        #   popup = NULL,
-        #   opacity = 1,
-        #   options = leaflet::pathOptions(pane = "masks")
-        # ) %>%
         leaflet::addPolygons(
           data = masque_metropole,
           fillColor = "white",
@@ -216,19 +206,19 @@ mod_carte_server <- function(id, stations, departements, eqb, suivi_regie){
     )
 
     observe({
-      req(stations, departements, eqb, suivi_regie)
+      req(departements, eqb, suivi_regie)
 
       deps <- departements()
       if (is.null(deps))
-        deps <- unique(stations$code_departement)
+        deps <- unique(donnees_carte$code_departement)
       if ("PPC" %in% deps)
         deps <- c(deps[deps != "PPC"], 75, 92, 93, 94)
 
       choix_eqb <- eqb()
       if (is.null(choix_eqb))
-        choix_eqb <- stations$code_support
+        choix_eqb <- unique(donnees_carte$code_support)
 
-      DonneesCarte <- stations %>%
+      DonneesCarte <- donnees_carte %>%
         dplyr::filter(
           code_departement %in% deps,
           code_support %in% choix_eqb

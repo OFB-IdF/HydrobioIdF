@@ -63,14 +63,14 @@ mod_chronique_taxons_ui <- function(id){
 #' chronique_taxons Server Functions
 #'
 #' @noRd
-mod_chronique_taxons_server <- function(id, choix_station, choix_eqb){
+mod_chronique_taxons_server <- function(id, stations, listes_taxo, choix_station, choix_eqb){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
 
     observe({
       req(choix_station, choix_eqb)
 
-      liste_station <- filtrer_listes(choix_station(), choix_eqb())
+      liste_station <- filtrer_listes(stations, listes_taxo, choix_station(), choix_eqb())
       liste_diato <- liste_station %>%
           dplyr::filter(code_support == 10)
       liste_inv <- liste_station %>%

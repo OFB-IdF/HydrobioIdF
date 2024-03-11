@@ -18,17 +18,17 @@ mod_chiffres_cles_station_ui <- function(id){
 #' chiffres_cles_station Server Functions
 #'
 #' @noRd
-mod_chiffres_cles_station_server <- function(id, choix_station, choix_eqb){
+mod_chiffres_cles_station_server <- function(id, resumes_listes, stations, choix_station, choix_eqb){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
 
     observe({
-      resume_listes <- filtrer_resumes(choix_station(), choix_eqb()) %>%
+      resume_listes <- filtrer_resumes(resumes_listes, choix_station(), choix_eqb()) %>%
         dplyr::select(-code_station_hydrobio, -code_support)
 
       output$tableau <- renderTable(resume_listes)
       output$titre <- renderText(with(
-        filtrer_station(choix_station()),
+        filtrer_station(stations, choix_station()),
         paste0('<a href="', uri_station_hydrobio, '" target=”_blank”><b>',
                libelle_station_hydrobio, '</b></a>')
         ))

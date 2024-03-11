@@ -27,7 +27,7 @@ mod_synthese_toutes_stations_ui <- function(id){
 #' synthese_toutes_stations Server Functions
 #'
 #' @noRd
-mod_synthese_toutes_stations_server <- function(id, choix_departement, choix_eqb){
+mod_synthese_toutes_stations_server <- function(id, stations, indices, choix_departement, choix_eqb){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
 
