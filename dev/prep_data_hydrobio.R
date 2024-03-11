@@ -1,5 +1,7 @@
 library(HydrobioIdF)
 
+date_donnees <- Sys.Date()
+
 stations <- telecharger_stations(
   code_departement = c(75, 77, 78, 91, 92, 93, 94, 95, 10, 51),
   suivi_regie = HydrobioIdF:::regie
@@ -107,6 +109,6 @@ donnees_carte_taxons <- listes_taxo %>%
 
 resumes_listes <- resumer_listes(listes_taxo)
 
-usethis::use_data(stations, indices, listes_taxo, resumes_listes, acronymes_indices, donnees_carte, donnees_carte_taxons, overwrite = TRUE)
+usethis::use_data(date_donnees, stations, indices, listes_taxo, resumes_listes, acronymes_indices, donnees_carte, donnees_carte_taxons, overwrite = TRUE)
 
 
