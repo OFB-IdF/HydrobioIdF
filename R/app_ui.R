@@ -15,6 +15,11 @@ app_ui <- function(request) {
                     class = "TitreAppli",
                     "Suivis hydrobiologiques en Île-de-France"
                 ),
+                div(
+                  div("Date d'accès aux données:"),
+                  div(date_donnees),
+                  style = "position: absolute; bottom: 0, width: 10%;"
+                ),
                 img(
                     src = knitr::image_uri(
                         app_sys("app/www/logo.png")
