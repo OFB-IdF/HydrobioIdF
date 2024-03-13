@@ -24,12 +24,14 @@ app_server <- function(input, output, session) {
     suivi_regie = regie_seule
     )
 
+  ordre_taxon <- mod_selecteur_ordre_taxons_server(id = "ordre_taxons", choix_station = station, choix_eqb = eqb)
 
   mod_synthese_station_server(
     id = "synthese_station",
     resumes_listes, stations, indices, acronymes_indices, listes_taxo,
     choix_station = station,
-    choix_eqb = eqb
+    choix_eqb = eqb,
+    ordre_taxon = ordre_taxon
     )
 
   mod_synthese_toutes_stations_server(
