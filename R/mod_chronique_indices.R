@@ -11,11 +11,12 @@
 mod_chronique_indices_ui <- function(id){
   ns <- NS(id)
   h <- 525
+  w <- 550
 
   css <- HTML(
     paste0(".box-body {
                max-height: ", h, "px !important;
-               min-width: 450px !important;
+               min-width: ", w, "px !important;
                overflow-y: scroll;
            }")
   )
@@ -36,6 +37,7 @@ mod_chronique_indices_ui <- function(id){
 mod_chronique_indices_server <- function(id, stations, indices, acronymes_indices, choix_station, choix_eqb){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
+    w <- 525
 
     observe({
       req(choix_station, choix_eqb)
@@ -45,7 +47,8 @@ mod_chronique_indices_server <- function(id, stations, indices, acronymes_indice
       output$indices <- renderPlot({
         tracer_chroniques_indices(DonneesGraphique, acronymes_indices, interactive = FALSE)
       },
-      height = dplyr::n_distinct(DonneesGraphique$code_indice) * 250
+      height = dplyr::n_distinct(DonneesGraphique$code_indice) * 250,
+      width = w
       )
     })
   })
