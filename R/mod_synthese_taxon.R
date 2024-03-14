@@ -57,12 +57,16 @@ mod_synthese_taxon_server <- function(id, listes, stations, departements, taxon,
       #   DonneesCarte <- DonneesCarte %>%
       #   dplyr::filter(regie & choix_eqb != 4)
 
-      listes_taxon <- listes %>%
+      listes_dep <- listes %>%
         dplyr::filter(
-          libelle_taxon == taxon(),
           code_departement %in% deps
         ) %>%
         dplyr::mutate(annee = lubridate::year(date_prelevement))
+
+      listes_taxon <- listes_dep %>%
+        dplyr::filter(
+          libelle_taxon == taxon()
+        )
 
       if (nrow(listes_taxon) > 0) {
         x_breaks <- integer_breaks(n = 3)(listes_taxon$annee)
@@ -97,20 +101,51 @@ mod_synthese_taxon_server <- function(id, listes, stations, departements, taxon,
       })
 
               output$chronique_stations <- renderPlot({
-                listes_taxon %>%
-                  dplyr::group_by(libelle_taxon, annee) %>%
+                listes_dep %>%
+                  dplyr::filter(
+                    annee >= min(listes_taxon$annee) & annee <= max(listes_taxon$annee),
+                    libelle_support == unique(listes_taxon$libelle_support)
+                  ) %>%
+                  dplyr::group_by(annee, libelle_station_hydrobio) %>%
                   dplyr::summarise(
-                    n_sta = dplyr::n_distinct(code_station_hydrobio),
+                    esp_pres = any(libelle_taxon %in% taxon()),
                     .groups = "drop"
-                    ) %>%
+                  ) %>%
+                  dplyr::group_by(annee) %>%
+                  dplyr::mutate(
+                    n_sta_tot = dplyr::n_distinct(libelle_station_hydrobio)
+                  ) %>%
+                  dplyr::ungroup() %>%
+                  dplyr::group_by(annee, esp_pres) %>%
+                  dplyr::summarise(
+                    n_sta = dplyr::n_distinct(libelle_station_hydrobio),
+                    n_sta_tot = unique(n_sta_tot),
+                    .groups = "drop"
+                  ) %>%
+                  tidyr::complete(
+                    tidyr::nesting(annee, n_sta_tot), esp_pres,
+                    fill = list(n_sta = 0)
+                  ) %>%
+                  dplyr::filter(!(!esp_pres & n_sta == 0)) %>%
+                  dplyr::mutate(
+                    y_label = ifelse(esp_pres, n_sta + 3, n_sta_tot + 3)
+                  ) %>%
                   ggplot2::ggplot() +
                   ggplot2::geom_col(
                     mapping = ggplot2::aes(
                       x = annee,
-                      y = n_sta
+                      y = n_sta,
+                      fill = esp_pres
                     ),
-                    fill = c("#6495ED"),
-                    width = .95
+                    width = .95,
+                    colour = c("#104E8B")
+                  ) +
+                  ggplot2::geom_text(
+                    mapping = ggplot2::aes(
+                      x = annee,
+                      y = y_label,
+                      label = n_sta
+                    )
                   ) +
                   ggplot2::labs(
                     x = "",
@@ -118,13 +153,19 @@ mod_synthese_taxon_server <- function(id, listes, stations, departements, taxon,
                   ) +
                   ggplot2::scale_x_continuous(
                     breaks = x_breaks
-                  )+
+                  ) +
+                  ggplot2::scale_fill_manual(
+                    values = c(
+                      `TRUE` = "#6495ED",
+                      `FALSE` = "white"
+                        )
+                  ) +
                   ggplot2::theme_minimal(base_size = 16) +
                   ggplot2::theme(
                     panel.grid.major.x = ggplot2::element_blank(),
                     panel.grid.minor.x = ggplot2::element_blank(),
                     axis.title = ggplot2::element_text(hjust = .95),
-                    legend.position = "right"
+                    legend.position = "none"
                   )
               })
       }
