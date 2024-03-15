@@ -39,7 +39,7 @@ mod_chronique_taxons_server <- function(id, stations, listes_taxo, choix_station
     w <- 525
 
     observe({
-      req(choix_station, choix_eqb, ordre_taxon())
+      req(choix_station, choix_eqb)
 
       liste_station <- filtrer_listes(stations, listes_taxo, choix_station(), choix_eqb())
       liste_diato <- liste_station %>%
@@ -51,30 +51,35 @@ mod_chronique_taxons_server <- function(id, stations, listes_taxo, choix_station
       liste_pois <- liste_station %>%
         dplyr::filter(code_support == 4)
 
-      output$diatomees <- renderPlot({
+      observe({
+        req(ordre_taxon())
+
+        output$diatomees <- renderPlot({
           tracer_chroniques_taxons(liste_diato, ordre_taxon())
-      },
-      height = dplyr::n_distinct(liste_diato$code_appel_taxon) * 20 + 20,
-      width = w
-      )
-      output$invertebres <- renderPlot({
-        tracer_chroniques_taxons(liste_inv, ordre_taxon())
-      },
-      height = dplyr::n_distinct(liste_inv$code_appel_taxon) * 20 + 20,
-      width = w
-      )
-      output$macrophytes <- renderPlot({
-        tracer_chroniques_taxons(liste_macro, ordre_taxon())
-      },
-      height = dplyr::n_distinct(liste_macro$code_appel_taxon) * 20 + 20,
-      width = w
-      )
-      output$poissons <- renderPlot({
-        tracer_chroniques_taxons(liste_pois, ordre_taxon())
-      },
-      height = dplyr::n_distinct(liste_pois$code_appel_taxon) * 20 + 20,
-      width = w
-      )
+        },
+        height = dplyr::n_distinct(liste_diato$code_appel_taxon) * 20 + 20,
+        width = w
+        )
+        output$invertebres <- renderPlot({
+          tracer_chroniques_taxons(liste_inv, ordre_taxon())
+        },
+        height = dplyr::n_distinct(liste_inv$code_appel_taxon) * 20 + 20,
+        width = w
+        )
+        output$macrophytes <- renderPlot({
+          tracer_chroniques_taxons(liste_macro, ordre_taxon())
+        },
+        height = dplyr::n_distinct(liste_macro$code_appel_taxon) * 20 + 20,
+        width = w
+        )
+        output$poissons <- renderPlot({
+          tracer_chroniques_taxons(liste_pois, ordre_taxon())
+        },
+        height = dplyr::n_distinct(liste_pois$code_appel_taxon) * 20 + 20,
+        width = w
+        )
+
+      })
 
       output$tabs <- renderUI({
         h <- 525
