@@ -72,7 +72,7 @@ mod_carte_ui <- function(id, hauteur){
 #' @importFrom leaflet.extras addResetMapButton
 #' @importFrom sf st_bbox
 #' @importFrom dplyr `%>%`
-mod_carte_server <- function(id, donnees_carte, departements, eqb, suivi_regie){
+mod_carte_server <- function(id, donnees_carte, choix_stations){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
 
@@ -206,27 +206,12 @@ mod_carte_server <- function(id, donnees_carte, departements, eqb, suivi_regie){
     )
 
     observe({
-      req(departements, eqb, suivi_regie)
-
-      deps <- departements()
-      if (is.null(deps))
-        deps <- unique(donnees_carte$code_departement)
-      if ("PPC" %in% deps)
-        deps <- c(deps[deps != "PPC"], 75, 92, 93, 94)
-
-      choix_eqb <- eqb()
-      if (is.null(choix_eqb))
-        choix_eqb <- unique(donnees_carte$code_support)
+      req(choix_stations)
 
       DonneesCarte <- donnees_carte %>%
         dplyr::filter(
-          code_departement %in% deps,
-          code_support %in% choix_eqb
+          code_station_hydrobio %in% choix_stations()
           )
-
-      if (suivi_regie())
-        DonneesCarte <- DonneesCarte %>%
-        dplyr::filter(regie)
 
       DonneesCarte <- DonneesCarte %>%
         dplyr::group_by(code_station_hydrobio, libelle_station_hydrobio) %>%

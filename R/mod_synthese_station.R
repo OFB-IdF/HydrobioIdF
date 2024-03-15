@@ -17,18 +17,18 @@ mod_synthese_station_ui <- function(id){
 #' synthese_station Server Functions
 #'
 #' @noRd
-mod_synthese_station_server <- function(id, resumes_listes, stations, indices, acronymes_indices, listes_taxo, choix_station, choix_eqb, ordre_taxon, suivi_regie){
+mod_synthese_station_server <- function(id, resumes_listes, stations, indices, acronymes_indices, listes_taxo, choix_station, choix_eqb, ordre_taxon, choix_stations){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
 
     observe({
-      req(choix_station(), suivi_regie)
+      req(choix_station(), choix_stations)
 
       station_regie <- stations %>%
         dplyr::filter(code_station_hydrobio == choix_station()) %>%
         dplyr::pull(regie)
 
-      if (suivi_regie() & !station_regie) {
+      if (!choix_station() %in% choix_stations()) {
 
         output$synthese_station <- renderUI(NULL)
 
