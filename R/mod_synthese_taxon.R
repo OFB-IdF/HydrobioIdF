@@ -18,7 +18,7 @@ mod_synthese_taxon_ui <- function(id){
 #' synthese_taxon Server Functions
 #'
 #' @noRd
-mod_synthese_taxon_server <- function(id, listes, stations, departements, taxon, suivi_regie){
+mod_synthese_taxon_server <- function(id, taxon, choix_stations){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
 
@@ -36,33 +36,12 @@ mod_synthese_taxon_server <- function(id, listes, stations, departements, taxon,
       return(fxn)
     }
 
-    listes_all <- listes %>%
-      dplyr::left_join(
-        stations %>%
-          dplyr::select(code_station_hydrobio, code_departement, regie),
-        by = c("code_station_hydrobio"), multiple = "all"
-      )
-
     observe({
-      req(departements, taxon, suivi_regie)
+      req(choix_stations, taxon)
 
-      deps <- departements()
-      if (is.null(deps))
-        deps <- unique(listes_all$code_departement)
-      if ("PPC" %in% deps)
-        deps <- c(deps[deps != "PPC"], 75, 92, 93, 94)
-
-
-      if (suivi_regie()) {
-        listes_dep <- listes_all %>%
-          dplyr::filter(regie)
-      } else {
-        listes_dep <- listes_all
-      }
-
-      listes_dep <- listes_dep %>%
+      listes_dep <- listes_taxo %>%
         dplyr::filter(
-          code_departement %in% deps
+          code_station_hydrobio %in% choix_stations()
         ) %>%
         dplyr::mutate(annee = lubridate::year(date_prelevement))
 

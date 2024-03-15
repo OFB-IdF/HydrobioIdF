@@ -12,56 +12,49 @@ app_server <- function(input, output, session) {
   # "stations", "acronymes_indices", "date_donnees"
   mod_load_data_server("donnees")
 
-  departements <- mod_selecteur_server(id = "departements")
-  eqb <- mod_selecteur_server(id = "eqb")
-  regie_seule <- mod_checkbox_server(id = "regie")
+  choix_departements <- mod_selecteur_server(id = "departements")
+  choix_eqbs <- mod_selecteur_server(id = "eqb")
+  choix_stations <- mod_regie_server(id = "regie", choix_eqb = choix_eqbs, choix_dep = choix_departements)
 
   station <- mod_carte_server(
     "carte",
     donnees_carte = donnees_carte,
-    departements = departements,
-    eqb = eqb,
-    suivi_regie = regie_seule
+    choix_stations = choix_stations
     )
 
   ordre_taxon <- mod_selecteur_ordre_taxons_server(
     id = "ordre_taxons",
     choix_station = station,
-    choix_eqb = eqb
+    choix_eqb = choix_eqbs
     )
 
   mod_synthese_toutes_stations_server(
     id = "bilan_stations",
     stations, indices,
-    choix_departement = departements,
-    choix_eqb = eqb,
-    suivi_regie = regie_seule
+    choix_stations = choix_stations,
+    choix_eqb = choix_eqbs
   )
 
   mod_synthese_station_server(
     id = "synthese_station",
     resumes_listes, stations, indices, acronymes_indices, listes_taxo,
     choix_station = station,
-    choix_eqb = eqb,
+    choix_eqb = choix_eqbs,
     ordre_taxon = ordre_taxon,
-    suivi_regie = regie_seule
+    choix_stations = choix_stations
     )
 
 
   taxon <- mod_repartition_taxons_server(
     id = "carte_taxons",
     listes = donnees_carte_taxons,
-    departements = departements,
-    eqb = eqb,
-    suivi_regie = regie_seule
+    choix_stations = choix_stations,
+    choix_eqbs = choix_eqbs
   )
 
   mod_synthese_taxon_server(
     id = "synthese_taxon",
-    listes = listes_taxo,
-    stations = stations,
-    departements = departements,
     taxon = taxon,
-    suivi_regie = regie_seule
+    choix_stations = choix_stations
   )
 }

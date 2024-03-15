@@ -71,7 +71,7 @@ mod_repartition_taxons_ui <- function(id){
 #' @importFrom leaflet.extras addResetMapButton
 #' @importFrom sf st_bbox
 #' @importFrom shiny HTML
-mod_repartition_taxons_server <- function(id, listes, departements, eqb, suivi_regie){
+mod_repartition_taxons_server <- function(id, listes, choix_stations, choix_eqbs){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
 
@@ -195,11 +195,11 @@ mod_repartition_taxons_server <- function(id, listes, departements, eqb, suivi_r
     )
 
     observe({
-      req(eqb)
+      req(choix_eqbs)
 
-      choix_eqb <- eqb()
-      if (is.null(choix_eqb))
-        choix_eqb <- unique(listes$code_support)
+      eqbs <- choix_eqbs()
+      if (is.null(eqbs))
+        eqbs <- unique(listes$code_support)
 
       updateSelectizeInput(
         session = session,
@@ -207,7 +207,7 @@ mod_repartition_taxons_server <- function(id, listes, departements, eqb, suivi_r
         choices = c(
           "Choisir un taxon" = "",
           listes %>%
-            dplyr::filter(code_support %in% choix_eqb) %>%
+            dplyr::filter(code_support %in% eqbs) %>%
             dplyr::pull(libelle_taxon) %>%
             unique()
         ),
@@ -215,30 +215,15 @@ mod_repartition_taxons_server <- function(id, listes, departements, eqb, suivi_r
       )
 
     })
-    observe({
-      req(listes, departements, input$taxon, suivi_regie)
 
-      deps <- departements()
-      if (is.null(deps))
-        deps <- unique(listes$code_departement)
-      if ("PPC" %in% deps)
-        deps <- c(deps[deps != "PPC"], 75, 92, 93, 94)
+    observe({
+      req(choix_stations, input$taxon)
 
       DonneesCarte <- listes %>%
         dplyr::filter(
-          code_departement %in% deps,
+          code_station_hydrobio %in% choix_stations(),
           libelle_taxon == input$taxon
-        ) %>%
-        dplyr::left_join(
-          stations %>%
-            sf::st_drop_geometry() %>%
-            dplyr::select(code_station_hydrobio, regie),
-          by = "code_station_hydrobio"
         )
-
-      if (suivi_regie())
-        DonneesCarte <- DonneesCarte %>%
-        dplyr::filter(regie)
 
       BboxMap <- sf::st_bbox(
         DonneesCarte %>%
@@ -254,8 +239,10 @@ mod_repartition_taxons_server <- function(id, listes, departements, eqb, suivi_r
           lat2 = BboxMap[["ymax"]]
         )
 
-
-      if (nrow(DonneesCarte %>% dplyr::filter(libelle_taxon == input$taxon)) == 0) {
+      if (nrow(
+        DonneesCarte %>%
+        dplyr::filter(libelle_taxon == input$taxon)
+        ) == 0) {
         leaflet::leafletProxy("carte_taxon") %>%
           leaflet::clearMarkers(map = .)
       } else {

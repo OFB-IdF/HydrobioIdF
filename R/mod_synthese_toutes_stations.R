@@ -27,7 +27,7 @@ mod_synthese_toutes_stations_ui <- function(id){
 #' synthese_toutes_stations Server Functions
 #'
 #' @noRd
-mod_synthese_toutes_stations_server <- function(id, stations, indices, choix_departement, choix_eqb, suivi_regie){
+mod_synthese_toutes_stations_server <- function(id, stations, indices, choix_stations, choix_eqb){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
 
@@ -39,18 +39,8 @@ mod_synthese_toutes_stations_server <- function(id, stations, indices, choix_dep
       )
 
     observe({
-      req(choix_departement, choix_eqb, suivi_regie)
+      req(choix_stations, choix_eqb)
 
-      if (suivi_regie()) {
-        indices_dep <- indices_dep %>%
-          dplyr::filter(regie)
-      }
-
-      deps <- choix_departement()
-      if (is.null(deps))
-        deps <- unique(indices_dep$code_departement)
-      if ("PPC" %in% deps)
-        deps <- c(deps[deps != "PPC"], 75, 92, 93, 94)
 
       eqb <- choix_eqb()
       if (is.null(eqb))
@@ -58,7 +48,7 @@ mod_synthese_toutes_stations_server <- function(id, stations, indices, choix_dep
 
       resume_indices <- indices_dep %>%
         dplyr::filter(
-          code_departement %in% deps,
+          code_station_hydrobio %in% choix_stations(),
           code_support %in% eqb
           )
 
@@ -67,22 +57,26 @@ mod_synthese_toutes_stations_server <- function(id, stations, indices, choix_dep
         donnees_graphique = resume_indices
         )
 
-      output$synthese_stations <- renderUI({
+      if (nrow(resume_indices) == 0) {
+        output$synthese_stations <- renderUI(NULL)
+      } else {
+        output$synthese_stations <- renderUI({
 
-        tags$div(
-          class = "sub-tabpanel",
-          tabsetPanel(
-            tabPanel(
-              title = "Chroniques",
-              mod_hist_chroniques_ui(ns("chroniques"))
-            ),
-            tabPanel(
-              title = "Qualité"
+          tags$div(
+            class = "sub-tabpanel",
+            tabsetPanel(
+              tabPanel(
+                title = "Chroniques",
+                mod_hist_chroniques_ui(ns("chroniques"))
+              ),
+              tabPanel(
+                title = "Qualité"
+              )
             )
           )
-        )
 
-      })
+        })
+      }
     })
   })
 }

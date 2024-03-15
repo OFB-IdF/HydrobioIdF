@@ -78,7 +78,7 @@ app_ui <- function(request) {
                       ),
                       choix_multiple = TRUE
                     ),
-                    mod_checkbox_ui(
+                    mod_regie_ui(
                       id = "regie",
                       titre = "Stations suivies au moins une fois en régie"
                     ),
