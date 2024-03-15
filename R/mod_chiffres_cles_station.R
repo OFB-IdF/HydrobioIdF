@@ -23,15 +23,18 @@ mod_chiffres_cles_station_server <- function(id, resumes_listes, stations, choix
     ns <- session$ns
 
     observe({
-      resume_listes <- filtrer_resumes(resumes_listes, choix_station(), choix_eqb()) %>%
-        dplyr::select(-code_station_hydrobio, -code_support)
 
-      output$tableau <- renderTable(resume_listes)
-      output$titre <- renderText(with(
-        filtrer_station(stations, choix_station()),
-        paste0('<a href="', uri_station_hydrobio, '" target=”_blank”><b>',
-               libelle_station_hydrobio, '</b></a>')
+        resume_listes <- resumes_listes %>%
+          filtrer_resumes(choix_station(), choix_eqb()) %>%
+          dplyr::select(-code_station_hydrobio, -code_support)
+
+        output$tableau <- renderTable(resume_listes)
+        output$titre <- renderText(with(
+          filtrer_station(stations, choix_station()),
+          paste0('<a href="', uri_station_hydrobio, '" target=”_blank”><b>',
+                 libelle_station_hydrobio, '</b></a>')
         ))
+
     })
 
 

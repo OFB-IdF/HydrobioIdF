@@ -27,19 +27,24 @@ mod_synthese_toutes_stations_ui <- function(id){
 #' synthese_toutes_stations Server Functions
 #'
 #' @noRd
-mod_synthese_toutes_stations_server <- function(id, stations, indices, choix_departement, choix_eqb){
+mod_synthese_toutes_stations_server <- function(id, stations, indices, choix_departement, choix_eqb, suivi_regie){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
 
     indices_dep <- indices %>%
       dplyr::left_join(
         stations %>%
-          dplyr::select(code_station_hydrobio, code_departement),
+          dplyr::select(code_station_hydrobio, code_departement, regie),
         by = "code_station_hydrobio"
       )
 
     observe({
-      req(choix_departement, choix_eqb)
+      req(choix_departement, choix_eqb, suivi_regie)
+
+      if (suivi_regie()) {
+        indices_dep <- indices_dep %>%
+          dplyr::filter(regie)
+      }
 
       deps <- choix_departement()
       if (is.null(deps))
