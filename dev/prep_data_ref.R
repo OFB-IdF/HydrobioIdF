@@ -24,11 +24,6 @@ masque_metropole <- sf::st_read("C:/QGIS-CUSTOM/DATA/VECTEUR/administration/ADMI
   dplyr::summarise() %>%
   rmapshaper::ms_simplify()
 
-# reseau_hydro <- sf::st_read("C:/QGIS-CUSTOM/DATA/VECTEUR/hydrographie/bdtopage_idf.gpkg", layer = "cours_eau_2022") %>%
-#   sf::st_transform(crs = 4326) %>%
-#   dplyr::select(TopoOH, CdOH) %>%
-#   rmapshaper::ms_simplify()
-
 edl <- sf::st_read("C:/QGIS-CUSTOM/DATA/VECTEUR/surveillance/edl_sn.gpkg") %>%
   sf::st_transform(crs = 4326) %>%
   dplyr::filter(!sf::st_is_empty(.)) %>%
@@ -47,7 +42,6 @@ usethis::use_data(
   limites_region, limites_region_l,
   limites_bassin, limites_bassin_l,
   masque_metropole,
-  # reseau_hydro,
   edl, regie,
   internal = TRUE, overwrite = TRUE
   )

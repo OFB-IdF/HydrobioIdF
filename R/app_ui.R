@@ -80,7 +80,7 @@ app_ui <- function(request) {
                     ),
                     mod_checkbox_ui(
                       id = "regie",
-                      titre = "Suivis en régie"
+                      titre = "Stations suivies au moins une fois en régie"
                     ),
                     mod_selecteur_ordre_taxons_ui(
                       id = "ordre_taxons"

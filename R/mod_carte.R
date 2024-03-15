@@ -226,7 +226,7 @@ mod_carte_server <- function(id, donnees_carte, departements, eqb, suivi_regie){
 
       if (suivi_regie())
         DonneesCarte <- DonneesCarte %>%
-        dplyr::filter(regie & choix_eqb != 4)
+        dplyr::filter(regie)
 
       DonneesCarte <- DonneesCarte %>%
         dplyr::group_by(code_station_hydrobio, libelle_station_hydrobio) %>%
