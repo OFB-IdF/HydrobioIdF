@@ -224,17 +224,21 @@ mod_repartition_taxons_server <- function(id, listes, departements, eqb, suivi_r
       if ("PPC" %in% deps)
         deps <- c(deps[deps != "PPC"], 75, 92, 93, 94)
 
-      # if (suivi_regie())
-      #   DonneesCarte <- DonneesCarte %>%
-      #   dplyr::filter(regie & choix_eqb != 4)
-
       DonneesCarte <- listes %>%
         dplyr::filter(
           code_departement %in% deps,
           libelle_taxon == input$taxon
+        ) %>%
+        dplyr::left_join(
+          stations %>%
+            sf::st_drop_geometry() %>%
+            dplyr::select(code_station_hydrobio, regie),
+          by = "code_station_hydrobio"
         )
 
-      print(colnames(DonneesCarte))
+      if (suivi_regie())
+        DonneesCarte <- DonneesCarte %>%
+        dplyr::filter(regie)
 
       BboxMap <- sf::st_bbox(
         DonneesCarte %>%

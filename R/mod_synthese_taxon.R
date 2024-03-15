@@ -36,28 +36,31 @@ mod_synthese_taxon_server <- function(id, listes, stations, departements, taxon,
       return(fxn)
     }
 
-    listes <- listes %>%
-            dplyr::left_join(
-              stations %>%
-                dplyr::select(code_station_hydrobio, code_departement),
-              by = c("code_station_hydrobio"), multiple = "all"
-            )
-
+    listes_all <- listes %>%
+      dplyr::left_join(
+        stations %>%
+          dplyr::select(code_station_hydrobio, code_departement, regie),
+        by = c("code_station_hydrobio"), multiple = "all"
+      )
 
     observe({
       req(departements, taxon, suivi_regie)
 
       deps <- departements()
       if (is.null(deps))
-        deps <- unique(listes$code_departement)
+        deps <- unique(listes_all$code_departement)
       if ("PPC" %in% deps)
         deps <- c(deps[deps != "PPC"], 75, 92, 93, 94)
 
-      # if (suivi_regie())
-      #   DonneesCarte <- DonneesCarte %>%
-      #   dplyr::filter(regie & choix_eqb != 4)
 
-      listes_dep <- listes %>%
+      if (suivi_regie()) {
+        listes_dep <- listes_all %>%
+          dplyr::filter(regie)
+      } else {
+        listes_dep <- listes_all
+      }
+
+      listes_dep <- listes_dep %>%
         dplyr::filter(
           code_departement %in% deps
         ) %>%
@@ -168,6 +171,9 @@ mod_synthese_taxon_server <- function(id, listes, stations, departements, taxon,
                     legend.position = "none"
                   )
               })
+      } else {
+        output$chronique_stations <- renderPlot(NULL)
+        output$chronique_abondances <- renderPlot(NULL)
       }
 
     })
