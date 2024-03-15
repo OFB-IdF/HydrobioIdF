@@ -211,9 +211,7 @@ mod_carte_server <- function(id, donnees_carte, choix_stations){
       DonneesCarte <- donnees_carte %>%
         dplyr::filter(
           code_station_hydrobio %in% choix_stations()
-          )
-
-      DonneesCarte <- DonneesCarte %>%
+          ) %>%
         dplyr::group_by(code_station_hydrobio, libelle_station_hydrobio) %>%
         dplyr::summarise(
           derniers_resultats = paste(derniers_resultats, collapse = "<br>"),
@@ -308,6 +306,41 @@ mod_carte_server <- function(id, donnees_carte, choix_stations){
     # observe the marker click info and print to console when it is changed.
     observeEvent(input$carte_op_marker_click,{
       SelectionPoint$clickedMarker <- input$carte_op_marker_click$id
+
+      DonneesStation <- donnees_carte %>%
+        dplyr::filter(
+          code_station_hydrobio == SelectionPoint$clickedMarker
+        ) %>%
+        dplyr::group_by(code_station_hydrobio, libelle_station_hydrobio) %>%
+        dplyr::summarise(
+          derniers_resultats = paste(derniers_resultats, collapse = "<br>"),
+          nb_annees = max(nb_annees),
+          .groups = "drop"
+        ) %>%
+        dplyr::mutate(
+          hover = paste0(
+            "<b>", libelle_station_hydrobio, "</b><br><br>",
+            derniers_resultats
+          )
+        )
+
+
+      leaflet::leafletProxy("carte_op") %>%
+        leaflet::clearGroup(map = ., group = "station_selected") %>%
+        leaflet::addCircleMarkers(
+          map = .,
+          data = DonneesStation,
+          layerId = ~code_station_hydrobio,
+          radius = ~radius_pal(nb_annees),
+          stroke = TRUE,
+          color = "black",
+          fillColor = c("#1874CD"),
+          fillOpacity = 1,
+          weight = 2,
+          label = ~lapply(hover, shiny::HTML),
+          options = pathOptions(pane = "foreground"),
+          group = "station_selected"
+        )
     })
 
     # POUR UNE RAISON QUE JE NE COMPRENDS PAS
