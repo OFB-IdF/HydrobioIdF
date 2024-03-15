@@ -324,6 +324,10 @@ mod_carte_server <- function(id, donnees_carte, choix_stations){
           )
         )
 
+      CoordsStation <- DonneesStation %>%
+        sf::st_centroid() %>%
+        sf::st_coordinates()
+
 
       leaflet::leafletProxy("carte_op") %>%
         leaflet::clearGroup(map = ., group = "station_selected") %>%
@@ -340,6 +344,11 @@ mod_carte_server <- function(id, donnees_carte, choix_stations){
           label = ~lapply(hover, shiny::HTML),
           options = pathOptions(pane = "foreground"),
           group = "station_selected"
+        ) %>%
+        leaflet::setView(
+          lng = unname(CoordsStation[,"X"]),
+          lat = unname(CoordsStation[,"Y"]),
+          zoom = input$carte_op_zoom
         )
     })
 
