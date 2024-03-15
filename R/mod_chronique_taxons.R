@@ -24,40 +24,9 @@ mod_chronique_taxons_ui <- function(id){
       tags$head(
         tags$style(css)
       ),
+      uiOutput(ns("tabs"))
 
-    tags$div(
-      class = "sub-tabpanel",
-      tabsetPanel(
-        tabPanel(
-          title = HTML("<p style='font-size:14px;color:black;margin:0px;'>Diatomées</p>"),
-          shinydashboard::box(
-            plotOutput(outputId = ns("diatomees"),
-                       height = h)
-            )
-        ),
-        tabPanel(
-          title = HTML("<p style='font-size:14px;color:black;margin:0px;'>Macrophytes</p>"),
-          shinydashboard::box(
-            plotOutput(outputId = ns("macrophytes"),
-                       height = h)
-          )
-        ),
-        tabPanel(
-          title = HTML("<p style='font-size:14px;color:black;margin:0px;'>Macroinvertébrés</p>"),
-          shinydashboard::box(
-            plotOutput(outputId = ns("invertebres"),
-                       height = h)
-          )
-        ),
-        tabPanel(
-          title = HTML("<p style='font-size:14px;color:black;margin:0px;'>Poissons</p>"),
-          shinydashboard::box(
-            plotOutput(outputId = ns("poissons"),
-                       height = h)
-          )
-        )
-      )
-    )
+
   )
 }
 
@@ -107,6 +76,72 @@ mod_chronique_taxons_server <- function(id, stations, listes_taxo, choix_station
       width = w
       )
 
+      output$tabs <- renderUI({
+        h <- 525
+        w <- 550
+
+        eqbs <- choix_eqb()
+        if (is.null(eqbs)) eqbs <- unique(listes_taxo$code_support)
+
+        if ("10" %in% eqbs) {
+          tab10 <- tabPanel(
+            title = HTML("<p style='font-size:14px;color:black;margin:0px;'>Diatomées</p>"),
+            shinydashboard::box(
+              plotOutput(outputId = ns("diatomees"),
+                         height = h)
+            )
+          )
+        } else {
+          tab10 <- NULL
+        }
+
+        if ("27" %in% eqbs) {
+          tab27 <- tabPanel(
+            title = HTML("<p style='font-size:14px;color:black;margin:0px;'>Macrophytes</p>"),
+            shinydashboard::box(
+              plotOutput(outputId = ns("macrophytes"),
+                         height = h)
+            )
+          )
+        } else {
+          tab27 <- NULL
+        }
+
+        if ("13" %in% eqbs) {
+          tab13 <- tabPanel(
+            title = HTML("<p style='font-size:14px;color:black;margin:0px;'>Macroinvertébrés</p>"),
+            shinydashboard::box(
+              plotOutput(outputId = ns("invertebres"),
+                         height = h)
+            )
+          )
+        } else {
+          tab13 <- NULL
+        }
+
+        if ("4" %in% eqbs) {
+          tab4 <- tabPanel(
+            title = HTML("<p style='font-size:14px;color:black;margin:0px;'>Poissons</p>"),
+            shinydashboard::box(
+              plotOutput(outputId = ns("poissons"),
+                         height = h)
+            )
+          )
+        } else {
+          tab4 <- NULL
+        }
+
+
+        tags$div(
+          class = "sub-tabpanel",
+          tabsetPanel(
+            tab10,
+            tab27,
+            tab13,
+            tab4
+          )
+        )
+      })
     })
   })
 }
