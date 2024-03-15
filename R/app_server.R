@@ -43,7 +43,8 @@ app_server <- function(input, output, session) {
     resumes_listes, stations, indices, acronymes_indices, listes_taxo,
     choix_station = station,
     choix_eqb = eqb,
-    ordre_taxon = ordre_taxon
+    ordre_taxon = ordre_taxon,
+    suivi_regie = regie_seule
     )
 
 
