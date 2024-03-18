@@ -85,10 +85,7 @@ mod_chronique_taxons_server <- function(id, stations, listes_taxo, choix_station
         h <- 525
         w <- 550
 
-        eqbs <- choix_eqb()
-        if (is.null(eqbs)) eqbs <- unique(listes_taxo$code_support)
-
-        if ("10" %in% eqbs) {
+        if (nrow(liste_diato) > 0) {
           tab10 <- tabPanel(
             title = HTML("<p style='font-size:14px;color:black;margin:0px;'>Diatomées</p>"),
             shinydashboard::box(
@@ -100,7 +97,7 @@ mod_chronique_taxons_server <- function(id, stations, listes_taxo, choix_station
           tab10 <- NULL
         }
 
-        if ("27" %in% eqbs) {
+        if (nrow(liste_macro) > 0) {
           tab27 <- tabPanel(
             title = HTML("<p style='font-size:14px;color:black;margin:0px;'>Macrophytes</p>"),
             shinydashboard::box(
@@ -112,7 +109,7 @@ mod_chronique_taxons_server <- function(id, stations, listes_taxo, choix_station
           tab27 <- NULL
         }
 
-        if ("13" %in% eqbs) {
+        if (nrow(liste_inv) > 0) {
           tab13 <- tabPanel(
             title = HTML("<p style='font-size:14px;color:black;margin:0px;'>Macroinvertébrés</p>"),
             shinydashboard::box(
@@ -124,7 +121,7 @@ mod_chronique_taxons_server <- function(id, stations, listes_taxo, choix_station
           tab13 <- NULL
         }
 
-        if ("4" %in% eqbs) {
+        if (nrow(liste_pois) > 0) {
           tab4 <- tabPanel(
             title = HTML("<p style='font-size:14px;color:black;margin:0px;'>Poissons</p>"),
             shinydashboard::box(
