@@ -256,7 +256,7 @@ mod_repartition_taxons_server <- function(id, listes, choix_stations, choix_eqbs
             radius = 7,
             stroke = TRUE,
             color = "black",
-            fillColor = c("#FFB90F"),
+            fillColor = "white",
             fillOpacity = 1,
             weight = 2,
             label = ~lapply(hover, shiny::HTML),
@@ -267,8 +267,51 @@ mod_repartition_taxons_server <- function(id, listes, choix_stations, choix_eqbs
 
     })
 
+    repartition <- reactiveValues()
 
-    reactive(input$taxon)
+    observe({
+      repartition$taxon <- input$taxon
+      repartition$station <- input$carte_taxon_marker_click$id
+      })
+
+    observeEvent(repartition$station, {
+      DonneesStation <- listes %>%
+        dplyr::filter(
+          libelle_taxon == repartition$taxon,
+          code_station_hydrobio == repartition$station
+          )
+
+      CoordsStation <- DonneesStation %>%
+        sf::st_centroid() %>%
+        sf::st_coordinates()
+
+      leaflet::leafletProxy("carte_taxon") %>%
+        leaflet::clearGroup(
+          group = "station_selected"
+        ) %>%
+        leaflet::addCircleMarkers(
+          data = DonneesStation,
+          layerId = ~code_station_hydrobio,
+          radius = 7,
+          stroke = TRUE,
+          color = "black",
+          fillColor = c("#6495ED"),
+          fillOpacity = 1,
+          weight = 2,
+          label = ~lapply(hover, shiny::HTML),
+          options = pathOptions(pane = "foreground"),
+          group = "station_selected"
+        ) %>%
+        leaflet::setView(
+          lng = unname(CoordsStation[,"X"]),
+          lat = unname(CoordsStation[,"Y"]),
+          zoom = input$carte_taxon_zoom
+        )
+    })
+
+
+    return(repartition)
+
   })
 }
 

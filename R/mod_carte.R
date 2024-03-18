@@ -330,9 +330,10 @@ mod_carte_server <- function(id, donnees_carte, choix_stations){
 
 
       leaflet::leafletProxy("carte_op") %>%
-        leaflet::clearGroup(map = ., group = "station_selected") %>%
+        leaflet::clearGroup(
+          group = "station_selected"
+          ) %>%
         leaflet::addCircleMarkers(
-          map = .,
           data = DonneesStation,
           layerId = ~code_station_hydrobio,
           radius = ~radius_pal(nb_annees),
