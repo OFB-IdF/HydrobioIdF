@@ -92,7 +92,7 @@ mod_synthese_taxon_server <- function(id, repartition, choix_stations){
                   fill = esp_pres
                 ),
                 width = .95,
-                colour = c("#104E8B")
+                colour = c("black")
               ) +
               # ggplot2::geom_text(
               #   mapping = ggplot2::aes(
@@ -111,8 +111,8 @@ mod_synthese_taxon_server <- function(id, repartition, choix_stations){
               ) +
               ggplot2::scale_fill_manual(
                 values = c(
-                  `TRUE` = "#6495ED",
-                  `FALSE` = "white"
+                  `TRUE` = "white",
+                  `FALSE` = "darkgrey"
                 )
               ) +
               ggplot2::theme_minimal(base_size = 16) +
@@ -125,7 +125,7 @@ mod_synthese_taxon_server <- function(id, repartition, choix_stations){
           })
 
           output$chronique_abondances <- renderPlot({
-            listes_taxon %>%
+            plot_ab <- listes_taxon %>%
               dplyr::group_by(libelle_taxon, annee) %>%
               dplyr::summarise(ab_moy = sum(resultat_taxon) / dplyr::n_distinct(code_station_hydrobio)) %>%
               ggplot2::ggplot() +
@@ -134,7 +134,7 @@ mod_synthese_taxon_server <- function(id, repartition, choix_stations){
                   x = annee,
                   y = ab_moy
                 ),
-                fill = "#6495ED",
+                fill = "white", colour = "black",
                 width = .95
               ) +
               ggplot2::labs(
@@ -146,11 +146,35 @@ mod_synthese_taxon_server <- function(id, repartition, choix_stations){
               ) +
               ggplot2::theme_minimal(base_size = 16) +
               ggplot2::theme(
+                plot.subtitle = ggplot2::element_text(
+                  colour = "#6495ED",
+                  face = "bold"
+                    ),
                 panel.grid.major.x = ggplot2::element_blank(),
                 panel.grid.minor.x = ggplot2::element_blank(),
                 axis.title = ggplot2::element_text(hjust = .95),
                 legend.position = "right"
               )
+
+            if (!is.null(repartition$station)) {
+              plot_ab <- plot_ab +
+                ggplot2::geom_point(
+                  data = listes_taxon %>%
+                    dplyr::filter(code_station_hydrobio == repartition$station) %>%
+                    dplyr::group_by(annee) %>%
+                    dplyr::summarise(ab_moy = mean(resultat_taxon)),
+                  mapping = ggplot2::aes(
+                    x = annee, y = ab_moy
+                  ),
+                  shape = 21, size = 6,
+                  fill = "#6495ED", colour = "black"
+                ) +
+                ggplot2::labs(subtitle = stations %>%
+                                dplyr::filter(code_station_hydrobio == repartition$station) %>%
+                                dplyr::pull(libelle_station_hydrobio))
+            }
+
+            plot_ab
           })
 
         } else {
