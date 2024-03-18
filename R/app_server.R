@@ -45,7 +45,7 @@ app_server <- function(input, output, session) {
     )
 
 
-  taxon <- mod_repartition_taxons_server(
+  repartition <- mod_repartition_taxons_server(
     id = "carte_taxons",
     listes = donnees_carte_taxons,
     choix_stations = choix_stations,
@@ -54,7 +54,7 @@ app_server <- function(input, output, session) {
 
   mod_synthese_taxon_server(
     id = "synthese_taxon",
-    taxon = taxon,
+    repartition = repartition,
     choix_stations = choix_stations
   )
 }

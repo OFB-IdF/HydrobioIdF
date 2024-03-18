@@ -267,8 +267,14 @@ mod_repartition_taxons_server <- function(id, listes, choix_stations, choix_eqbs
 
     })
 
+    repartition <- reactiveValues()
 
-    reactive(input$taxon)
+    observe({
+      repartition$taxon <- input$taxon
+      })
+
+    return(repartition)
+
   })
 }
 
