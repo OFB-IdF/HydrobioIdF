@@ -256,7 +256,7 @@ mod_repartition_taxons_server <- function(id, listes, choix_stations, choix_eqbs
             radius = 7,
             stroke = TRUE,
             color = "black",
-            fillColor = c("#FFB90F"),
+            fillColor = c("#6495ED"),
             fillOpacity = 1,
             weight = 2,
             label = ~lapply(hover, shiny::HTML),

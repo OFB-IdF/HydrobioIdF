@@ -133,7 +133,7 @@ mod_synthese_taxon_server <- function(id, taxon, choix_stations){
                 x = annee,
                 y = ab_moy
               ),
-              fill = "#FFB90F",
+              fill = "#6495ED",
               width = .95
             ) +
             ggplot2::labs(
