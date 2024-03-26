@@ -205,13 +205,13 @@ mod_carte_server <- function(id, donnees_carte, choix_stations){
         leaflet.extras::addResetMapButton()
     )
 
-    observe({
+    DonneesCarte <- reactive({
       req(choix_stations)
 
-      DonneesCarte <- donnees_carte %>%
+      donnees_carte %>%
         dplyr::filter(
           code_station_hydrobio %in% choix_stations()
-          ) %>%
+        ) %>%
         dplyr::group_by(code_station_hydrobio, libelle_station_hydrobio) %>%
         dplyr::summarise(
           derniers_resultats = paste(derniers_resultats, collapse = "<br>"),
@@ -224,18 +224,21 @@ mod_carte_server <- function(id, donnees_carte, choix_stations){
             derniers_resultats
           )
         )
+    })
+    observe({
+      req(choix_stations)
 
       updateSelectizeInput(
         session = session,
         inputId = "station",
         choices = c(
           "Localiser une station" = "",
-          DonneesCarte$libelle_station_hydrobio
+          DonneesCarte()$libelle_station_hydrobio
         ),
         server = TRUE
       )
 
-      BboxMap <- sf::st_bbox(DonneesCarte)
+      BboxMap <- sf::st_bbox(DonneesCarte())
 
       leaflet::leafletProxy("carte_op") %>%
         leaflet::fitBounds(
@@ -247,7 +250,7 @@ mod_carte_server <- function(id, donnees_carte, choix_stations){
         )
 
 
-      if (nrow(DonneesCarte) == 0) {
+      if (nrow(DonneesCarte()) == 0) {
         leaflet::leafletProxy("carte_op") %>%
           leaflet::clearMarkers(map = .)
       } else {
@@ -255,7 +258,7 @@ mod_carte_server <- function(id, donnees_carte, choix_stations){
           leaflet::clearMarkers(map = .) %>%
           leaflet::addCircleMarkers(
             map = .,
-            data = DonneesCarte,
+            data = DonneesCarte(),
             layerId = ~code_station_hydrobio,
             radius = ~radius_pal(nb_annees),
             stroke = TRUE,
@@ -264,7 +267,8 @@ mod_carte_server <- function(id, donnees_carte, choix_stations){
             fillOpacity = 1,
             weight = 2,
             label = ~lapply(hover, shiny::HTML),
-            options = pathOptions(pane = "foreground")
+            options = pathOptions(pane = "foreground"),
+            group = "all_stations"
           )
       }
 
@@ -272,7 +276,7 @@ mod_carte_server <- function(id, donnees_carte, choix_stations){
 
         if (input$station != "") {
 
-          CoordsStation <- DonneesCarte %>%
+          CoordsStation <- DonneesCarte() %>%
             dplyr::filter(libelle_station_hydrobio == input$station) %>%
             dplyr::summarise() %>%
             sf::st_centroid() %>%
@@ -333,6 +337,23 @@ mod_carte_server <- function(id, donnees_carte, choix_stations){
         leaflet::clearGroup(
           group = "station_selected"
           ) %>%
+        leaflet::clearGroup(
+          group = "all_stations"
+        ) %>%
+        leaflet::addCircleMarkers(
+          map = .,
+          data = DonneesCarte(),
+          layerId = ~code_station_hydrobio,
+          radius = ~radius_pal(nb_annees),
+          stroke = TRUE,
+          color = "black",
+          fillColor = "white",
+          fillOpacity = 1,
+          weight = 2,
+          label = ~lapply(hover, shiny::HTML),
+          options = pathOptions(pane = "foreground"),
+          group = "all_stations"
+        ) %>%
         leaflet::addCircleMarkers(
           data = DonneesStation,
           layerId = ~code_station_hydrobio,

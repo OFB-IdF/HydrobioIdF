@@ -216,17 +216,21 @@ mod_repartition_taxons_server <- function(id, listes, choix_stations, choix_eqbs
 
     })
 
+    DonneesCarte <- reactive({
+      listes %>%
+      dplyr::filter(
+        code_station_hydrobio %in% choix_stations(),
+        libelle_taxon == input$taxon
+      )
+    })
+
+
+
     observe({
       req(choix_stations, input$taxon)
 
-      DonneesCarte <- listes %>%
-        dplyr::filter(
-          code_station_hydrobio %in% choix_stations(),
-          libelle_taxon == input$taxon
-        )
-
       BboxMap <- sf::st_bbox(
-        DonneesCarte %>%
+        DonneesCarte() %>%
           dplyr::filter(libelle_taxon == input$taxon)
         )
 
@@ -240,7 +244,7 @@ mod_repartition_taxons_server <- function(id, listes, choix_stations, choix_eqbs
         )
 
       if (nrow(
-        DonneesCarte %>%
+        DonneesCarte() %>%
         dplyr::filter(libelle_taxon == input$taxon)
         ) == 0) {
         leaflet::leafletProxy("carte_taxon") %>%
@@ -250,7 +254,7 @@ mod_repartition_taxons_server <- function(id, listes, choix_stations, choix_eqbs
           leaflet::clearMarkers(map = .) %>%
           leaflet::addCircleMarkers(
             map = .,
-            data = DonneesCarte %>%
+            data = DonneesCarte() %>%
               dplyr::filter(libelle_taxon == input$taxon),
             layerId = ~code_station_hydrobio,
             radius = 7,
@@ -260,7 +264,8 @@ mod_repartition_taxons_server <- function(id, listes, choix_stations, choix_eqbs
             fillOpacity = 1,
             weight = 2,
             label = ~lapply(hover, shiny::HTML),
-            options = pathOptions(pane = "foreground")
+            options = pathOptions(pane = "foreground"),
+            group = "all_stations"
           )
       }
 
@@ -288,6 +293,24 @@ mod_repartition_taxons_server <- function(id, listes, choix_stations, choix_eqbs
       leaflet::leafletProxy("carte_taxon") %>%
         leaflet::clearGroup(
           group = "station_selected"
+        ) %>%
+        leaflet::clearGroup(
+          group = "all_stations"
+        ) %>%
+        leaflet::addCircleMarkers(
+          map = .,
+          data = DonneesCarte() %>%
+            dplyr::filter(libelle_taxon == input$taxon),
+          layerId = ~code_station_hydrobio,
+          radius = 7,
+          stroke = TRUE,
+          color = "black",
+          fillColor = "white",
+          fillOpacity = 1,
+          weight = 2,
+          label = ~lapply(hover, shiny::HTML),
+          options = pathOptions(pane = "foreground"),
+          group = "all_stations"
         ) %>%
         leaflet::addCircleMarkers(
           data = DonneesStation,
