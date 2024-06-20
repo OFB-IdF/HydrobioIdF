@@ -171,8 +171,7 @@ importer_suivis_regie <- function(chemin_xlsx) {
                   pattern = "\\d{4}"
                 ) %>%
                 as.numeric(),
-              indice = i,
-              code_station = paste0("0", code_station)
+              indice = i
             ) %>%
             dplyr::filter(realisation %in%  c("0", "1")) %>%
             dplyr::select(
