@@ -11,7 +11,7 @@
 #' @importFrom patchwork wrap_plots
 #' @importFrom purrr map
 #' @importFrom stringr str_replace_na
-tracer_chroniques_indices <- function(DonneesGraphique, acronymes_indices, interactive = FALSE) {
+tracer_chroniques_indices <- function(DonneesGraphique, acronymes_indices, regie, interactive = FALSE) {
   integer_breaks <- function(n = 5, ...) {
     fxn <- function(x) {
       if (length(unique(na.omit(x))) == 1) {
@@ -37,11 +37,11 @@ tracer_chroniques_indices <- function(DonneesGraphique, acronymes_indices, inter
     ) %>%
     dplyr::left_join(
       regie %>%
+        dplyr::mutate(regie = realisation == 1) %>%
         dplyr::select(
           code_station_hydrobio = code_station,
-          code_indice, annee
-        ) %>%
-        dplyr::mutate(regie = TRUE),
+          code_indice, annee, regie
+        ),
       by = c("code_station_hydrobio", "code_indice", "annee"),
       multiple = "all"
     ) %>%

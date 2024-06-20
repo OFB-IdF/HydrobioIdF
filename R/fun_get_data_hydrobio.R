@@ -147,17 +147,21 @@ importer_suivis_regie <- function(chemin_xlsx) {
   openxlsx2::read_xlsx(chemin_xlsx) %>%
     janitor::clean_names() %>%
     (function(df_xl) {
-      indices <- df_xl[1,-seq(3)] %>%
+      colnames(df_xl)[seq(3)] <- df_xl[1,seq(3)] %>%
+        janitor::make_clean_names()
+
+      indices <- df_xl[1,-seq(4)] %>%
         t() %>%
         as.vector() %>%
-        unique()
+        unique() %>%
+        na.omit()
 
       purrr::map_dfr(
         indices,
         function(i) {
-          df_xl[-1,c(seq(3), which(as.vector(t(df_xl[1,])) == i))] %>%
+          df_xl[-1,c(seq(4), which(as.vector(t(df_xl[1,])) == i))] %>%
             tidyr::pivot_longer(
-              cols = -seq(3),
+              cols = -seq(4),
               names_to = "annee",
               values_to = "realisation"
             ) %>%
@@ -170,9 +174,9 @@ importer_suivis_regie <- function(chemin_xlsx) {
               indice = i,
               code_station = paste0("0", code_station)
             ) %>%
-            dplyr::filter(realisation == "X") %>%
+            dplyr::filter(realisation %in%  c("0", "1")) %>%
             dplyr::select(
-              cours_deau, commune, code_station, indice, annee
+              cours_deau, commune, code_station, indice, annee, realisation
             )
         }
       ) %>%
