@@ -2,7 +2,7 @@ library(HydrobioIdF)
 
 date_donnees <- Sys.Date()
 
-regie <- HydrobioIdF::importer_suivis_regie("dev/Historique prog labo.xlsx")
+regie <- importer_suivis_regie("dev/Historique prog labo.xlsx")
 
 stations <- telecharger_stations(
   code_departement = c(75, 77, 78, 91, 92, 93, 94, 95, 10, 51),
