@@ -4,23 +4,26 @@ date_donnees <- Sys.Date()
 
 regie <- importer_suivis_regie("dev/Historique prog labo.xlsx")
 
+departements <- c(75, 77, 78, 91, 92, 93, 94, 95)
+departements_extra <- c(10, 51, 52)
+
 stations <- telecharger_stations(
-  code_departement = c(75, 77, 78, 91, 92, 93, 94, 95, 10, 51),
+  code_departement = c(departements, departements_extra),
   suivi_regie = regie
   ) %>%
   dplyr::filter(
-    (code_departement %in% c(75, 77, 78, 91, 92, 93, 94, 95)) |  regie
+    (code_departement %in% departements) |  regie
   )
 
 indices <- telecharger_indices(
-  code_departement = c(75, 77, 78, 91, 92, 93, 94, 95, 10, 51)
+  code_departement = c(departements, departements_extra)
 ) %>%
   dplyr::filter(
     code_station_hydrobio %in% stations$code_station_hydrobio
   )
 
 listes_taxo <- telecharger_listes(
-  code_departement = c(75, 77, 78, 91, 92, 93, 94, 95, 10, 51)
+  code_departement = c(departements, departements_extra)
 ) %>%
   dplyr::filter(
     code_station_hydrobio %in% stations$code_station_hydrobio
