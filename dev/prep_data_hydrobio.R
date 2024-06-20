@@ -2,9 +2,11 @@ library(HydrobioIdF)
 
 date_donnees <- Sys.Date()
 
+regie <- HydrobioIdF::importer_suivis_regie("dev/Historique prog labo.xlsx")
+
 stations <- telecharger_stations(
   code_departement = c(75, 77, 78, 91, 92, 93, 94, 95, 10, 51),
-  suivi_regie = HydrobioIdF:::regie
+  suivi_regie = regie
   ) %>%
   dplyr::filter(
     (code_departement %in% c(75, 77, 78, 91, 92, 93, 94, 95)) |  regie
@@ -111,7 +113,7 @@ resumes_listes <- resumer_listes(listes_taxo)
 
 
 
-save(date_donnees, stations, indices, listes_taxo, resumes_listes, acronymes_indices, donnees_carte, donnees_carte_taxons,
+save(date_donnees, regie, stations, indices, listes_taxo, resumes_listes, acronymes_indices, donnees_carte, donnees_carte_taxons,
      file = "dev/data_hydrobio.rda")
 
 
