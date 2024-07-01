@@ -3,8 +3,32 @@
 #' @param input,output,session Internal parameters for {shiny}.
 #'     DO NOT REMOVE.
 #' @import shiny
+#' @importFrom shinylogs track_usage store_json
+#' @importFrom rdrop2 drop_auth
+#' @importFrom purrr walk
 #' @noRd
 app_server <- function(input, output, session) {
+  shinylogs::track_usage(
+    storage_mode = shinylogs::store_json("logs/")
+  )
+
+  session$onSessionEnded(function() {
+    rdrop2::drop_auth(
+      rdstoken = "dropbox_token.rds"
+    )
+
+    list.files("logs") %>%
+      purrr::walk(
+        function(log) {
+          rdrop2::drop_upload(
+            file = file.path("logs", log),
+            path = "shinyapps_logs",
+            mode = "add"
+          )
+        }
+      )
+  })
+
   # Your application server logic
 
   # Télécharge et charge dans l'espace de travail les données: "donnees_carte",
