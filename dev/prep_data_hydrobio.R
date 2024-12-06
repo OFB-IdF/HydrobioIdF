@@ -1,3 +1,5 @@
+if (!require(pak)) install.packages("pak")
+pak::pkg_install("OFB-IdF/HydrobioIdF")
 library(HydrobioIdF)
 
 date_donnees <- Sys.Date()
