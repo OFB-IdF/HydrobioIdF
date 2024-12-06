@@ -1,15 +1,14 @@
 if (!require(pak)) install.packages("pak")
 pak::pkg_install("OFB-IdF/HydrobioIdF")
-library(HydrobioIdF)
 
 date_donnees <- Sys.Date()
 
-regie <- importer_suivis_regie("dev/Historique prog labo.xlsx")
+regie <- HydrobioIdF::importer_suivis_regie("dev/Historique prog labo.xlsx")
 
 departements <- c(75, 77, 78, 91, 92, 93, 94, 95)
 departements_extra <- c(10, 51, 52)
 
-stations <- telecharger_stations(
+stations <- HydrobioIdF::telecharger_stations(
   code_departement = c(departements, departements_extra),
   suivi_regie = regie
   ) %>%
@@ -17,14 +16,14 @@ stations <- telecharger_stations(
     (code_departement %in% departements) |  regie
   )
 
-indices <- telecharger_indices(
+indices <- HydrobioIdF::telecharger_indices(
   code_departement = c(departements, departements_extra)
 ) %>%
   dplyr::filter(
     code_station_hydrobio %in% stations$code_station_hydrobio
   )
 
-listes_taxo <- telecharger_listes(
+listes_taxo <- HydrobioIdF::telecharger_listes(
   code_departement = c(departements, departements_extra)
 ) %>%
   dplyr::filter(
@@ -114,7 +113,7 @@ donnees_carte_taxons <- listes_taxo %>%
   ) %>%
   sf::st_transform(crs = 4326)
 
-resumes_listes <- resumer_listes(listes_taxo)
+resumes_listes <- HydrobioIdF::resumer_listes(listes_taxo)
 
 
 

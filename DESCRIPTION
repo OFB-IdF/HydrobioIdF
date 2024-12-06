@@ -10,15 +10,18 @@ Depends:
 Imports: 
     config (>= 0.3.1),
     dplyr,
+    forcats,
+    ggplot2,
     golem (>= 0.4.1),
     htmltools,
     hubeau,
+    janitor,
     knitr,
     leaflet,
     leaflet.extras,
     lubridate,
+    openxlsx2,
     patchwork,
-    pkgload,
     plotly,
     purrr,
     sf,
@@ -26,9 +29,6 @@ Imports:
     shinydashboard,
     stringr,
     tidyr
-Suggests:
-    openxlsx2,
-    janitor
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2
