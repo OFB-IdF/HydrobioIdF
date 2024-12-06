@@ -1,0 +1,28 @@
+on:
+  schedule:
+    - cron: "0 0 1 * *"
+  workflow_dispatch:
+
+name: Monthly update
+jobs:
+  run-update:
+    name: update data
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_PAT: ${{secrets.GITHUB_TOKEN}}
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Run R scripts in Docker
+        run: |
+          docker run --volume ${{ github.workspace}}:/workspace --workdir /workspace ofbidf/r_prr_onde:latest bash -c "
+          Rscript 'dev/prep_data_hydrobio.R'
+          "
+
+      - name: Commit results
+        run: |
+          git config --local user.email "actions@github.com"
+          git config --local user.name "GitHub Actions"
+          git add .
+          git commit -m "Results $(date)" || echo "No changes to commit"
+          git push origin -f || echo "No changes to commit"
