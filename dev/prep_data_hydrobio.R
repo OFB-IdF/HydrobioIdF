@@ -1,9 +1,12 @@
 if (!require(pak)) install.packages("pak")
-pak::pkg_install("OFB-IdF/HydrobioIdF")
+pak::pkg_install(c("OFB-IdF/HydrobioIdF", "CedricMondy/SEEEapi"))
 
 date_donnees <- Sys.Date()
 
 regie <- HydrobioIdF::importer_suivis_regie("dev/Historique prog labo.xlsx")
+typo_nationale <- sf::st_read("dev/stations_reseaux_sn.gpkg", layer = "stations_reseaux_sn") |> 
+  dplyr::select(CdStationMesureEauxSurface, TypeCEStationMesureEauxSurface) |> 
+  sf::st_drop_geometry()
 
 departements <- c(75, 77, 78, 91, 92, 93, 94, 95)
 departements_extra <- c(10, 51, 52)
@@ -14,6 +17,9 @@ stations <- HydrobioIdF::telecharger_stations(
   ) |>
   dplyr::filter(
     (code_departement %in% departements) |  regie
+  ) |> 
+  dplyr::left_join(
+    typo_nationale, by = c("code_station_hydrobio" = "CdStationMesureEauxSurface")
   )
 
 indices <- HydrobioIdF::telecharger_indices(
@@ -22,6 +28,79 @@ indices <- HydrobioIdF::telecharger_indices(
   dplyr::filter(
     code_station_hydrobio %in% stations$code_station_hydrobio
   )
+
+indices_seee <- indices |> 
+  dplyr::transmute(
+    CODE_OPERATION = code_prelevement,
+    CODE_STATION = code_station_hydrobio,
+    DATE = date_prelevement |> 
+      format(format = "%d/%m/%Y"),
+    CODE_PAR = code_indice,
+    LIB_PAR = libelle_indice,
+    RESULTAT = resultat_indice
+  ) |> 
+  dplyr::bind_rows(
+    indices |> 
+      dplyr::filter(code_indice == 7036) |> 
+      dplyr::transmute(
+        CODE_OPERATION = code_prelevement,
+        CODE_STATION = code_station_hydrobio,
+        DATE = date_prelevement |> 
+          format(format = "%d/%m/%Y")
+      ) |> 
+      dplyr::distinct() |> 
+      dplyr::mutate(
+        CODE_PAR = "NA",
+        LIB_PAR = "ALT",
+        RESULTAT = 200 # valeur bidon
+      )
+  ) |> 
+  dplyr::mutate(
+    LIB_PAR = ifelse(CODE_PAR == 7036, "IPR", LIB_PAR)
+  )
+
+stations_seee <- stations |> 
+  dplyr::transmute(
+    CODE_STATION = code_station_hydrobio,
+    TYPO_NATIONALE = TypeCEStationMesureEauxSurface,
+    TG_BV = TypeCEStationMesureEauxSurface |> 
+      stringr::str_detect(pattern = "TG") |> 
+      stringr::str_replace_all(pattern = 'TRUE', replacement = "OUI") |> 
+      stringr::str_replace_all(pattern = 'FALSE', replacement = "NON"),
+    PERIODE_DEBUT = lubridate::year(date_premier_prelevement),
+    PERIODE_FIN = lubridate::year(date_dernier_prelevement)
+  ) |> 
+  dplyr::filter(!is.na(TYPO_NATIONALE)) |> 
+  dplyr::rowwise() |> 
+  dplyr::mutate(ANNEE = list(seq(PERIODE_DEBUT, PERIODE_FIN))) |> 
+  dplyr::ungroup() |> 
+  tidyr::unnest(ANNEE) |> 
+  dplyr::select(CODE_STATION, TYPO_NATIONALE, TG_BV, PERIODE_DEBUT = ANNEE, PERIODE_FIN = ANNEE)
+
+
+# etat_bio <- SEEEapi::calc_indic(
+#     indic = "EBio_CE_2018",
+#     version = "1.0.1",
+#     data = list(
+#       stations_seee #|> readr::write_delim(file = "stations.txt", delim = "\t")
+#       ,
+#       indices_seee |> 
+#         dplyr::filter(CODE_PAR == 5856) #|> readr::write_delim(file = "ibd.csv", delim = ";")
+#       ,
+#       indices_seee |> 
+#         dplyr::filter(CODE_PAR == 2928) #|> readr::write_delim(file = "ibmr.csv", delim = ";")
+#       ,
+#       indices_seee |> 
+#         dplyr::filter(CODE_PAR == 7613) #|> readr::write_delim(file = "i2m2.csv", delim = ";")
+#       ,
+#       indices_seee |> 
+#         dplyr::filter(CODE_PAR  %in% c("NA", "7036") ) |> 
+#         dplyr::arrange(CODE_STATION, CODE_OPERATION, CODE_PAR) #|> readr::write_delim(file = "ipr.csv", delim = ";")
+#     )
+#   )
+
+etat_bio <- vroom::vroom("RESULTAT_EBio_CE_2018_1.0.1_2024-12-11-16-16-14.csv", skip = 1) |> 
+  dplyr::filter(!is.na(RESULTAT))
 
 listes_taxo <- HydrobioIdF::telecharger_listes(
   code_departement = c(departements, departements_extra)
@@ -116,7 +195,7 @@ donnees_carte_taxons <-
 resumes_listes <- HydrobioIdF::resumer_listes(listes_taxo)
 
 
-save(date_donnees, regie, stations, indices, listes_taxo, resumes_listes, acronymes_indices, donnees_carte, donnees_carte_taxons,
+save(date_donnees, regie, stations, indices, listes_taxo, resumes_listes, acronymes_indices, donnees_carte, donnees_carte_taxons, etat_bio,
      file = "dev/data_hydrobio.rda")
 
 
