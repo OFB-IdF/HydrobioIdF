@@ -6,7 +6,7 @@ date_donnees <- Sys.Date()
 regie <- HydrobioIdF::importer_suivis_regie("dev/Historique prog labo.xlsx")
 
 departements <- c(75, 77, 78, 91, 92, 93, 94, 95)
-departements_extra <- c(10, 51, 52)
+departements_extra <- c(10, 51, 52, 45)
 
 stations <- HydrobioIdF::telecharger_stations(
   code_departement = c(departements, departements_extra),
