@@ -1,6 +1,8 @@
 if (!require(pak)) install.packages("pak")
 pak::pkg_install("OFB-IdF/HydrobioIdF")
 
+unlink("dev/data_hydrobio.rda")
+
 date_donnees <- Sys.Date()
 
 regie <- HydrobioIdF::importer_suivis_regie("dev/Historique prog labo.xlsx")
@@ -82,7 +84,7 @@ donnees_carte <- stations |>
   dplyr::filter(!is.na(libelle_support)) |>
   sf::st_transform(crs = 4326)
 
-donnees_carte_taxons <- 
+donnees_carte_taxons <-
   dplyr::left_join(
     stations |>
       dplyr::select(code_departement, code_station_hydrobio),
