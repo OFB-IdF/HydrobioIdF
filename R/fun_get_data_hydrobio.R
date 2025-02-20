@@ -99,27 +99,47 @@ telecharger_listes <- function(code_departement, code_eqb = c(`Poissons` = 4, `D
     listes <- purrr::map(
       .x = stations,
       .f = function (x) {
-        hubeau::get_hydrobio_taxons(
-          code_station_hydrobio = x,
-          code_support = paste(code_eqb, collapse = ",")
-        ) %>%
-          (function(df_temp) {
-            if (nrow(df_temp) != 0) {
-              df_temp %>%
-                dplyr::group_by(
-                  code_station_hydrobio, libelle_station_hydrobio,
-                  code_prelevement, date_prelevement,
-                  code_support, libelle_support, code_appel_taxon, libelle_appel_taxon,
-                  coordonnee_x, coordonnee_y
-                ) %>%
-                dplyr::summarise(
-                  resultat_taxon = sum(resultat_taxon),
-                  .groups = "drop"
-                )
-            } else {
-              df_temp
-            }
-          })
+        taxons <- try(
+          hubeau::get_hydrobio_taxons(
+            code_station_hydrobio = x,
+            code_support = paste(code_eqb, collapse = ",")
+            )
+          )
+
+        trials <- 1
+        while (all(class(taxons) == "try-error" & trials <= 10)) {
+          taxons <- try(
+            hubeau::get_hydrobio_taxons(
+              code_station_hydrobio = x,
+              code_support = paste(code_eqb, collapse = ",")
+            )
+          )
+
+          trials <- trials + 1
+        }
+
+        if (any(class(taxons) == "try-error")) {
+          warning(paste0("Station ", x, ": erreur de téléchargement des listes"))
+        } else {
+          taxons %>%
+            (function(df_temp) {
+              if (nrow(df_temp) != 0) {
+                df_temp %>%
+                  dplyr::group_by(
+                    code_station_hydrobio, libelle_station_hydrobio,
+                    code_prelevement, date_prelevement,
+                    code_support, libelle_support, code_appel_taxon, libelle_appel_taxon,
+                    coordonnee_x, coordonnee_y
+                  ) %>%
+                  dplyr::summarise(
+                    resultat_taxon = sum(resultat_taxon),
+                    .groups = "drop"
+                  )
+              } else {
+                df_temp
+              }
+              })
+        }
       },
       .progress = TRUE
     ) %>%

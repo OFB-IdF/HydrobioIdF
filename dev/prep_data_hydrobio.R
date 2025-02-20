@@ -1,6 +1,8 @@
 if (!require(pak)) install.packages("pak")
 pak::pkg_install(c("OFB-IdF/HydrobioIdF", "CedricMondy/SEEEapi"))
 
+unlink("dev/data_hydrobio.rda")
+
 date_donnees <- Sys.Date()
 
 regie <- HydrobioIdF::importer_suivis_regie("dev/Historique prog labo.xlsx")
@@ -9,7 +11,7 @@ typo_nationale <- sf::st_read("dev/stations_reseaux_sn.gpkg", layer = "stations_
   sf::st_drop_geometry()
 
 departements <- c(75, 77, 78, 91, 92, 93, 94, 95)
-departements_extra <- c(10, 51, 52)
+departements_extra <- c(10, 51, 52, 45)
 
 stations <- HydrobioIdF::telecharger_stations(
   code_departement = c(departements, departements_extra),
@@ -161,7 +163,7 @@ donnees_carte <- stations |>
   dplyr::filter(!is.na(libelle_support)) |>
   sf::st_transform(crs = 4326)
 
-donnees_carte_taxons <- 
+donnees_carte_taxons <-
   dplyr::left_join(
     stations |>
       dplyr::select(code_departement, code_station_hydrobio),
