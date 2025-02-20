@@ -79,29 +79,30 @@ stations_seee <- stations |>
   tidyr::unnest(ANNEE) |> 
   dplyr::select(CODE_STATION, TYPO_NATIONALE, TG_BV, PERIODE_DEBUT = ANNEE, PERIODE_FIN = ANNEE)
 
+# SEEEapi::get_algo(
+#   indic = "EBio_CE_2018",
+#   version = "1.0.1",
+#   dir_algo = "algo_seee"
+# )
 
-# etat_bio <- SEEEapi::calc_indic(
-#     indic = "EBio_CE_2018",
-#     version = "1.0.1",
-#     data = list(
-#       stations_seee #|> readr::write_delim(file = "stations.txt", delim = "\t")
-#       ,
-#       indices_seee |> 
-#         dplyr::filter(CODE_PAR == 5856) #|> readr::write_delim(file = "ibd.csv", delim = ";")
-#       ,
-#       indices_seee |> 
-#         dplyr::filter(CODE_PAR == 2928) #|> readr::write_delim(file = "ibmr.csv", delim = ";")
-#       ,
-#       indices_seee |> 
-#         dplyr::filter(CODE_PAR == 7613) #|> readr::write_delim(file = "i2m2.csv", delim = ";")
-#       ,
-#       indices_seee |> 
-#         dplyr::filter(CODE_PAR  %in% c("NA", "7036") ) |> 
-#         dplyr::arrange(CODE_STATION, CODE_OPERATION, CODE_PAR) #|> readr::write_delim(file = "ipr.csv", delim = ";")
-#     )
-#   )
-
-etat_bio <- vroom::vroom("RESULTAT_EBio_CE_2018_1.0.1_2024-12-11-16-16-14.csv", skip = 1) |> 
+etat_bio <- SEEEapi::calc_indic(
+    indic = "EBio_CE_2018",
+    version = "1.0.1",
+    locally = TRUE,
+    dir_algo = "algo_seee",
+    data = list(
+      stations_seee,
+      indices_seee |> 
+        dplyr::filter(CODE_PAR == 5856),
+      indices_seee |> 
+        dplyr::filter(CODE_PAR == 2928),
+      indices_seee |> 
+        dplyr::filter(CODE_PAR == 7613),
+      indices_seee |> 
+        dplyr::filter(CODE_PAR  %in% c("NA", "7036") ) |> 
+        dplyr::arrange(CODE_STATION, CODE_OPERATION, CODE_PAR) 
+    )
+  )$result |> 
   dplyr::filter(!is.na(RESULTAT))
 
 listes_taxo <- HydrobioIdF::telecharger_listes(
@@ -197,7 +198,7 @@ donnees_carte_taxons <-
 resumes_listes <- HydrobioIdF::resumer_listes(listes_taxo)
 
 
-save(date_donnees, regie, stations, indices, listes_taxo, resumes_listes, acronymes_indices, donnees_carte, donnees_carte_taxons, etat_bio,
+save(date_donnees, regie, stations, indices, etat_bio, listes_taxo, resumes_listes, acronymes_indices, donnees_carte, donnees_carte_taxons, etat_bio,
      file = "dev/data_hydrobio.rda")
 
 
