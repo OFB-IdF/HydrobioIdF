@@ -1,0 +1,8 @@
+CHANGELOG EBio_CE_2018
+
+Version 1.0.1
+    Correction d'une erreur ne permettant pas les fichiers vides pour les résultats macroinvertébrés
+	22/02/2023 : Correction du json pour indiquer qu'il faut mettre I2M2 et pas MGCE ou MPCE.
+
+Version 1.0.0
+    Première version

@@ -1,11 +1,14 @@
 if (!require(pak)) install.packages("pak")
-pak::pkg_install("OFB-IdF/HydrobioIdF")
+pak::pkg_install(c("OFB-IdF/HydrobioIdF", "CedricMondy/SEEEapi"))
 
 unlink("dev/data_hydrobio.rda")
 
 date_donnees <- Sys.Date()
 
 regie <- HydrobioIdF::importer_suivis_regie("dev/Historique prog labo.xlsx")
+typo_nationale <- sf::st_read("dev/stations_reseaux_sn.gpkg", layer = "stations_reseaux_sn") |> 
+  dplyr::select(CdStationMesureEauxSurface, TypeCEStationMesureEauxSurface) |> 
+  sf::st_drop_geometry()
 
 departements <- c(75, 77, 78, 91, 92, 93, 94, 95)
 departements_extra <- c(10, 51, 52, 45)
@@ -16,6 +19,9 @@ stations <- HydrobioIdF::telecharger_stations(
   ) |>
   dplyr::filter(
     (code_departement %in% departements) |  regie
+  ) |> 
+  dplyr::left_join(
+    typo_nationale, by = c("code_station_hydrobio" = "CdStationMesureEauxSurface")
   )
 
 indices <- HydrobioIdF::telecharger_indices(
@@ -23,6 +29,172 @@ indices <- HydrobioIdF::telecharger_indices(
 ) |>
   dplyr::filter(
     code_station_hydrobio %in% stations$code_station_hydrobio
+  )
+
+indices_seee <- indices |> 
+  dplyr::transmute(
+    CODE_OPERATION = code_prelevement,
+    CODE_STATION = code_station_hydrobio,
+    DATE = date_prelevement |> 
+      format(format = "%d/%m/%Y"),
+    CODE_PAR = code_indice,
+    LIB_PAR = libelle_indice,
+    RESULTAT = resultat_indice
+  ) |> 
+  dplyr::bind_rows(
+    indices |> 
+      dplyr::filter(code_indice == 7036) |> 
+      dplyr::transmute(
+        CODE_OPERATION = code_prelevement,
+        CODE_STATION = code_station_hydrobio,
+        DATE = date_prelevement |> 
+          format(format = "%d/%m/%Y")
+      ) |> 
+      dplyr::distinct() |> 
+      dplyr::mutate(
+        CODE_PAR = "NA",
+        LIB_PAR = "ALT",
+        RESULTAT = 200 # valeur bidon
+      )
+  ) |> 
+  dplyr::mutate(
+    LIB_PAR = ifelse(CODE_PAR == 7036, "IPR", LIB_PAR)
+  )
+
+stations_seee <- stations |> 
+  dplyr::transmute(
+    CODE_STATION = code_station_hydrobio,
+    TYPO_NATIONALE = TypeCEStationMesureEauxSurface,
+    TG_BV = TypeCEStationMesureEauxSurface |> 
+      stringr::str_detect(pattern = "TG") |> 
+      stringr::str_replace_all(pattern = 'TRUE', replacement = "OUI") |> 
+      stringr::str_replace_all(pattern = 'FALSE', replacement = "NON"),
+    PERIODE_DEBUT = lubridate::year(date_premier_prelevement),
+    PERIODE_FIN = lubridate::year(date_dernier_prelevement)
+  ) |> 
+  dplyr::filter(!is.na(TYPO_NATIONALE)) |> 
+  dplyr::rowwise() |> 
+  dplyr::mutate(ANNEE = list(seq(PERIODE_DEBUT, PERIODE_FIN))) |> 
+  dplyr::ungroup() |> 
+  tidyr::unnest(ANNEE) |> 
+  dplyr::select(CODE_STATION, TYPO_NATIONALE, TG_BV, PERIODE_DEBUT = ANNEE, PERIODE_FIN = ANNEE)
+
+# SEEEapi::get_algo(
+#   indic = "EBio_CE_2018",
+#   version = "1.0.1",
+#   dir_algo = "algo_seee"
+# )
+
+etat_bio <- SEEEapi::calc_indic(
+    indic = "EBio_CE_2018",
+    version = "1.0.1",
+    locally = TRUE,
+    dir_algo = "algo_seee",
+    data = list(
+      stations_seee,
+      indices_seee |> 
+        dplyr::filter(CODE_PAR == 5856),
+      indices_seee |> 
+        dplyr::filter(CODE_PAR == 2928),
+      indices_seee |> 
+        dplyr::filter(CODE_PAR == 7613),
+      indices_seee |> 
+        dplyr::filter(CODE_PAR  %in% c("NA", "7036") ) |> 
+        dplyr::arrange(CODE_STATION, CODE_OPERATION, CODE_PAR) 
+    )
+  )$result |> 
+  dplyr::filter(!is.na(RESULTAT))
+
+fichiers_parametres <- list.files(
+  path = "algo_seee/EBio_CE_2018/1.0.1/",
+  pattern = "params",
+  full.names = TRUE
+)
+
+noms_indices_param <- fichiers_parametres |> 
+  stringr::str_remove(
+    pattern = "algo_seee/EBio_CE_2018/1.0.1/EBio_CE_2018_params_"
+) |> 
+  stringr::str_remove(
+    pattern = ".csv"
+  )
+
+valeurs_seuils <- fichiers_parametres |> 
+  purrr::map(
+    function(x) {
+      vroom::vroom(file = x, locale = vroom::locale(decimal_mark = ",")) 
+    }
+  ) |> 
+  purrr::set_names(noms_indices_param)
+
+for (x in noms_indices_param) {
+  print(x)
+  if (x == "IPR") {
+    valeurs_seuils$IPR <- valeurs_seuils$IPR |> 
+      dplyr::mutate(
+        bon = ifelse(is.na(BON), BASSE_ALTITUDE, BON)
+      ) |> 
+      dplyr::select(TYPO_NATIONALE, TRES_BON, BON = bon, MOYEN, MEDIOCRE, MAUVAIS) |> 
+      tidyr::pivot_longer(
+        cols = -TYPO_NATIONALE,
+        names_to = "classe", values_to = "seuil_haut"
+      ) |> 
+      dplyr::mutate(
+        seuil_bas = ifelse(classe == "TRES_BON", 0, dplyr::lag(seuil_haut))
+      )
+  } else {
+    if (x == "IBD") {
+      valeurs_seuils$IBD <- valeurs_seuils$IBD |> 
+        dplyr::select(TYPO_NATIONALE, TG_BV, TRES_BON, BON, MOYEN, MEDIOCRE, MAUVAIS) |> 
+        tidyr::pivot_longer(
+          cols = -c(TYPO_NATIONALE, TG_BV),
+          names_to = "classe", values_to = "seuil_bas"
+        ) |> 
+        dplyr::mutate(
+          seuil_haut = ifelse(classe == "TRES_BON", 1, dplyr::lag(seuil_bas))
+        )
+    } else {
+      valeurs_seuils[[x]] <- valeurs_seuils[[x]] |> 
+        dplyr::select(TYPO_NATIONALE, TRES_BON, BON, MOYEN, MEDIOCRE, MAUVAIS) |> 
+        tidyr::pivot_longer(
+          cols = -c(TYPO_NATIONALE),
+          names_to = "classe", values_to = "seuil_bas"
+        ) |> 
+        dplyr::mutate(
+          seuil_haut = ifelse(classe == "TRES_BON", 1, dplyr::lag(seuil_bas))
+        )
+    }
+  }
+}
+
+valeurs_seuils_stations <- stations_seee |> 
+  sf::st_drop_geometry() |> 
+  dplyr::distinct(CODE_STATION, TYPO_NATIONALE, TG_BV) |> 
+  dplyr::mutate(indice = "IBD") |> 
+  dplyr::left_join(
+    valeurs_seuils$IBD,
+    by = c("TYPO_NATIONALE", "TG_BV")
+  )
+
+for (i in noms_indices_param) {
+  if (i != "IBD") {
+    valeurs_seuils_stations <- dplyr::bind_rows(
+      valeurs_seuils_stations,
+      stations_seee |> 
+        sf::st_drop_geometry() |> 
+        dplyr::distinct(CODE_STATION, TYPO_NATIONALE, TG_BV) |> 
+        dplyr::mutate(indice = i) |> 
+        dplyr::left_join(
+          valeurs_seuils[[i]],
+          by = c("TYPO_NATIONALE")
+        )
+    )
+  }
+}
+
+valeurs_seuils_stations <- valeurs_seuils_stations |> 
+  dplyr::mutate(
+    seuil_haut = ifelse(is.na(seuil_bas), NA, seuil_haut)
   )
 
 listes_taxo <- HydrobioIdF::telecharger_listes(
@@ -118,7 +290,7 @@ donnees_carte_taxons <-
 resumes_listes <- HydrobioIdF::resumer_listes(listes_taxo)
 
 
-save(date_donnees, regie, stations, indices, listes_taxo, resumes_listes, acronymes_indices, donnees_carte, donnees_carte_taxons,
+save(date_donnees, regie, stations, indices, valeurs_seuils_stations, etat_bio, listes_taxo, resumes_listes, acronymes_indices, donnees_carte, donnees_carte_taxons, etat_bio,
      file = "dev/data_hydrobio.rda")
 
 
