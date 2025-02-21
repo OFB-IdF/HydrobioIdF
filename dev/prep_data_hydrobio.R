@@ -105,6 +105,98 @@ etat_bio <- SEEEapi::calc_indic(
   )$result |> 
   dplyr::filter(!is.na(RESULTAT))
 
+fichiers_parametres <- list.files(
+  path = "algo_seee/EBio_CE_2018/1.0.1/",
+  pattern = "params",
+  full.names = TRUE
+)
+
+noms_indices_param <- fichiers_parametres |> 
+  stringr::str_remove(
+    pattern = "algo_seee/EBio_CE_2018/1.0.1/EBio_CE_2018_params_"
+) |> 
+  stringr::str_remove(
+    pattern = ".csv"
+  )
+
+valeurs_seuils <- fichiers_parametres |> 
+  purrr::map(
+    function(x) {
+      vroom::vroom(file = x, locale = vroom::locale(decimal_mark = ",")) 
+    }
+  ) |> 
+  purrr::set_names(noms_indices_param)
+
+for (x in noms_indices_param) {
+  print(x)
+  if (x == "IPR") {
+    valeurs_seuils$IPR <- valeurs_seuils$IPR |> 
+      dplyr::mutate(
+        bon = ifelse(is.na(BON), BASSE_ALTITUDE, BON)
+      ) |> 
+      dplyr::select(TYPO_NATIONALE, TRES_BON, BON = bon, MOYEN, MEDIOCRE, MAUVAIS) |> 
+      tidyr::pivot_longer(
+        cols = -TYPO_NATIONALE,
+        names_to = "classe", values_to = "seuil_haut"
+      ) |> 
+      dplyr::mutate(
+        seuil_bas = ifelse(classe == "TRES_BON", 0, dplyr::lag(seuil_haut))
+      )
+  } else {
+    if (x == "IBD") {
+      valeurs_seuils$IBD <- valeurs_seuils$IBD |> 
+        dplyr::select(TYPO_NATIONALE, TG_BV, TRES_BON, BON, MOYEN, MEDIOCRE, MAUVAIS) |> 
+        tidyr::pivot_longer(
+          cols = -c(TYPO_NATIONALE, TG_BV),
+          names_to = "classe", values_to = "seuil_bas"
+        ) |> 
+        dplyr::mutate(
+          seuil_haut = ifelse(classe == "TRES_BON", 1, dplyr::lag(seuil_bas))
+        )
+    } else {
+      valeurs_seuils[[x]] <- valeurs_seuils[[x]] |> 
+        dplyr::select(TYPO_NATIONALE, TRES_BON, BON, MOYEN, MEDIOCRE, MAUVAIS) |> 
+        tidyr::pivot_longer(
+          cols = -c(TYPO_NATIONALE),
+          names_to = "classe", values_to = "seuil_bas"
+        ) |> 
+        dplyr::mutate(
+          seuil_haut = ifelse(classe == "TRES_BON", 1, dplyr::lag(seuil_bas))
+        )
+    }
+  }
+}
+
+valeurs_seuils_stations <- stations_seee |> 
+  sf::st_drop_geometry() |> 
+  dplyr::distinct(CODE_STATION, TYPO_NATIONALE, TG_BV) |> 
+  dplyr::mutate(indice = "IBD") |> 
+  dplyr::left_join(
+    valeurs_seuils$IBD,
+    by = c("TYPO_NATIONALE", "TG_BV")
+  )
+
+for (i in noms_indices_param) {
+  if (i != "IBD") {
+    valeurs_seuils_stations <- dplyr::bind_rows(
+      valeurs_seuils_stations,
+      stations_seee |> 
+        sf::st_drop_geometry() |> 
+        dplyr::distinct(CODE_STATION, TYPO_NATIONALE, TG_BV) |> 
+        dplyr::mutate(indice = i) |> 
+        dplyr::left_join(
+          valeurs_seuils[[i]],
+          by = c("TYPO_NATIONALE")
+        )
+    )
+  }
+}
+
+valeurs_seuils_stations <- valeurs_seuils_stations |> 
+  dplyr::mutate(
+    seuil_haut = ifelse(is.na(seuil_bas), NA, seuil_haut)
+  )
+
 listes_taxo <- HydrobioIdF::telecharger_listes(
   code_departement = c(departements, departements_extra)
 ) |>
@@ -198,7 +290,7 @@ donnees_carte_taxons <-
 resumes_listes <- HydrobioIdF::resumer_listes(listes_taxo)
 
 
-save(date_donnees, regie, stations, indices, etat_bio, listes_taxo, resumes_listes, acronymes_indices, donnees_carte, donnees_carte_taxons, etat_bio,
+save(date_donnees, regie, stations, indices, valeurs_seuils_stations, etat_bio, listes_taxo, resumes_listes, acronymes_indices, donnees_carte, donnees_carte_taxons, etat_bio,
      file = "dev/data_hydrobio.rda")
 
 
