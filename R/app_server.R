@@ -31,7 +31,7 @@ app_server <- function(input, output, session) {
 
   mod_synthese_toutes_stations_server(
     id = "bilan_stations",
-    stations, indices,
+    stations, etat_bio,
     choix_stations = choix_stations,
     choix_eqb = choix_eqbs
   )

@@ -57,6 +57,11 @@ mod_synthese_toutes_stations_server <- function(id, stations, indices, choix_sta
         donnees_graphique = resume_indices
         )
 
+      mod_hist_qualite_server(
+        id = "qualite",
+        donnees_graphique = resume_indices
+      )
+
       if (nrow(resume_indices) == 0) {
         output$synthese_stations <- renderUI(NULL)
       } else {
@@ -66,11 +71,12 @@ mod_synthese_toutes_stations_server <- function(id, stations, indices, choix_sta
             class = "sub-tabpanel",
             tabsetPanel(
               tabPanel(
-                title = "Chroniques",
-                mod_hist_chroniques_ui(ns("chroniques"))
+                title = "Qualité",
+                mod_hist_qualite_ui(ns("qualite"))
               ),
               tabPanel(
-                title = "Qualité"
+                title = "Chroniques",
+                mod_hist_chroniques_ui(ns("chroniques"))
               )
             )
           )
