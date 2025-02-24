@@ -32,7 +32,6 @@ indices <- HydrobioIdF::telecharger_indices(
   )
 
 indices_seee <- indices |>
-  dplyr::filter(code_indice != 7036) |>
   dplyr::transmute(
     CODE_OPERATION = code_prelevement,
     CODE_STATION = code_station_hydrobio,
@@ -86,7 +85,13 @@ stations_seee <- stations |>
 #   dir_algo = "algo_seee"
 # )
 
-etat_bio <- SEEEapi::calc_indic(
+# SEEEapi::get_algo(
+#   indic = "EBio_CE_2015",
+#   version = "1.0.1",
+#   dir_algo = "algo_seee"
+# )
+
+etat_bio <- (SEEEapi::calc_indic(
     indic = "EBio_CE_2018",
     version = "1.0.1",
     locally = TRUE,
@@ -103,7 +108,45 @@ etat_bio <- SEEEapi::calc_indic(
         dplyr::filter(CODE_PAR  %in% c("NA", "7036") ) |>
         dplyr::arrange(CODE_STATION, CODE_OPERATION, CODE_PAR)
     )
-  )$result |>
+  )$result) |>
+  dplyr::bind_rows(
+    SEEEapi::calc_indic(
+      indic = "EBio_CE_2018",
+      version = "1.0.1",
+      locally = TRUE,
+      dir_algo = "algo_seee",
+      data = list(
+        stations_seee,
+        indices_seee |>
+          dplyr::slice(0),
+        indices_seee |>
+          dplyr::slice(0),
+        indices_seee |>
+          dplyr::filter(CODE_PAR == 6951),
+        indices_seee |>
+          dplyr::slice(0)
+      )
+    )$result
+  ) |>
+  dplyr::bind_rows(
+    SEEEapi::calc_indic(
+      indic = "EBio_CE_2015",
+      version = "1.0.1",
+      locally = TRUE,
+      dir_algo = "algo_seee",
+      data = list(
+        stations_seee,
+        indices_seee |>
+          dplyr::slice(0),
+        indices_seee |>
+          dplyr::slice(0),
+        indices_seee |>
+          dplyr::filter(CODE_PAR == 5910),
+        indices_seee |>
+          dplyr::slice(0)
+      )
+    )$result
+  ) |>
   dplyr::filter(!is.na(RESULTAT)) |>
   dplyr::select(
     code_station_hydrobio = CODE_STATION,
@@ -126,10 +169,21 @@ etat_bio <- SEEEapi::calc_indic(
 etat_bio <- etat_bio |>
   dplyr::bind_rows(
     indices |>
-      dplyr::anti_join(etat_bio, by = c("code_station_hydrobio", "annee")) |>
+      dplyr::anti_join(etat_bio, by = c("code_indice", "code_station_hydrobio", "annee")) |>
       dplyr::select(
         code_station_hydrobio, annee, code_indice, libelle_indice, resultat_indice, code_support, libelle_support
       )
+  ) |>
+  dplyr::mutate(
+    libelle_indice = dplyr::case_when(
+      code_indice == 7036 ~ "IPR",
+      code_indice == 5856 ~ "IBD",
+      code_indice == 2928 ~ "IBMR",
+      code_indice == 7613 ~ "I2M2",
+      code_indice == 5910 ~ "IBG équivalent",
+      code_indice == 6951 ~ "Invertébrés GCE",
+      TRUE ~ libelle_indice
+    )
   )
 
 fichiers_parametres <- list.files(
@@ -137,10 +191,14 @@ fichiers_parametres <- list.files(
   pattern = "params",
   full.names = TRUE
 )
+fichiers_parametres <- c(
+  fichiers_parametres[!stringr::str_detect(fichiers_parametres, "IBG-DCE")],
+  "algo_seee/EBio_CE_2015/1.0.1/EBio_CE_2015_params_IBG-DCE.csv"
+)
 
 noms_indices_param <- fichiers_parametres |>
   stringr::str_remove(
-    pattern = "algo_seee/EBio_CE_2018/1.0.1/EBio_CE_2018_params_"
+    pattern = "algo_seee/EBio_CE_201\\d/1.0.1/EBio_CE_201\\d_params_"
 ) |>
   stringr::str_remove(
     pattern = ".csv"

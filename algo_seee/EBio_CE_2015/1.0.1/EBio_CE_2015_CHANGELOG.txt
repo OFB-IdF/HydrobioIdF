@@ -1,0 +1,7 @@
+CHANGELOG EBio_CE_2015
+
+Version 1.0.1
+    Correction d'une erreur ne permettant pas les fichiers vides pour les résultats macroinvertébrés
+
+Version 1.0.0
+    Première version
