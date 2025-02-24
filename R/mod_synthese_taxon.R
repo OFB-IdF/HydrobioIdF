@@ -22,20 +22,6 @@ mod_synthese_taxon_server <- function(id, repartition, choix_stations){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
 
-    integer_breaks <- function(n = 5, ...) {
-      fxn <- function(x) {
-        if (length(unique(na.omit(x))) == 1) {
-          breaks <- unique(na.omit(x))
-        } else {
-          breaks <- floor(pretty(x, n, ...))
-        }
-
-        names(breaks) <- attr(breaks, "labels")
-        unique(breaks)
-      }
-      return(fxn)
-    }
-
     observe({
       req(choix_stations)
 

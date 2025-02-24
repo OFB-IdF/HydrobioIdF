@@ -17,7 +17,7 @@ mod_synthese_station_ui <- function(id){
 #' synthese_station Server Functions
 #'
 #' @noRd
-mod_synthese_station_server <- function(id, resumes_listes, stations, regie, indices, acronymes_indices, listes_taxo, choix_station, choix_eqb, ordre_taxon, choix_stations){
+mod_synthese_station_server <- function(id, resumes_listes, stations, regie, indices, acronymes_indices, valeurs_seuils_stations, etat_bio, listes_taxo, choix_station, choix_eqb, ordre_taxon, choix_stations){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
 
@@ -45,6 +45,7 @@ mod_synthese_station_server <- function(id, resumes_listes, stations, regie, ind
           mod_chronique_indices_server(
             id = "chronique_indices",
             stations, regie, indices, acronymes_indices,
+            valeurs_seuils_stations, etat_bio,
             choix_station, choix_eqb
           )
 

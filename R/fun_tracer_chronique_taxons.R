@@ -14,20 +14,6 @@ tracer_chroniques_taxons <- function(liste_station, ordre_taxon) {
   liste_station <- liste_station %>%
     dplyr::mutate(annee = lubridate::year(date_prelevement))
 
-  integer_breaks <- function(n = 5, ...) {
-    fxn <- function(x) {
-      if (length(unique(na.omit(x))) == 1) {
-        breaks <- unique(na.omit(x))
-      } else {
-        breaks <- floor(pretty(x, n, ...))
-      }
-
-      names(breaks) <- attr(breaks, "labels")
-      unique(breaks)
-    }
-    return(fxn)
-  }
-
   x_lims <- range(na.omit(liste_station$annee))
   x_breaks <- integer_breaks(n = 3)(liste_station$annee)
 
