@@ -31,7 +31,7 @@ loadDependencies <- function(dependencies) {
   suppressAll <- function(expr) {
     suppressPackageStartupMessages(suppressWarnings(expr))
   }
-  
+
   lapply(dependencies,
          function(x)
          {
@@ -76,7 +76,7 @@ limites_ibd  <- read.csv2("EBio_CE_2018_params_IBD.csv",
                           stringsAsFactors = FALSE)
 limites_ibmr <- read.csv2("EBio_CE_2018_params_IBMR.csv",
                           stringsAsFactors = FALSE)
-limites_ibg  <- read.csv2("EBio_CE_2018_params_IBG-DCE.csv", 
+limites_ibg  <- read.csv2("EBio_CE_2018_params_IBG-DCE.csv",
                           stringsAsFactors = FALSE)
 limites_i2m2 <- read.csv2("EBio_CE_2018_params_I2M2.csv",
                           stringsAsFactors = FALSE)
@@ -91,37 +91,37 @@ funImport <- function(File, stations = NULL, params = NULL) {
   textImport <- readLines(con = File)
   headerLoc <- sapply(textImport, grepl, pattern = "CODE_OPERATION") %>%
     which()
-  
-  df <- read.csv2(File, as.is = TRUE, 
+
+  df <- read.csv2(File, as.is = TRUE,
                   quote = "\"", skip = headerLoc - 1,
                   colClasses = c(CODE_OPERATION = "character",
                                  CODE_STATION   = "character",
                                  DATE           = "character",
                                  CODE_PAR       = "character",
                                  RESULTAT       = "character"))
-  
+
   if (!is.null(stations)) {
     df <- filter(df, CODE_STATION %in% stations)
   }
-  
+
   if (!is.null(params)) {
     df <- filter(df, CODE_PAR %in% params | LIB_PAR == "ALT")
   }
-  
-  df <- mutate(df, 
+
+  df <- mutate(df,
                RESULTAT       = as.numeric(RESULTAT))
-  
+
   return(df[, colnames(df) != "TYPO_NATIONALE"])
 }
 
 ## Fonction permettant de faire la moyenne des indicateurs par site et par
 ## periode
 funMoyenne <- function(valeurs, dateFormat = "%d/%m/%Y", sites) {
-  sites <- mutate(sites, 
+  sites <- mutate(sites,
                   PERIODE_DEBUT = as.integer(as.character(PERIODE_DEBUT)),
                   PERIODE_FIN   = as.integer(as.character(PERIODE_FIN)),
                   CODE_STATION  = as.character(CODE_STATION))
-  
+
   mutate(valeurs,
          ANNEE = as.Date(DATE,
                          format = dateFormat
@@ -154,7 +154,7 @@ funMoyenne <- function(valeurs, dateFormat = "%d/%m/%Y", sites) {
 funEQR <- function(valeurs, references) {
   if (nrow(valeurs) > 0) {
     columns <- colnames(valeurs)
-    
+
     # IBD
     if (unique(valeurs$CODE_PAR) %in% 5856) {
       valeurs <- left_join(x = valeurs,
@@ -162,32 +162,33 @@ funEQR <- function(valeurs, references) {
                            by = c("TYPO_NATIONALE", "TG_BV")) %>%
         mutate(EQR = (RESULTAT - MINIMUM) / (REFERENCE - MINIMUM))
     }
-    
+
     # IBMR
     if (unique(valeurs$CODE_PAR) %in% 2928) {
       valeurs <- mutate(valeurs,
                         TYPO_NATIONALE = gsub(pattern = "TTGA\\d",
                                               replacement = "TTGA",
-                                              x = TYPO_NATIONALE)) %>% 
+                                              x = TYPO_NATIONALE)) %>%
         left_join(x = .,
                   y = references,
                   by = "TYPO_NATIONALE") %>%
         mutate(EQR = RESULTAT / REFERENCE)
     }
-    
+
     # IBG-DCE et MGCE
     if (unique(valeurs$CODE_PAR %in% c(5910, 6951))) {
       valeurs <- mutate(valeurs,
                         TYPO_NATIONALE = gsub(pattern = "TTGA\\d",
-                                              replacement = "TTGA")) %>% 
+                                              replacement = "TTGA",
+                                              x = TYPO_NATIONALE)) %>%
         left_join(x = .,
                   y = references,
                   by = "TYPO_NATIONALE") %>%
         mutate(EQR = (RESULTAT - 1) / (REFERENCE - 1))
     }
-    
+
     valeurs[, c(columns, "EQR")]
-    
+
   } else {
     mutate(valeurs, EQR = NA)
   }
@@ -196,26 +197,26 @@ funEQR <- function(valeurs, references) {
 ## Fonction permettant d'obtenir la classe de qualite d'un indicateur
 funClass <- function(valeurs, limites) {
   columns <- colnames(valeurs)
-  
+
   allocate_class <- function(val, lims, type = 1) {
     if (type == 1) {
-      cond <- round(val, 8) >= 
+      cond <- round(val, 8) >=
         round(lims[, c("TRES_BON", "BON", "MOYEN",
                        "MEDIOCRE", "MAUVAIS")], 8)
     }
-    
+
     if (type == 2) {
-      cond <- round(val, 8) <= 
+      cond <- round(val, 8) <=
         round(lims[, c("TRES_BON", "BON", "MOYEN",
                        "MEDIOCRE", "MAUVAIS")], 8)
     }
-    
+
     cond %>%
       apply(
         MARGIN = 1,
         (function(x) {
           ind <- (1:5)[x == TRUE]
-          
+
           if (all(is.na(ind))) {
             return(NA)
           } else {
@@ -227,22 +228,22 @@ funClass <- function(valeurs, limites) {
         })
       )
   }
-  
+
   if (nrow(valeurs) == 0) {
     valeurs <- mutate(valeurs,
                       CLASSE = as.character(RESULTAT)
     )
   } else {
-    
+
     if (unique(valeurs$CODE_PAR) %in% c(5856, 2928, 5910, 6951, 7613)) {
       if("TG_BV" %in% colnames(limites)) {
-        lims <- left_join(valeurs, limites, 
+        lims <- left_join(valeurs, limites,
                           by = c("TYPO_NATIONALE", "TG_BV"))
       } else {
         lims <- left_join(valeurs, limites, by = "TYPO_NATIONALE")
-        
+
       }
-      
+
       valeurs <-
         mutate(valeurs,
                CLASSE = allocate_class(
@@ -252,7 +253,7 @@ funClass <- function(valeurs, limites) {
                )
         )
     }
-    
+
     if (unique(valeurs$CODE_PAR) %in% c(7036)) {
       valeurs <- mutate(valeurs,
                         ALT2 = ifelse(ALT < 500,
@@ -263,7 +264,7 @@ funClass <- function(valeurs, limites) {
                           as.character()    %>%
                           as.numeric()
       )
-      
+
       lims <- left_join(valeurs, limites,
                         by = "TYPO_NATIONALE"
       ) %>%
@@ -274,7 +275,7 @@ funClass <- function(valeurs, limites) {
                                    HAUTE_ALTITUDE
                             )
         ))
-      
+
       valeurs <-
         mutate(valeurs,
                CLASSE = allocate_class(
@@ -285,7 +286,7 @@ funClass <- function(valeurs, limites) {
         )
     }
   }
-  
+
   return(valeurs[, c(columns, "CLASSE")])
 }
 
@@ -297,7 +298,7 @@ funAggregation <- function(classes) {
                              "MOYEN", "BON", "TRES_BON"
                            )
   )
-  
+
   names(classLevels)[min(classLevels[as.character(classes)], na.rm = TRUE)]
 }
 
@@ -316,7 +317,7 @@ funArrondi <- function (x, digits = 0) {
            ceiling(x)/(10^digits),
            round(x)/(10^digits))
   }
-  
+
   if (is.data.frame(x))
     return(data.frame(lapply(x, .local, digits)))
   .local(x, digits)
@@ -346,31 +347,31 @@ funResult 		<- function(indic, vIndic, heure_debut,
   heure_dif       <- heure_fin - heure_debut
   temps_execution <- paste0(round(heure_dif, 2),
                             attr(heure_dif, "units"))
-  
+
   # creation du bandeau d'information
   etiquette <- paste(indic, vIndic, Sys.Date(),
                      "Temps d'execution :", temps_execution,
                      sep = ";")
-  
+
   # sortie du bandeau d'information
   cat(paste0(etiquette, "\n"), file = file, sep = "")
-  
+
   # sortie du fichier de sortie
   write.table(data_sortie, row.names = FALSE, quote = FALSE, sep = ";",
               file = file, append = TRUE)
-  
+
   # Sortie complementaire
   if(complementaire)
   {
     if (file == "") {
       print("Fichier")
     }
-    
+
     cat(paste0(etiquette, "\n"), file = file_complementaire, sep = "")
     write.table(data_complementaire, row.names = FALSE, quote = FALSE,
                 sep = ";", file = file_complementaire, append = TRUE)
   }
-  
+
 }# fin de la fonction funResult
 
 ## INITIALISATION DU TRAITEMENT ----
@@ -393,8 +394,8 @@ heure_debut <- Sys.time()
 data_station <- read.table(File_station, header = TRUE, sep = "\t",
                            quote = "\"", stringsAsFactors = FALSE,
                            colClasses = c(CODE_STATION   = "character",
-                                          TYPO_NATIONALE = "character")) %>% 
-  mutate(TG_BV = if_else(condition = (TG_BV == "" | is.na(TG_BV)) & 
+                                          TYPO_NATIONALE = "character")) %>%
+  mutate(TG_BV = if_else(condition = (TG_BV == "" | is.na(TG_BV)) &
                            !grepl(pattern = "TG", x = TYPO_NATIONALE),
                          true  = "NON",
                          false = TG_BV))
@@ -413,7 +414,7 @@ data_mib  <- funImport(File     = File_mib,
 
 data_ipr  <- funImport(File     = File_ipr,
                        stations = data_station$CODE_STATION,
-                       params   = indicateurs$CODE_PAR) 
+                       params   = indicateurs$CODE_PAR)
 
 alt <- filter(data_ipr, LIB_PAR %in% "ALT") %>%
   mutate(ALT = RESULTAT)                  %>%
@@ -436,8 +437,8 @@ paramsOut <- data.frame(
 )
 
 data_sortie <- funSortie(data_entree = data_station, paramsOut = paramsOut,
-                         CODE_STATION, TYPO_NATIONALE, TG_BV, 
-                         PERIODE_DEBUT, PERIODE_FIN) %>% 
+                         CODE_STATION, TYPO_NATIONALE, TG_BV,
+                         PERIODE_DEBUT, PERIODE_FIN) %>%
   mutate(CODE_STATION   = as.character(CODE_STATION),
          PERIODE_DEBUT  = as.integer(PERIODE_DEBUT),
          PERIODE_FIN    = as.integer(PERIODE_FIN),
@@ -462,7 +463,7 @@ table_mib <- funMoyenne(valeurs    = data_mib,
 
 table_ipr <- funMoyenne(valeurs    = data_ipr,
                         dateFormat = "%d/%m/%Y",
-                        sites      = data_station) 
+                        sites      = data_station)
 
 # Calcul des EQR
 
@@ -476,17 +477,17 @@ if (nrow(table_mib) > 0) {
   if (unique(table_mib$CODE_PAR) == 5910) limites_mib <- limites_ibg
   if (unique(table_mib$CODE_PAR) == 6951) limites_mib <- limites_mgce
   if (unique(table_mib$CODE_PAR) == 7613) limites_mib <- limites_i2m2
-  
+
   if (unique(table_mib$CODE_PAR) %in% c(5910, 6951)) {
     eqr_mib <- funEQR(valeurs    = table_mib,
                       references = limites_mib)
   }
-  
+
   if (unique(table_mib$CODE_PAR) %in% c(7613)) {
     eqr_mib <- mutate(table_mib,
                       EQR = RESULTAT)
   }
-  
+
 } else {
   eqr_mib <- mutate(table_mib,
                     EQR = RESULTAT)
@@ -509,7 +510,7 @@ eqr_ipr <- funClass(valeurs = left_join(eqr_ipr, alt, by = "CODE_STATION"),
                     limites = limites_ipr)
 
 eqr <- bind_rows(eqr_ibd, eqr_ibmr, eqr_mib, eqr_ipr) %>%
-  mutate(LIB_PAR = indicateurs$LIB_PAR[match(CODE_PAR, 
+  mutate(LIB_PAR = indicateurs$LIB_PAR[match(CODE_PAR,
                                              indicateurs$CODE_PAR)] %>%
            as.character())                        %>%
   select(CODE_STATION, PERIODE_DEBUT, PERIODE_FIN,
@@ -555,18 +556,18 @@ data_sortie <- left_join(x  = data_sortie,
                          y  = sortie,
                          by = c("CODE_STATION",
                                 "PERIODE_DEBUT", "PERIODE_FIN",
-                                "CODE_PAR", "LIB_PAR")) %>% 
+                                "CODE_PAR", "LIB_PAR")) %>%
   mutate(CODE_PAR = factor(CODE_PAR,
-                           levels = c(indicateurs$CODE_PAR, "8353"))) %>% 
-  arrange(CODE_STATION, PERIODE_DEBUT, PERIODE_FIN, CODE_PAR) %>% 
+                           levels = c(indicateurs$CODE_PAR, "8353"))) %>%
+  arrange(CODE_STATION, PERIODE_DEBUT, PERIODE_FIN, CODE_PAR) %>%
   mutate(CODE_PAR = as.character(CODE_PAR))
 
 ## COMMENTAIRES ----
 
 ## Donnees absentes
-data_sortie <- 
+data_sortie <-
   mutate(data_sortie,
-         COMMENTAIRES = if_else(is.na(RESULTAT) & CODE_PAR != 8353, 
+         COMMENTAIRES = if_else(is.na(RESULTAT) & CODE_PAR != 8353,
                                 "Aucunes donnees disponibles sur la periode d'evaluation definie",
                                 NA_character_))
 
