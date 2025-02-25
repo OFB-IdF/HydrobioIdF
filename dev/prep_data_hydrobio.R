@@ -212,6 +212,24 @@ valeurs_seuils <- fichiers_parametres |>
   ) |>
   purrr::set_names(noms_indices_param)
 
+parametres_eqr <- c("IBD", "IBMR", "IBG-DCE", "MGCE") |>
+  purrr::map(
+    function(i) {
+      if (i == "IBD") {
+        params <- valeurs_seuils[[i]] |>
+          dplyr::distinct(TYPO_NATIONALE, TG_BV, REFERENCE, MINIMUM)
+      }
+
+      if (i %in% c("IBG-DCE", "MGCE", "IBMR")) {
+        params <- valeurs_seuils[[i]] |>
+          dplyr::distinct(TYPO_NATIONALE, REFERENCE)
+      }
+
+      params
+    }
+  ) |>
+  purrr::set_names(c(5856, 2928, 5910, 6951))
+
 for (x in noms_indices_param) {
   print(x)
   if (x == "IPR") {
@@ -375,7 +393,7 @@ donnees_carte_taxons <-
 resumes_listes <- HydrobioIdF::resumer_listes(listes_taxo)
 
 
-save(date_donnees, regie, stations, indices, valeurs_seuils_stations, etat_bio, listes_taxo, resumes_listes, acronymes_indices, donnees_carte, donnees_carte_taxons, etat_bio,
+save(date_donnees, regie, stations, indices, valeurs_seuils_stations, etat_bio, listes_taxo, resumes_listes, acronymes_indices, donnees_carte, donnees_carte_taxons, etat_bio, parametres_eqr,
      file = "dev/data_hydrobio.rda")
 
 

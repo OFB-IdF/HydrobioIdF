@@ -31,15 +31,23 @@ app_server <- function(input, output, session) {
 
   mod_synthese_toutes_stations_server(
     id = "bilan_stations",
-    stations, etat_bio,
+    stations = stations,
+    indices = etat_bio,
     choix_stations = choix_stations,
     choix_eqb = choix_eqbs
   )
 
   mod_synthese_station_server(
     id = "synthese_station",
-    resumes_listes, stations, regie, indices, acronymes_indices,
-    valeurs_seuils_stations, etat_bio, listes_taxo,
+    resumes_listes = resumes_listes,
+    stations = stations,
+    regie = regie,
+    indices = indices,
+    acronymes_indices = acronymes_indices,
+    valeurs_seuils_stations = valeurs_seuils_stations,
+    parametres_eqr = parametres_eqr,
+    etat_bio = etat_bio,
+    listes_taxo = listes_taxo,
     choix_station = station,
     choix_eqb = choix_eqbs,
     ordre_taxon = ordre_taxon,

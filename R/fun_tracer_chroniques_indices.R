@@ -11,13 +11,47 @@
 #' @importFrom patchwork wrap_plots
 #' @importFrom purrr map
 #' @importFrom stringr str_replace_na
-tracer_chroniques_indices <- function(DonneesGraphique, acronymes_indices, regie, seuils_station, interactive = FALSE) {
+tracer_chroniques_indices <- function(DonneesGraphique, acronymes_indices, regie, seuils_station, parametres_eqr_station, interactive = FALSE) {
 
   x_lims <- range(na.omit(DonneesGraphique$annee))
   if (length(unique(x_lims)) == 1)
     x_lims <- x_lims + c(-1, +1)
 
   x_breaks <- integer_breaks(n = 3)(DonneesGraphique$annee)
+
+  conversion_eqr <- function(valeurs, code_indice, parametres_eqr_station) {
+    if (code_indice == 5856) {
+      eqr <- (valeurs - parametres_eqr_station[[code_indice]]$MINIMUM) / (parametres_eqr_station[[code_indice]]$REFERENCE - parametres_eqr_station[[code_indice]]$MINIMUM)
+    }
+
+    if (code_indice == 2928) {
+      eqr <- valeurs / parametres_eqr_station[[code_indice]]$REFERENCE
+    }
+
+    if (code_indice %in% c(6951, 5910)) {
+      eqr <- (valeurs - 1) / (parametres_eqr_station[[code_indice]]$REFERENCE - 1)
+    }
+
+    eqr
+  }
+
+  retroconversion_eqr <- function(valeurs_eqr, code_indice, parametres_eqr_station) {
+    val <- valeurs_eqr
+
+    if (code_indice == 5856) {
+      val <- valeurs_eqr * (parametres_eqr_station[[code_indice]]$REFERENCE - parametres_eqr_station[[code_indice]]$MINIMUM) + parametres_eqr_station[[code_indice]]$MINIMUM
+    }
+
+    if (code_indice == 2928) {
+      val <- valeurs_eqr * parametres_eqr_station[[code_indice]]$REFERENCE
+    }
+
+    if (code_indice %in% c(6951, 5910)) {
+      val <- valeurs_eqr * (parametres_eqr_station[[code_indice]]$REFERENCE - 1) + 1
+    }
+
+    val
+  }
 
   graphique <- DonneesGraphique %>%
     dplyr::mutate(
@@ -36,8 +70,7 @@ tracer_chroniques_indices <- function(DonneesGraphique, acronymes_indices, regie
     ) %>%
     dplyr::mutate(
       regie = ifelse(is.na(regie), FALSE, regie),
-      type_resultat = ifelse(!is.na(eqr_indice), "eqr", "brut"),
-      resultat_indice = ifelse(!is.na(eqr_indice), eqr_indice, resultat_indice)
+      eqr = !is.na(eqr_indice)
       ) %>%
     dplyr::group_by(libelle_indice) %>%
     dplyr::group_split() %>%
@@ -47,9 +80,36 @@ tracer_chroniques_indices <- function(DonneesGraphique, acronymes_indices, regie
           ggplot2::ggplot() +
           ggplot2::geom_rect(
             data = seuils_station |>
-              dplyr::filter(libelle_indice %in% data_indice$libelle_indice),
+              dplyr::filter(
+                libelle_indice %in% data_indice$libelle_indice
+                ) |>
+              dplyr::mutate(
+                seuil_bas_raw = ifelse(
+                  test = code_indice %in% c(5856, 2928, 5910, 6951) & !is.na(seuil_bas),
+                  yes = retroconversion_eqr(
+                    valeurs_eqr = seuil_bas,
+                    code_indice = unique(data_indice$code_indice),
+                    parametres_eqr_station = parametres_eqr_station
+                  ),
+                  no = seuil_bas
+                ) ,
+                seuil_haut_raw = dplyr::case_when(
+                  code_indice %in% c(5856, 2928, 5910, 6951) &
+                    !is.na(seuil_haut) &
+                    classe == "TRES_BON" ~ 20,
+                  code_indice %in% c(5856, 2928, 5910, 6951) &
+                    !is.na(seuil_haut) ~
+                    retroconversion_eqr(
+                      valeurs_eqr = seuil_haut,
+                      code_indice = unique(data_indice$code_indice),
+                      parametres_eqr_station = parametres_eqr_station
+                    ),
+                  TRUE ~ seuil_haut
+                )
+              ),
             mapping = ggplot2::aes(
-              ymin = seuil_bas, ymax = seuil_haut,
+              ymin = seuil_bas_raw,
+              ymax = seuil_haut_raw,
               fill = classe
             ),
             xmin = x_lims[1], xmax = x_lims[2],
@@ -109,18 +169,27 @@ tracer_chroniques_indices <- function(DonneesGraphique, acronymes_indices, regie
           )
 
         if (unique(data_indice$code_indice) %in%
-            c(5856, 2928, 5910, 6951) && unique(data_indice$type_resultat) == "brut")
+            c(5856, 2928, 5910, 6951) && !all(data_indice$eqr))
           p <- p +
             ggplot2::scale_y_continuous(
               limits = c(0, 20),
               breaks = c(0, 5, 10, 15, 20)
             )
 
-        if (unique(data_indice$code_indice) %in% c(5856, 2928, 5910, 6951) && unique(data_indice$type_resultat) == "eqr")
+        if (unique(data_indice$code_indice) %in% c(5856, 2928, 5910, 6951) && all(data_indice$eqr))
           p <- p +
             ggplot2::scale_y_continuous(
-              limits = c(0, 1),
-              breaks = c(0, .25, .5, .75, 1)
+              limits = c(0, 20),
+              breaks = c(0, 5, 10, 15, 20),
+              sec.axis = ggplot2::sec_axis(
+                name = "EQR",
+                transform = ~ conversion_eqr(
+                  valeurs = .,
+                  code_indice = unique(data_indice$code_indice),
+                  parametres_eqr_station = parametres_eqr_station
+                  ),
+                breaks = c(0, .25, .5, .75, 1)
+                )
             )
 
         if (unique(data_indice$code_indice) %in% c(7613))

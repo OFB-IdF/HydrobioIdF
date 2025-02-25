@@ -17,7 +17,7 @@ mod_synthese_station_ui <- function(id){
 #' synthese_station Server Functions
 #'
 #' @noRd
-mod_synthese_station_server <- function(id, resumes_listes, stations, regie, indices, acronymes_indices, valeurs_seuils_stations, etat_bio, listes_taxo, choix_station, choix_eqb, ordre_taxon, choix_stations){
+mod_synthese_station_server <- function(id, resumes_listes, stations, regie, indices, acronymes_indices, valeurs_seuils_stations, parametres_eqr, etat_bio, listes_taxo, choix_station, choix_eqb, ordre_taxon, choix_stations){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
 
@@ -38,21 +38,32 @@ mod_synthese_station_server <- function(id, resumes_listes, stations, regie, ind
 
           mod_chiffres_cles_station_server(
             id = "chiffres_cles",
-            resumes_listes, stations,
-            choix_station, choix_eqb
+            resumes_listes = resumes_listes,
+            stations = stations,
+            choix_station = choix_station,
+            choix_eqb = choix_eqb
           )
 
           mod_chronique_indices_server(
             id = "chronique_indices",
-            stations, regie, indices, acronymes_indices,
-            valeurs_seuils_stations, etat_bio,
-            choix_station, choix_eqb
+            stations =stations,
+            regie = regie,
+            indices = indices,
+            acronymes_indices = acronymes_indices,
+            parametres_eqr = parametres_eqr,
+            valeurs_seuils_stations = valeurs_seuils_stations,
+            etat_bio = etat_bio,
+            choix_station = choix_station,
+            choix_eqb = choix_eqb
           )
 
           mod_chronique_taxons_server(
             id = "chronique_taxons",
-            stations, listes_taxo,
-            choix_station, choix_eqb, ordre_taxon
+            stations = stations,
+            listes_taxo = listes_taxo,
+            choix_station = choix_station,
+            choix_eqb = choix_eqb,
+            ordre_taxon = ordre_taxon
           )
 
           if (is.null(choix_station())) {
