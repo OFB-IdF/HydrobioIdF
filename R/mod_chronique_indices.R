@@ -34,7 +34,7 @@ mod_chronique_indices_ui <- function(id){
 #' chronique_indices Server Functions
 #'
 #' @noRd
-mod_chronique_indices_server <- function(id, stations, regie, indices, acronymes_indices, valeurs_seuils_stations, etat_bio, choix_station, choix_eqb){
+mod_chronique_indices_server <- function(id, stations, regie, indices, acronymes_indices, valeurs_seuils_stations, parametres_eqr, etat_bio, choix_station, choix_eqb){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
     w <- 525
@@ -48,12 +48,33 @@ mod_chronique_indices_server <- function(id, stations, regie, indices, acronymes
           indice == "IBG-DCE" ~ "IBG équivalent",
           indice == "MGCE" ~ "Invertébrés GCE",
           TRUE ~ indice
-        ))
+        )) |>
+        dplyr::mutate(
+          code_indice = names(acronymes_indices)[match(libelle_indice, acronymes_indices)]
+        )
+
+      parametres_eqr_station <- parametres_eqr |>
+        purrr::map(
+          function(df) {
+            df |>
+              dplyr::inner_join(
+                seuils_station |>
+                  dplyr::distinct(TYPO_NATIONALE, TG_BV)
+              )
+          }
+        )
 
       DonneesGraphique <- filtrer_indices(stations, etat_bio, choix_station(), choix_eqb())
 
       output$indices <- renderPlot({
-        tracer_chroniques_indices(DonneesGraphique, acronymes_indices, regie = regie, seuils_station, interactive = FALSE)
+        tracer_chroniques_indices(
+          DonneesGraphique = DonneesGraphique,
+          acronymes_indices = acronymes_indices,
+          regie = regie,
+          seuils_station = seuils_station,
+          parametres_eqr_station = parametres_eqr_station,
+          interactive = FALSE
+          )
       },
       height = dplyr::n_distinct(DonneesGraphique$code_indice) * 250,
       width = w

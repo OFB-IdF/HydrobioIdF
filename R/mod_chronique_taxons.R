@@ -55,25 +55,37 @@ mod_chronique_taxons_server <- function(id, stations, listes_taxo, choix_station
         req(ordre_taxon())
 
         output$diatomees <- renderPlot({
-          tracer_chroniques_taxons(liste_diato, ordre_taxon())
+          tracer_chroniques_taxons(
+            liste_station = liste_diato,
+            ordre_taxon = ordre_taxon()
+            )
         },
         height = dplyr::n_distinct(liste_diato$code_appel_taxon) * 20 + 20,
         width = w
         )
         output$invertebres <- renderPlot({
-          tracer_chroniques_taxons(liste_inv, ordre_taxon())
+          tracer_chroniques_taxons(
+            liste_station = liste_inv,
+            ordre_taxon = ordre_taxon()
+            )
         },
         height = dplyr::n_distinct(liste_inv$code_appel_taxon) * 20 + 20,
         width = w
         )
         output$macrophytes <- renderPlot({
-          tracer_chroniques_taxons(liste_macro, ordre_taxon())
+          tracer_chroniques_taxons(
+            liste_station = liste_macro,
+            ordre_taxon = ordre_taxon()
+            )
         },
         height = dplyr::n_distinct(liste_macro$code_appel_taxon) * 20 + 20,
         width = w
         )
         output$poissons <- renderPlot({
-          tracer_chroniques_taxons(liste_pois, ordre_taxon())
+          tracer_chroniques_taxons(
+            liste_station = liste_pois,
+            ordre_taxon = ordre_taxon()
+            )
         },
         height = dplyr::n_distinct(liste_pois$code_appel_taxon) * 20 + 20,
         width = w
