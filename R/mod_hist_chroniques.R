@@ -1,8 +1,13 @@
 #' hist_chroniques UI Function
 #'
-#' @description A shiny Module.
+#' @description Module Shiny permettant d'afficher les chroniques temporelles des indices biologiques
+#' sous forme de graphique interactif. Le module génère un graphique montrant l'évolution des valeurs
+#' d'indices au cours du temps pour une ou plusieurs stations.
 #'
-#' @param id,input,output,session Internal parameters for {shiny}.
+#' @param id Internal parameter for {shiny}.
+#' @param input,output,session Internal parameters for {shiny}.
+#'
+#' @return Un objet tagList contenant un graphique plotly.
 #'
 #' @noRd
 #'
@@ -16,6 +21,15 @@ mod_hist_chroniques_ui <- function(id){
 }
 
 #' hist_chroniques Server Functions
+#'
+#' @param id Internal parameter for {shiny}.
+#' @param donnees_graphique Un data.frame contenant les données à afficher avec les colonnes:
+#'   - code_station_hydrobio: Code de la station
+#'   - code_support: Code de l'élément de qualité biologique
+#'   - date_prelevement: Date du prélèvement
+#'   - resultat_indice: Valeur de l'indice
+#'
+#' @return Un objet plotly contenant le graphique des chroniques temporelles.
 #'
 #' @noRd
 #' @importFrom plotly renderPlotly

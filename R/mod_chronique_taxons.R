@@ -1,8 +1,16 @@
 #' chronique_taxons UI Function
 #'
-#' @description A shiny Module.
+#' @description Module Shiny permettant d'afficher les chroniques des listes taxonomiques pour une station.
+#' Le module génère des graphiques montrant l'évolution temporelle des taxons observés
+#' pour chaque élément de qualité biologique (diatomées, invertébrés, macrophytes, poissons).
 #'
-#' @param id,input,output,session Internal parameters for {shiny}.
+#' @param id Internal parameter for {shiny}.
+#' @param stations Un objet sf contenant les stations hydrobiologiques.
+#' @param listes_taxo Un data.frame contenant les listes taxonomiques.
+#' @param choix_station Fonction réactive retournant le code de la station sélectionnée.
+#' @param choix_eqb Fonction réactive retournant les codes des éléments de qualité sélectionnés.
+#' @param ordre_taxon Fonction réactive retournant l'ordre de tri des taxons.
+#' @param input,output,session Internal parameters for {shiny}.
 #'
 #' @noRd
 #'

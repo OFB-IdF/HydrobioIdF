@@ -1,8 +1,16 @@
 #' repartition_taxons UI Function
 #'
-#' @description A shiny Module.
+#' @description Module Shiny permettant d'afficher la répartition spatiale des taxons sur une carte interactive.
+#' Le module génère une carte leaflet avec les stations où chaque taxon a été observé, avec des
+#' fonctionnalités de recherche et de filtrage des taxons.
 #'
-#' @param id,input,output,session Internal parameters for {shiny}.
+#' @param id Internal parameter for {shiny}.
+#' @param input,output,session Internal parameters for {shiny}.
+#'
+#' @return Un objet tagList contenant une carte leaflet et des contrôles de recherche.
+#'
+#' @details Le module inclut des styles CSS personnalisés pour optimiser l'affichage de la carte
+#' et des contrôles de recherche. La carte occupe la hauteur disponible de la fenêtre moins 200px.
 #'
 #' @noRd
 #'

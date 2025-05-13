@@ -1,8 +1,12 @@
 #' carte UI Function
 #'
-#' @description A shiny Module.
+#' @description Module Shiny permettant d'afficher une carte interactive des stations de suivi hydrobiologique.
+#' La carte permet de visualiser la localisation des stations, leur état écologique et
+#' le nombre d'années de suivi. Elle inclut également une fonction de recherche de station.
 #'
-#' @param id,input,output,session Internal parameters for {shiny}.
+#' @param id Internal parameter for {shiny}.
+#' @param hauteur Hauteur de la carte en pixels.
+#' @param input,output,session Internal parameters for {shiny}.
 #'
 #' @noRd
 #'

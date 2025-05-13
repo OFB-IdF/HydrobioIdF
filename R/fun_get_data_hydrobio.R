@@ -1,7 +1,18 @@
-#' @param code_departement
-#' @param suivi_regie
+#' Télécharger les stations hydrobiologiques
 #'
+#' @param code_departement Un vecteur de codes départements (format : "01", "02", etc.)
+#' @param suivi_regie Un data.frame contenant les stations suivies en régie
+#'
+#' @return Un objet sf contenant les stations hydrobiologiques avec leurs coordonnées et attributs
 #' @export
+#'
+#' @details Cette fonction télécharge les stations hydrobiologiques depuis l'API Hub'Eau et
+#' ajoute une colonne indiquant si la station est suivie en régie.
+#'
+#' @examples
+#' \dontrun{
+#' stations <- telecharger_stations(c("75", "77", "78"), suivi_regie)
+#' }
 #'
 #' @importFrom dplyr select mutate
 #' @importFrom hubeau get_hydrobio_stations_hydrobio
@@ -27,10 +38,23 @@ telecharger_stations <- function(code_departement, suivi_regie) {
     )
 }
 
-#' @param code_departement
-#' @param code_indice
+#' Télécharger les indices biologiques
 #'
+#' @param code_departement Un vecteur de codes départements (format : "01", "02", etc.)
+#' @param code_indice Un vecteur nommé de codes indices. Par défaut : IBG-eq (5910), I2M2 (7613),
+#'   MIV-GCE (6951), IBMR (2928), IBD (5856), IPR (7036)
+#'
+#' @return Un objet sf contenant les indices biologiques avec leurs coordonnées et attributs
 #' @export
+#'
+#' @details Cette fonction télécharge les indices biologiques depuis l'API Hub'Eau pour les
+#' départements et indices spécifiés. Les indices sont géolocalisés et incluent les dates
+#' de prélèvement.
+#'
+#' @examples
+#' \dontrun{
+#' indices <- telecharger_indices(c("75", "77", "78"))
+#' }
 #'
 #' @importFrom dplyr distinct mutate filter
 #' @importFrom hubeau get_hydrobio_indices
@@ -60,13 +84,25 @@ telecharger_indices <- function(code_departement, code_indice = c(`IBG-eq` = 591
     dplyr::filter(!is.na(resultat_indice))
 }
 
-#' Title
+#' Télécharger les listes faunistiques et floristiques
 #'
-#' @param code_departement
-#' @param code_eqb
+#' @param code_departement Un vecteur de codes départements (format : "01", "02", etc.)
+#' @param code_eqb Un vecteur nommé de codes des éléments de qualité biologique. Par défaut :
+#'   Poissons (4), Diatomées (10), Macroinvertébrés (13), Macrophytes (27)
 #'
-#' @return
+#' @return Un data.frame contenant les listes faunistiques et floristiques avec leurs coordonnées
+#'   et attributs, incluant les abondances des taxons par prélèvement
 #' @export
+#'
+#' @details Cette fonction télécharge les listes faunistiques et floristiques depuis l'API Hub'Eau
+#'   pour les départements et éléments de qualité biologique spécifiés. En cas d'erreur lors du
+#'   téléchargement global, la fonction tente de télécharger les données station par station.
+#'   Les abondances des taxons sont sommées par prélèvement.
+#'
+#' @examples
+#' \dontrun{
+#' listes <- telecharger_listes(c("75", "77", "78"))
+#' }
 #'
 #' @importFrom dplyr group_by summarise pull
 #' @importFrom hubeau get_hydrobio_taxons get_hydrobio_stations_hydrobio
@@ -150,12 +186,23 @@ telecharger_listes <- function(code_departement, code_eqb = c(`Poissons` = 4, `D
 }
 
 
-#' Title
+#' Importer les données de suivi en régie
 #'
-#' @param chemin_xlsx
+#' @param chemin_xlsx Le chemin vers le fichier Excel contenant les données de suivi en régie
 #'
-#' @return
+#' @return Un data.frame contenant les informations de suivi en régie avec les colonnes suivantes :
+#'   cours_deau, commune, code_station, indice, annee, realisation, code_indice
 #' @export
+#'
+#' @details Cette fonction importe les données de suivi en régie à partir d'un fichier Excel.
+#'   Elle nettoie les noms de colonnes, pivote les données pour obtenir un format long,
+#'   et ajoute les codes indices correspondant aux différents protocoles (IBD, MPCE, IBMR).
+#'   Pour les MPCE, elle duplique les lignes pour ajouter le code I2M2 en plus du code IBG.
+#'
+#' @examples
+#' \dontrun{
+#' suivi_regie <- importer_suivis_regie("chemin/vers/fichier.xlsx")
+#' }
 #'
 #' @importFrom dplyr mutate filter select case_when bind_rows
 #' @importFrom janitor clean_names

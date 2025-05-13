@@ -1,11 +1,37 @@
-#' Title
+#' Tracer les chroniques des indices biologiques
 #'
-#' @param DonneesGraphique
+#' @param DonneesGraphique Un data.frame contenant les indices biologiques avec les colonnes
+#'   annee, code_indice, libelle_indice, resultat_indice et classe_indice
+#' @param acronymes_indices Un vecteur nommé des acronymes des indices
+#' @param regie Un data.frame contenant les informations de suivi en régie
+#' @param seuils_station Un data.frame contenant les seuils de qualité pour la station
+#' @param parametres_eqr_station Un data.frame contenant les paramètres de calcul des EQR
+#' @param interactive Logique. Si TRUE, produit des graphiques interactifs avec plotly
 #'
-#' @return
+#' @return Une liste d'objets ggplot2 ou plotly (si interactive = TRUE) représentant
+#'   les chroniques des indices biologiques avec les seuils de qualité et les EQR
 #' @export
 #'
+#' @details Cette fonction trace les chroniques des indices biologiques en représentant
+#'   à la fois les valeurs brutes et les EQR (Ecological Quality Ratio). Les graphiques
+#'   incluent :
+#'   \itemize{
+#'     \item Les valeurs des indices avec les seuils de qualité
+#'     \item Les valeurs d'EQR avec les seuils normalisés
+#'     \item Une courbe de tendance (loess)
+#'     \item Un code couleur selon la classe de qualité
+#'   }
+#'
 #' @examples
+#' \dontrun{
+#' chroniques <- tracer_chroniques_indices(
+#'   DonneesGraphique = indices_station,
+#'   acronymes_indices = c("5856" = "IBD", "2928" = "IBMR"),
+#'   regie = suivi_regie,
+#'   seuils_station = seuils,
+#'   parametres_eqr_station = params_eqr
+#' )
+#' }
 #' @importFrom dplyr mutate left_join select group_by group_split
 #' @importFrom ggplot2 ggplot aes geom_smooth geom_point scale_colour_manual theme_light theme element_blank labs facet_wrap vars scale_x_continuous scale_y_continuous scale_y_reverse
 #' @importFrom patchwork wrap_plots

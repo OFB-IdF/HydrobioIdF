@@ -1,8 +1,15 @@
 #' synthese_taxon UI Function
 #'
-#' @description A shiny Module.
+#' @description Module Shiny permettant d'afficher une synthèse des données pour un taxon spécifique.
+#' Le module affiche des graphiques montrant l'évolution temporelle des abondances du taxon
+#' sur l'ensemble des stations sélectionnées.
 #'
-#' @param id,input,output,session Internal parameters for {shiny}.
+#' @param id Internal parameter for {shiny}.
+#' @param input,output,session Internal parameters for {shiny}.
+#'
+#' @return Un objet tagList contenant deux graphiques :
+#' - Un graphique montrant la présence du taxon par station au fil du temps
+#' - Un graphique montrant l'évolution des abondances du taxon
 #'
 #' @noRd
 #'
@@ -16,6 +23,17 @@ mod_synthese_taxon_ui <- function(id){
 }
 
 #' synthese_taxon Server Functions
+#'
+#' @param id Internal parameter for {shiny}.
+#' @param repartition Liste réactive contenant les informations sur le taxon sélectionné.
+#' @param choix_stations Fonction réactive retournant la liste des stations sélectionnées.
+#'
+#' @details La fonction serveur gère la création de deux graphiques :
+#' - Un graphique temporel montrant sur quelles stations le taxon a été observé
+#' - Un graphique temporel montrant l'évolution des abondances du taxon
+#'
+#' Les graphiques sont mis à jour automatiquement en fonction de la sélection des stations
+#' et du taxon choisi dans l'interface.
 #'
 #' @noRd
 mod_synthese_taxon_server <- function(id, repartition, choix_stations){

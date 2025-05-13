@@ -1,13 +1,24 @@
 
-#' Title
+#' Tracer un graphique des chroniques de suivi
 #'
-#' @param donnees_graphique
-#' @param interactive
+#' @param donnees_graphique Un data.frame ou objet sf contenant les données de suivi avec
+#'   les colonnes code_station_hydrobio, libelle_support et annee
+#' @param interactive Logique. Si TRUE, produit un graphique interactif avec plotly
 #'
-#' @return
+#' @return Un objet ggplot2 ou plotly (si interactive = TRUE) représentant la distribution
+#'   du nombre d'années de suivi par élément de qualité biologique
 #' @export
 #'
+#' @details Cette fonction produit un graphique en barres montrant la distribution du nombre
+#'   d'années de suivi par élément de qualité biologique. Les chroniques sont regroupées en
+#'   4 classes : 1 an, 2-5 ans, 6-10 ans et plus de 10 ans.
+#'
 #' @examples
+#' \dontrun{
+#' plot_chroniques(indices)
+#' plot_chroniques(indices, interactive = TRUE)
+#' }
+#'
 #' @importFrom dplyr as_tibble mutate distinct count case_when
 #' @importFrom ggplot2 ggplot geom_col aes position_dodge scale_fill_manual labs theme_minimal theme element_blank element_text
 #' @importFrom plotly ggplotly layout add_annotations

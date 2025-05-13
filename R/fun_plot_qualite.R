@@ -1,13 +1,25 @@
 
-#' Title
+#' Tracer un graphique de l'évolution de la qualité
 #'
-#' @param donnees_graphique
-#' @param interactive
+#' @param donnees_graphique Un data.frame ou objet sf contenant les données de qualité avec
+#'   les colonnes code_station_hydrobio, libelle_support, libelle_indice, classe_indice et annee
+#' @param interactive Logique. Si TRUE, produit un graphique interactif avec plotly
 #'
-#' @return
+#' @return Un objet ggplot2 ou plotly (si interactive = TRUE) représentant l'évolution
+#'   de la qualité par indice biologique et par cycle DCE
 #' @export
 #'
+#' @details Cette fonction produit un graphique en barres empilées montrant l'évolution de
+#'   la qualité écologique par indice biologique. Les données sont regroupées par cycle DCE
+#'   (avant 2010, 2010-2015, 2016-2021, 2022-2027) et les classes de qualité sont
+#'   représentées selon le code couleur DCE (bleu, vert, jaune, orange, rouge).
+#'
 #' @examples
+#' \dontrun{
+#' plot_qualite(indices)
+#' plot_qualite(indices, interactive = TRUE)
+#' }
+#'
 #' @importFrom dplyr as_tibble mutate distinct count case_when
 #' @importFrom ggplot2 ggplot geom_col aes position_dodge scale_fill_manual labs theme_minimal theme element_blank element_text
 #' @importFrom plotly ggplotly layout add_annotations

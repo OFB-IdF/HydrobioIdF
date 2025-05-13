@@ -1,8 +1,13 @@
 #' synthese_toutes_stations UI Function
 #'
-#' @description A shiny Module.
+#' @description Module Shiny permettant d'afficher une synthèse des données pour l'ensemble des stations sélectionnées.
+#' Le module génère une vue d'ensemble des indices biologiques et de leur évolution pour toutes
+#' les stations sélectionnées.
 #'
-#' @param id,input,output,session Internal parameters for {shiny}.
+#' @param id Internal parameter for {shiny}.
+#' @param input,output,session Internal parameters for {shiny}.
+#'
+#' @return Un objet tagList contenant les éléments UI pour afficher la synthèse multi-stations.
 #'
 #' @noRd
 #'
@@ -25,6 +30,17 @@ mod_synthese_toutes_stations_ui <- function(id){
 }
 
 #' synthese_toutes_stations Server Functions
+#'
+#' @param id Internal parameter for {shiny}.
+#' @param stations Data frame contenant les informations sur les stations.
+#' @param indices Data frame contenant les valeurs des indices biologiques.
+#' @param choix_stations Fonction réactive retournant la liste des stations sélectionnées.
+#' @param choix_eqb Fonction réactive retournant les codes des éléments de qualité sélectionnés.
+#'
+#' @details La fonction serveur gère l'affichage des synthèses pour toutes les stations sélectionnées.
+#' Elle permet de visualiser et comparer les indices biologiques entre les stations, en tenant compte
+#' des éléments de qualité biologiques sélectionnés. Les données sont filtrées en fonction des
+#' sélections de l'utilisateur (stations et éléments de qualité).
 #'
 #' @noRd
 mod_synthese_toutes_stations_server <- function(id, stations, indices, choix_stations, choix_eqb){

@@ -1,11 +1,30 @@
-#' Title
+#' Résumer les listes faunistiques et floristiques d'une station
 #'
-#' @param listes_station
+#' @param listes_station Un data.frame contenant les listes faunistiques et floristiques
+#'   avec les colonnes code_station_hydrobio, code_support, libelle_support, date_prelevement,
+#'   libelle_taxon
 #'
-#' @return
+#' @return Un data.frame contenant un résumé des listes par élément de qualité biologique
+#'   avec les colonnes suivantes :
+#'   \itemize{
+#'     \item code_station_hydrobio : Code de la station
+#'     \item code_support : Code de l'élément de qualité biologique
+#'     \item EQB : Libellé de l'élément de qualité biologique
+#'     \item Période : Période de suivi (année min-année max)
+#'     \item Années : Nombre d'années de suivi
+#'     \item Taxons : Gamme du nombre de taxons (min-max)
+#'   }
 #' @export
 #'
+#' @details Cette fonction résume les listes faunistiques et floristiques en calculant
+#'   le nombre d'années de suivi et la gamme du nombre de taxons observés par élément
+#'   de qualité biologique. Les éléments de qualité sont ordonnés selon : Diatomées,
+#'   Macrophytes, Macroinvertébrés, Poissons.
+#'
 #' @examples
+#' \dontrun{
+#' resume <- resumer_listes(listes_stations)
+#' }
 #' @importFrom dplyr group_by summarise n_distinct mutate arrange select
 #' @importFrom lubridate year
 #' @importFrom purrr map_chr

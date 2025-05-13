@@ -1,8 +1,14 @@
 #' checkbox UI Function
 #'
-#' @description A shiny Module.
+#' @description Module Shiny permettant de filtrer les stations selon leur mode de gestion (régie/prestataire).
+#' Le module affiche une case à cocher permettant de sélectionner les stations en régie ou non.
 #'
-#' @param id,input,output,session Internal parameters for {shiny}.
+#' @param id Internal parameter for {shiny}.
+#' @param titre Texte à afficher à côté de la case à cocher.
+#' @param defaut Valeur booléenne indiquant si la case doit être cochée par défaut.
+#' @param input,output,session Internal parameters for {shiny}.
+#'
+#' @return Un objet tagList contenant une case à cocher.
 #'
 #' @noRd
 #'
@@ -19,6 +25,15 @@ mod_regie_ui <- function(id, titre = "", defaut = FALSE){
 }
 
 #' checkbox Server Functions
+#'
+#' @param id Internal parameter for {shiny}.
+#' @param choix_eqbs Fonction réactive retournant les codes des éléments de qualité sélectionnés.
+#' @param choix_dep Fonction réactive retournant les codes des départements sélectionnés.
+#'
+#' @details La fonction serveur filtre les stations selon leur mode de gestion (régie/prestataire)
+#' en fonction des éléments de qualité et départements sélectionnés.
+#'
+#' @return Une fonction réactive retournant un vecteur de codes stations.
 #'
 #' @noRd
 mod_regie_server <- function(id, choix_eqbs, choix_dep){

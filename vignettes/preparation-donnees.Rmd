@@ -1,0 +1,168 @@
+---
+title: "Préparation des données pour l'application HydrobioIdF"
+author: "OFB-IdF"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Préparation des données pour l'application HydrobioIdF}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Introduction
+
+Cette vignette décrit en détail le processus de préparation des données utilisées dans l'application HydrobioIdF. Le package utilise deux scripts principaux pour la préparation des données :
+
+1. `prep_data_hydrobio.R` : Prépare les données hydrobiologiques
+2. `prep_data_ref.R` : Prépare les données de référence géographiques
+
+# Préparation des données hydrobiologiques
+
+## Fichiers sources
+
+Le script `prep_data_hydrobio.R` utilise les fichiers sources suivants :
+
+- `Historique prog labo.xlsx` : Fichier Excel contenant l'historique des suivis en régie
+  - Structure du fichier :
+    - Première ligne, à partir de la cinquième colonne (E) : Années (cellules fusionnées sur l'ensemble des colonnes correspondant aux indices suivis cette année-là)
+    - Deuxième ligne : les noms des colonnes fixes et à partir de la 5ème colonne (E) en-têtes avec les noms des indices biologiques (IBD, MPCE, IBMR)
+    - Colonnes fixes (4 premières colonnes) :
+      - `cours_deau` : Nom du cours d'eau
+      - `commune` : Nom de la commune
+      - `code_station` : Code de la station de mesure
+      - Une colonne optionnelle de commentaire sur la station
+    - Colonnes suivantes : Organisées par année avec les indices suivis pour chacune d'entre elles
+      - Valeurs possibles : 
+        - "0" : Suivi non réalisé en régie
+        - "1" : Suivi réalisé en régie
+    - Note : Pour les invertébrés (MPCE), les données sont utilisées à la fois pour l'IBG équivalent (code 5910) et l'I2M2 (code 7613)
+  - Champs requis :
+    - `code_station` : Code de la station de mesure
+    - les colonnes de suivi par année et indice
+
+- `stations_reseaux_sn.gpkg` : Fichier GeoPackage contenant la typologie nationale des stations
+  - Champs requis :
+    - `CdStationMesureEauxSurface` : Code de la station de mesure
+    - `TypeCEStationMesureEauxSurface` : Type de cours d'eau de la station
+
+## Étapes de préparation
+
+### 1. Chargement des données initiales
+
+- Installation des dépendances (packages `HydrobioIdF` et `SEEEapi`)
+- Import des suivis en régie depuis le fichier Excel
+- Lecture de la typologie nationale des stations
+
+### 2. Collecte des stations
+
+- Téléchargement des données pour les départements d'Île-de-France (75, 77, 78, 91, 92, 93, 94, 95)
+- Inclusion des départements limitrophes pour les stations en régie (10, 51, 52, 45)
+- Filtrage pour ne garder que les stations d'Île-de-France et celles suivies en régie
+- Association avec la typologie nationale
+
+### 3. Collecte des indices
+
+- Téléchargement des indices biologiques
+- Filtrage pour ne conserver que les indices des stations sélectionnées
+- Formatage des données pour le SEEE (Système d'Évaluation de l'État des Eaux) :
+  - Codes des indices biologiques :
+    - 7036 : IPR (Indice Poissons Rivière)
+    - 5856 : IBD (Indice Biologique Diatomées)
+    - 2928 : IBMR (Indice Biologique Macrophytique en Rivière)
+    - 7613 : I2M2 (Indice Invertébrés Multi-Métrique)
+    - 5910 : IBG équivalent
+    - 6951 : Invertébrés GCE
+  - Champs formatés pour le SEEE :
+    - CODE_OPERATION : Identifiant unique du prélèvement
+    - CODE_STATION : Code de la station de mesure
+    - DATE : Date du prélèvement (format JJ/MM/AAAA)
+    - CODE_PAR : Code de l'indice
+    - LIB_PAR : Libellé de l'indice
+    - RESULTAT : Valeur de l'indice
+
+### 4. Calcul de l'état biologique
+
+Utilisation des algorithmes du SEEE pour calculer :
+
+- État biologique selon la méthode 2018 (EBio_CE_2018)
+- État biologique selon la méthode 2015 (EBio_CE_2015)
+
+Pour chaque indice biologique, les résultats comprennent :
+- resultat_indice : Valeur brute de l'indice
+- eqr_indice : Ratio de Qualité Écologique (EQR)
+- classe_indice : Classe de qualité
+- code_support : Code du support biologique
+- libelle_support : Libellé du support biologique
+
+Les indices sont traités selon deux méthodes :
+- Méthode 2018 : Utilise les paramètres de l'algorithme EBio_CE_2018 v1.0.1
+- Méthode 2015 : Utilise les paramètres de l'algorithme EBio_CE_2015 v1.0.1 pour l'IBG-DCE
+
+Indices biologiques traités :
+- IPR (Indice Poissons Rivière)
+- IBD (Indice Biologique Diatomées)
+- IBMR (Indice Biologique Macrophytique en Rivière)
+- I2M2 (Indice Invertébrés Multi-Métrique)
+- IBG équivalent
+- Invertébrés GCE
+
+# Préparation des données de référence
+
+Le script `prep_data_ref.R` prépare les couches géographiques de référence :
+
+## Données sources
+
+- Limites administratives (ADMIN EXPRESS)
+- Bassins hydrographiques (BD TOPAGE)
+- État des lieux du bassin Seine-Normandie
+
+## Couches préparées
+
+1. **Limites régionales** :
+   - Région Île-de-France
+   - Simplification géométrique pour optimisation
+   - Création de versions polygones et lignes
+
+2. **Limites du bassin** :
+   - Bassin Seine-Normandie
+   - Simplification géométrique
+   - Création de versions polygones et lignes
+
+3. **Masque métropolitain** :
+   - Différence avec le bassin Seine-Normandie
+   - Simplification géométrique
+
+4. **État des lieux** :
+   - Données de l'état des masses d'eau
+   - Indicateurs : état biologique, écologique et physico-chimique
+   - Année de référence : 2022
+
+# Format des données produites
+
+Les données préparées sont sauvegardées dans deux fichiers principaux :
+
+1. `data_hydrobio.rda` : Contient les données hydrobiologiques
+   - Stations de mesure
+   - Indices biologiques
+   - États biologiques calculés
+
+2. Données internes au package :
+   - Limites géographiques (région, bassin)
+   - Masque métropolitain
+   - État des lieux
+
+# Utilisation des données
+
+Les données préparées sont utilisées par l'application Shiny pour :
+
+- Afficher les stations de mesure sur la carte
+- Calculer et visualiser les indicateurs biologiques
+- Fournir le contexte géographique (limites administratives et hydrologiques)
+- Présenter l'état des masses d'eau

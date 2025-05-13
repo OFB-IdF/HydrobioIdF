@@ -1,8 +1,13 @@
 #' hist_qualite UI Function
 #'
-#' @description A shiny Module.
+#' @description Module Shiny permettant d'afficher l'historique des classes de qualité des indices biologiques
+#' sous forme de graphique. Le module génère un graphique montrant l'évolution des classes de qualité
+#' au cours du temps pour une ou plusieurs stations.
 #'
-#' @param id,input,output,session Internal parameters for {shiny}.
+#' @param id Internal parameter for {shiny}.
+#' @param input,output,session Internal parameters for {shiny}.
+#'
+#' @return Un objet tagList contenant un graphique plotly.
 #'
 #' @noRd
 #'
@@ -16,6 +21,15 @@ mod_hist_qualite_ui <- function(id) {
 }
 
 #' hist_qualite Server Functions
+#'
+#' @param id Internal parameter for {shiny}.
+#' @param donnees_graphique Un data.frame contenant les données à afficher avec les colonnes:
+#'   - code_station_hydrobio: Code de la station
+#'   - code_support: Code de l'élément de qualité biologique
+#'   - date_prelevement: Date du prélèvement
+#'   - classe_etat: Classe de qualité de l'indice
+#'
+#' @return Un objet plotly contenant le graphique des classes de qualité.
 #'
 #' @noRd
 #' @importFrom plotly renderPlotly

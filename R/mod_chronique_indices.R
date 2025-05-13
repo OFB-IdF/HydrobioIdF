@@ -1,8 +1,20 @@
 #' chronique_indices UI Function
 #'
-#' @description A shiny Module.
+#' @description Module Shiny permettant d'afficher les chroniques des indices biologiques pour une station.
+#' Le module génère des graphiques montrant l'évolution temporelle des indices biologiques
+#' avec les seuils de qualité et les valeurs d'EQR associées.
 #'
-#' @param id,input,output,session Internal parameters for {shiny}.
+#' @param id Internal parameter for {shiny}.
+#' @param stations Un objet sf contenant les stations hydrobiologiques.
+#' @param regie Un data.frame indiquant les opérateurs des prélèvements.
+#' @param indices Un data.frame contenant les indices biologiques.
+#' @param acronymes_indices Un vecteur nommé des acronymes des indices.
+#' @param valeurs_seuils_stations Un data.frame contenant les seuils de qualité par station.
+#' @param parametres_eqr Un data.frame contenant les paramètres de calcul des EQR.
+#' @param etat_bio Un data.frame contenant l'état biologique des stations.
+#' @param choix_station Fonction réactive retournant le code de la station sélectionnée.
+#' @param choix_eqb Fonction réactive retournant les codes des éléments de qualité sélectionnés.
+#' @param input,output,session Internal parameters for {shiny}.
 #'
 #' @noRd
 #'

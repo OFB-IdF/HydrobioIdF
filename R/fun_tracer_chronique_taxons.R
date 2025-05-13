@@ -1,11 +1,28 @@
-#' Title
+#' Tracer les chroniques d'abondance des taxons
 #'
-#' @param liste_station
+#' @param liste_station Un data.frame contenant les listes faunistiques ou floristiques
+#'   avec les colonnes date_prelevement, libelle_taxon et resultat_taxon
+#' @param ordre_taxon Une chaîne de caractères indiquant l'ordre de présentation des taxons :
+#'   "ordre alphabétique", "abondance sur la chronique" ou une année spécifique
 #'
-#' @return
+#' @return Une liste d'objets ggplot2 représentant les chroniques d'abondance des taxons
+#'   par groupes de 20 taxons maximum
 #' @export
 #'
+#' @details Cette fonction trace les chroniques d'abondance des taxons en les regroupant
+#'   par lots de 20 taxons maximum. L'ordre des taxons peut être :
+#'   \itemize{
+#'     \item alphabétique (ordre inverse)
+#'     \item selon l'abondance totale sur la chronique
+#'     \item selon l'abondance pour une année spécifique
+#'   }
+#'
 #' @examples
+#' \dontrun{
+#' chroniques <- tracer_chroniques_taxons(liste_station, "ordre alphabétique")
+#' chroniques <- tracer_chroniques_taxons(liste_station, "abondance sur la chronique")
+#' chroniques <- tracer_chroniques_taxons(liste_station, 2020)
+#' }
 #' @importFrom dplyr mutate group_by summarise group_split
 #' @importFrom ggplot2 ggplot geom_point aes scale_x_continuous sec_axis theme_minimal theme element_blank element_text labs
 #' @importFrom lubridate year
