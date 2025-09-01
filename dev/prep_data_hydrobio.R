@@ -314,15 +314,15 @@ valeurs_seuils <- fichiers_parametres |>
 
 # Extraction des paramètres nécessaires au calcul des EQR (Ecological Quality Ratio)
 # L'EQR est un indicateur normalisé permettant de comparer les résultats entre
-# différents types de cours d'eau. 
+# différents types de cours d'eau.
 
 # Pour chaque indice, on extrait les paramètres nécessaires au calcul :
-# - IBD (code 5856) : 
+# - IBD (code 5856) :
 #   * Valeurs de référence et minimales spécifiques à chaque type de cours d'eau
 #   * Prise en compte de la présence de très grands bassins versants (>10 000 km²)
-# - IBMR (code 2928) : 
+# - IBMR (code 2928) :
 #   * Valeurs de référence spécifiques à chaque type de cours d'eau
-# - IBG-DCE (code 5910) et Invertébrés GCE (code 6951) : 
+# - IBG-DCE (code 5910) et Invertébrés GCE (code 6951) :
 #   * Valeurs de référence spécifiques à chaque type de cours d'eau
 parametres_eqr <- c("IBD", "IBMR", "IBG-DCE", "MGCE") |>
   purrr::map(
@@ -606,8 +606,8 @@ resumes_listes <- HydrobioIdF::resumer_listes(listes_taxo)
 # - donnees_carte : données formatées pour l'affichage cartographique
 # - donnees_carte_taxons : données taxonomiques pour l'affichage cartographique
 # - parametres_eqr : paramètres de calcul des EQR par indice
-save(date_donnees, regie, stations, indices, valeurs_seuils_stations, etat_bio, 
-     listes_taxo, resumes_listes, acronymes_indices, donnees_carte, 
+save(date_donnees, regie, stations, indices, valeurs_seuils_stations, etat_bio,
+     listes_taxo, resumes_listes, acronymes_indices, donnees_carte,
      donnees_carte_taxons, parametres_eqr,
      file = "dev/data_hydrobio.rda")
 
