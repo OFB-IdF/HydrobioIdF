@@ -1,4 +1,4 @@
-EBio_CE_2015;v1.0.1;2025-11-01;Temps d'execution :;0.74secs
+EBio_CE_2015;v1.0.1;2025-12-01;Temps d'execution :;0.7secs
 CODE_STATION;TYPO_NATIONALE;PERIODE_DEBUT;PERIODE_FIN;CODE_PAR;LIB_PAR;RESULTAT;EQR;CLASSE;CLASSE_NUM;COMMENTAIRES
 03002900;P10;1987;1987;5856;IndiceBioDiat;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
 03002900;P10;1987;1987;2928;IBMR;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
@@ -222,6 +222,18 @@ CODE_STATION;TYPO_NATIONALE;PERIODE_DEBUT;PERIODE_FIN;CODE_PAR;LIB_PAR;RESULTAT;
 03002900;P10;2023;2023;6951;MGCE 12 prelevements;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
 03002900;P10;2023;2023;7036;Indice Poisson Riviere;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
 03002900;P10;2023;2023;8353;Etat Biologique;NA;NA;TRES_BON;1;
+03002900;P10;2024;2024;5856;IndiceBioDiat;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03002900;P10;2024;2024;2928;IBMR;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03002900;P10;2024;2024;5910;MPCE phases A+B;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03002900;P10;2024;2024;6951;MGCE 12 prelevements;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03002900;P10;2024;2024;7036;Indice Poisson Riviere;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03002900;P10;2024;2024;8353;Etat Biologique;NA;NA;NA;NA;
+03002900;P10;2025;2025;5856;IndiceBioDiat;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03002900;P10;2025;2025;2928;IBMR;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03002900;P10;2025;2025;5910;MPCE phases A+B;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03002900;P10;2025;2025;6951;MGCE 12 prelevements;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03002900;P10;2025;2025;7036;Indice Poisson Riviere;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03002900;P10;2025;2025;8353;Etat Biologique;NA;NA;NA;NA;
 03003790;TP10;2010;2010;5856;IndiceBioDiat;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
 03003790;TP10;2010;2010;2928;IBMR;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
 03003790;TP10;2010;2010;5910;MPCE phases A+B;15;0.933333333333333;TRES_BON;1;
@@ -642,6 +654,18 @@ CODE_STATION;TYPO_NATIONALE;PERIODE_DEBUT;PERIODE_FIN;CODE_PAR;LIB_PAR;RESULTAT;
 03004349;G9;2023;2023;6951;MGCE 12 prelevements;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
 03004349;G9;2023;2023;7036;Indice Poisson Riviere;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
 03004349;G9;2023;2023;8353;Etat Biologique;NA;NA;TRES_BON;1;
+03004349;G9;2024;2024;5856;IndiceBioDiat;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03004349;G9;2024;2024;2928;IBMR;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03004349;G9;2024;2024;5910;MPCE phases A+B;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03004349;G9;2024;2024;6951;MGCE 12 prelevements;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03004349;G9;2024;2024;7036;Indice Poisson Riviere;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03004349;G9;2024;2024;8353;Etat Biologique;NA;NA;NA;NA;
+03004349;G9;2025;2025;5856;IndiceBioDiat;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03004349;G9;2025;2025;2928;IBMR;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03004349;G9;2025;2025;5910;MPCE phases A+B;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03004349;G9;2025;2025;6951;MGCE 12 prelevements;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03004349;G9;2025;2025;7036;Indice Poisson Riviere;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03004349;G9;2025;2025;8353;Etat Biologique;NA;NA;NA;NA;
 03005210;TP9;2018;2018;5856;IndiceBioDiat;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
 03005210;TP9;2018;2018;2928;IBMR;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
 03005210;TP9;2018;2018;5910;MPCE phases A+B;9;0.5;MEDIOCRE;4;
@@ -1206,6 +1230,12 @@ CODE_STATION;TYPO_NATIONALE;PERIODE_DEBUT;PERIODE_FIN;CODE_PAR;LIB_PAR;RESULTAT;
 03008505;P9;2024;2024;6951;MGCE 12 prelevements;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
 03008505;P9;2024;2024;7036;Indice Poisson Riviere;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
 03008505;P9;2024;2024;8353;Etat Biologique;NA;NA;NA;NA;
+03008505;P9;2025;2025;5856;IndiceBioDiat;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03008505;P9;2025;2025;2928;IBMR;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03008505;P9;2025;2025;5910;MPCE phases A+B;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03008505;P9;2025;2025;6951;MGCE 12 prelevements;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03008505;P9;2025;2025;7036;Indice Poisson Riviere;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03008505;P9;2025;2025;8353;Etat Biologique;NA;NA;NA;NA;
 03010670;M9;2010;2010;5856;IndiceBioDiat;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
 03010670;M9;2010;2010;2928;IBMR;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
 03010670;M9;2010;2010;5910;MPCE phases A+B;13;0.857142857142857;BON;2;
@@ -1698,6 +1728,12 @@ CODE_STATION;TYPO_NATIONALE;PERIODE_DEBUT;PERIODE_FIN;CODE_PAR;LIB_PAR;RESULTAT;
 03011840;P9;2024;2024;6951;MGCE 12 prelevements;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
 03011840;P9;2024;2024;7036;Indice Poisson Riviere;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
 03011840;P9;2024;2024;8353;Etat Biologique;NA;NA;NA;NA;
+03011840;P9;2025;2025;5856;IndiceBioDiat;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03011840;P9;2025;2025;2928;IBMR;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03011840;P9;2025;2025;5910;MPCE phases A+B;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03011840;P9;2025;2025;6951;MGCE 12 prelevements;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03011840;P9;2025;2025;7036;Indice Poisson Riviere;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03011840;P9;2025;2025;8353;Etat Biologique;NA;NA;NA;NA;
 03012100;G9;1993;1993;5856;IndiceBioDiat;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
 03012100;G9;1993;1993;2928;IBMR;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
 03012100;G9;1993;1993;5910;MPCE phases A+B;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
@@ -1884,6 +1920,18 @@ CODE_STATION;TYPO_NATIONALE;PERIODE_DEBUT;PERIODE_FIN;CODE_PAR;LIB_PAR;RESULTAT;
 03012100;G9;2023;2023;6951;MGCE 12 prelevements;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
 03012100;G9;2023;2023;7036;Indice Poisson Riviere;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
 03012100;G9;2023;2023;8353;Etat Biologique;NA;NA;NA;NA;
+03012100;G9;2024;2024;5856;IndiceBioDiat;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03012100;G9;2024;2024;2928;IBMR;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03012100;G9;2024;2024;5910;MPCE phases A+B;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03012100;G9;2024;2024;6951;MGCE 12 prelevements;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03012100;G9;2024;2024;7036;Indice Poisson Riviere;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03012100;G9;2024;2024;8353;Etat Biologique;NA;NA;NA;NA;
+03012100;G9;2025;2025;5856;IndiceBioDiat;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03012100;G9;2025;2025;2928;IBMR;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03012100;G9;2025;2025;5910;MPCE phases A+B;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03012100;G9;2025;2025;6951;MGCE 12 prelevements;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03012100;G9;2025;2025;7036;Indice Poisson Riviere;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03012100;G9;2025;2025;8353;Etat Biologique;NA;NA;NA;NA;
 03012450;TP9;2013;2013;5856;IndiceBioDiat;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
 03012450;TP9;2013;2013;2928;IBMR;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
 03012450;TP9;2013;2013;5910;MPCE phases A+B;18;1.0625;TRES_BON;1;
@@ -3486,6 +3534,12 @@ CODE_STATION;TYPO_NATIONALE;PERIODE_DEBUT;PERIODE_FIN;CODE_PAR;LIB_PAR;RESULTAT;
 03014130;P10;2024;2024;6951;MGCE 12 prelevements;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
 03014130;P10;2024;2024;7036;Indice Poisson Riviere;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
 03014130;P10;2024;2024;8353;Etat Biologique;NA;NA;NA;NA;
+03014130;P10;2025;2025;5856;IndiceBioDiat;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03014130;P10;2025;2025;2928;IBMR;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03014130;P10;2025;2025;5910;MPCE phases A+B;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03014130;P10;2025;2025;6951;MGCE 12 prelevements;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03014130;P10;2025;2025;7036;Indice Poisson Riviere;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03014130;P10;2025;2025;8353;Etat Biologique;NA;NA;NA;NA;
 03014170;TP10;2012;2012;5856;IndiceBioDiat;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
 03014170;TP10;2012;2012;2928;IBMR;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
 03014170;TP10;2012;2012;5910;MPCE phases A+B;16;1;TRES_BON;1;
@@ -3912,6 +3966,18 @@ CODE_STATION;TYPO_NATIONALE;PERIODE_DEBUT;PERIODE_FIN;CODE_PAR;LIB_PAR;RESULTAT;
 03015000;P10;2023;2023;6951;MGCE 12 prelevements;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
 03015000;P10;2023;2023;7036;Indice Poisson Riviere;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
 03015000;P10;2023;2023;8353;Etat Biologique;NA;NA;TRES_BON;1;
+03015000;P10;2024;2024;5856;IndiceBioDiat;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03015000;P10;2024;2024;2928;IBMR;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03015000;P10;2024;2024;5910;MPCE phases A+B;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03015000;P10;2024;2024;6951;MGCE 12 prelevements;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03015000;P10;2024;2024;7036;Indice Poisson Riviere;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03015000;P10;2024;2024;8353;Etat Biologique;NA;NA;NA;NA;
+03015000;P10;2025;2025;5856;IndiceBioDiat;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03015000;P10;2025;2025;2928;IBMR;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03015000;P10;2025;2025;5910;MPCE phases A+B;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03015000;P10;2025;2025;6951;MGCE 12 prelevements;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03015000;P10;2025;2025;7036;Indice Poisson Riviere;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03015000;P10;2025;2025;8353;Etat Biologique;NA;NA;NA;NA;
 03015520;TP10;2013;2013;5856;IndiceBioDiat;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
 03015520;TP10;2013;2013;2928;IBMR;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
 03015520;TP10;2013;2013;5910;MPCE phases A+B;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
@@ -4182,6 +4248,12 @@ CODE_STATION;TYPO_NATIONALE;PERIODE_DEBUT;PERIODE_FIN;CODE_PAR;LIB_PAR;RESULTAT;
 03017000;M10;2024;2024;6951;MGCE 12 prelevements;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
 03017000;M10;2024;2024;7036;Indice Poisson Riviere;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
 03017000;M10;2024;2024;8353;Etat Biologique;NA;NA;NA;NA;
+03017000;M10;2025;2025;5856;IndiceBioDiat;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03017000;M10;2025;2025;2928;IBMR;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03017000;M10;2025;2025;5910;MPCE phases A+B;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03017000;M10;2025;2025;6951;MGCE 12 prelevements;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03017000;M10;2025;2025;7036;Indice Poisson Riviere;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03017000;M10;2025;2025;8353;Etat Biologique;NA;NA;NA;NA;
 03017900;M9;1985;1985;5856;IndiceBioDiat;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
 03017900;M9;1985;1985;2928;IBMR;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
 03017900;M9;1985;1985;5910;MPCE phases A+B;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
@@ -4416,6 +4488,18 @@ CODE_STATION;TYPO_NATIONALE;PERIODE_DEBUT;PERIODE_FIN;CODE_PAR;LIB_PAR;RESULTAT;
 03017900;M9;2023;2023;6951;MGCE 12 prelevements;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
 03017900;M9;2023;2023;7036;Indice Poisson Riviere;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
 03017900;M9;2023;2023;8353;Etat Biologique;NA;NA;TRES_BON;1;
+03017900;M9;2024;2024;5856;IndiceBioDiat;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03017900;M9;2024;2024;2928;IBMR;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03017900;M9;2024;2024;5910;MPCE phases A+B;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03017900;M9;2024;2024;6951;MGCE 12 prelevements;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03017900;M9;2024;2024;7036;Indice Poisson Riviere;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03017900;M9;2024;2024;8353;Etat Biologique;NA;NA;NA;NA;
+03017900;M9;2025;2025;5856;IndiceBioDiat;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03017900;M9;2025;2025;2928;IBMR;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03017900;M9;2025;2025;5910;MPCE phases A+B;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03017900;M9;2025;2025;6951;MGCE 12 prelevements;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03017900;M9;2025;2025;7036;Indice Poisson Riviere;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03017900;M9;2025;2025;8353;Etat Biologique;NA;NA;NA;NA;
 03018242;TP9;1998;1998;5856;IndiceBioDiat;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
 03018242;TP9;1998;1998;2928;IBMR;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
 03018242;TP9;1998;1998;5910;MPCE phases A+B;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
@@ -4764,6 +4848,12 @@ CODE_STATION;TYPO_NATIONALE;PERIODE_DEBUT;PERIODE_FIN;CODE_PAR;LIB_PAR;RESULTAT;
 03018675;P9;2024;2024;6951;MGCE 12 prelevements;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
 03018675;P9;2024;2024;7036;Indice Poisson Riviere;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
 03018675;P9;2024;2024;8353;Etat Biologique;NA;NA;NA;NA;
+03018675;P9;2025;2025;5856;IndiceBioDiat;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03018675;P9;2025;2025;2928;IBMR;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03018675;P9;2025;2025;5910;MPCE phases A+B;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03018675;P9;2025;2025;6951;MGCE 12 prelevements;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03018675;P9;2025;2025;7036;Indice Poisson Riviere;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03018675;P9;2025;2025;8353;Etat Biologique;NA;NA;NA;NA;
 03018791;P9;2011;2011;5856;IndiceBioDiat;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
 03018791;P9;2011;2011;2928;IBMR;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
 03018791;P9;2011;2011;5910;MPCE phases A+B;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
@@ -5694,6 +5784,18 @@ CODE_STATION;TYPO_NATIONALE;PERIODE_DEBUT;PERIODE_FIN;CODE_PAR;LIB_PAR;RESULTAT;
 03020650;P9;2023;2023;6951;MGCE 12 prelevements;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
 03020650;P9;2023;2023;7036;Indice Poisson Riviere;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
 03020650;P9;2023;2023;8353;Etat Biologique;NA;NA;TRES_BON;1;
+03020650;P9;2024;2024;5856;IndiceBioDiat;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03020650;P9;2024;2024;2928;IBMR;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03020650;P9;2024;2024;5910;MPCE phases A+B;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03020650;P9;2024;2024;6951;MGCE 12 prelevements;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03020650;P9;2024;2024;7036;Indice Poisson Riviere;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03020650;P9;2024;2024;8353;Etat Biologique;NA;NA;NA;NA;
+03020650;P9;2025;2025;5856;IndiceBioDiat;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03020650;P9;2025;2025;2928;IBMR;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03020650;P9;2025;2025;5910;MPCE phases A+B;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03020650;P9;2025;2025;6951;MGCE 12 prelevements;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03020650;P9;2025;2025;7036;Indice Poisson Riviere;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03020650;P9;2025;2025;8353;Etat Biologique;NA;NA;NA;NA;
 03020708;TP9;2011;2011;5856;IndiceBioDiat;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
 03020708;TP9;2011;2011;2928;IBMR;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
 03020708;TP9;2011;2011;5910;MPCE phases A+B;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
@@ -6324,6 +6426,12 @@ CODE_STATION;TYPO_NATIONALE;PERIODE_DEBUT;PERIODE_FIN;CODE_PAR;LIB_PAR;RESULTAT;
 03022000;P10;2024;2024;6951;MGCE 12 prelevements;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
 03022000;P10;2024;2024;7036;Indice Poisson Riviere;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
 03022000;P10;2024;2024;8353;Etat Biologique;NA;NA;NA;NA;
+03022000;P10;2025;2025;5856;IndiceBioDiat;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03022000;P10;2025;2025;2928;IBMR;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03022000;P10;2025;2025;5910;MPCE phases A+B;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03022000;P10;2025;2025;6951;MGCE 12 prelevements;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03022000;P10;2025;2025;7036;Indice Poisson Riviere;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03022000;P10;2025;2025;8353;Etat Biologique;NA;NA;NA;NA;
 03022445;P9;2008;2008;5856;IndiceBioDiat;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
 03022445;P9;2008;2008;2928;IBMR;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
 03022445;P9;2008;2008;5910;MPCE phases A+B;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
@@ -7332,6 +7440,12 @@ CODE_STATION;TYPO_NATIONALE;PERIODE_DEBUT;PERIODE_FIN;CODE_PAR;LIB_PAR;RESULTAT;
 03043450;TP9;2024;2024;6951;MGCE 12 prelevements;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
 03043450;TP9;2024;2024;7036;Indice Poisson Riviere;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
 03043450;TP9;2024;2024;8353;Etat Biologique;NA;NA;NA;NA;
+03043450;TP9;2025;2025;5856;IndiceBioDiat;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03043450;TP9;2025;2025;2928;IBMR;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03043450;TP9;2025;2025;5910;MPCE phases A+B;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03043450;TP9;2025;2025;6951;MGCE 12 prelevements;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03043450;TP9;2025;2025;7036;Indice Poisson Riviere;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03043450;TP9;2025;2025;8353;Etat Biologique;NA;NA;NA;NA;
 03044000;P9;2012;2012;5856;IndiceBioDiat;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
 03044000;P9;2012;2012;2928;IBMR;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
 03044000;P9;2012;2012;5910;MPCE phases A+B;18;1.0625;TRES_BON;1;
@@ -8118,6 +8232,12 @@ CODE_STATION;TYPO_NATIONALE;PERIODE_DEBUT;PERIODE_FIN;CODE_PAR;LIB_PAR;RESULTAT;
 03048000;TG9;2023;2023;6951;MGCE 12 prelevements;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
 03048000;TG9;2023;2023;7036;Indice Poisson Riviere;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
 03048000;TG9;2023;2023;8353;Etat Biologique;NA;NA;NA;NA;
+03048000;TG9;2024;2024;5856;IndiceBioDiat;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03048000;TG9;2024;2024;2928;IBMR;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03048000;TG9;2024;2024;5910;MPCE phases A+B;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03048000;TG9;2024;2024;6951;MGCE 12 prelevements;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03048000;TG9;2024;2024;7036;Indice Poisson Riviere;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03048000;TG9;2024;2024;8353;Etat Biologique;NA;NA;NA;NA;
 03048290;TP9;2012;2012;5856;IndiceBioDiat;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
 03048290;TP9;2012;2012;2928;IBMR;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
 03048290;TP9;2012;2012;5910;MPCE phases A+B;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
@@ -11970,6 +12090,24 @@ CODE_STATION;TYPO_NATIONALE;PERIODE_DEBUT;PERIODE_FIN;CODE_PAR;LIB_PAR;RESULTAT;
 03075000;TP9;2021;2021;6951;MGCE 12 prelevements;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
 03075000;TP9;2021;2021;7036;Indice Poisson Riviere;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
 03075000;TP9;2021;2021;8353;Etat Biologique;NA;NA;MOYEN;3;
+03075000;TP9;2022;2022;5856;IndiceBioDiat;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03075000;TP9;2022;2022;2928;IBMR;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03075000;TP9;2022;2022;5910;MPCE phases A+B;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03075000;TP9;2022;2022;6951;MGCE 12 prelevements;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03075000;TP9;2022;2022;7036;Indice Poisson Riviere;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03075000;TP9;2022;2022;8353;Etat Biologique;NA;NA;NA;NA;
+03075000;TP9;2023;2023;5856;IndiceBioDiat;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03075000;TP9;2023;2023;2928;IBMR;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03075000;TP9;2023;2023;5910;MPCE phases A+B;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03075000;TP9;2023;2023;6951;MGCE 12 prelevements;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03075000;TP9;2023;2023;7036;Indice Poisson Riviere;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03075000;TP9;2023;2023;8353;Etat Biologique;NA;NA;NA;NA;
+03075000;TP9;2024;2024;5856;IndiceBioDiat;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03075000;TP9;2024;2024;2928;IBMR;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03075000;TP9;2024;2024;5910;MPCE phases A+B;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03075000;TP9;2024;2024;6951;MGCE 12 prelevements;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03075000;TP9;2024;2024;7036;Indice Poisson Riviere;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03075000;TP9;2024;2024;8353;Etat Biologique;NA;NA;NA;NA;
 03075260;TP9;2011;2011;5856;IndiceBioDiat;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
 03075260;TP9;2011;2011;2928;IBMR;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
 03075260;TP9;2011;2011;5910;MPCE phases A+B;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
@@ -15768,6 +15906,12 @@ CODE_STATION;TYPO_NATIONALE;PERIODE_DEBUT;PERIODE_FIN;CODE_PAR;LIB_PAR;RESULTAT;
 03109000;G9;2023;2023;6951;MGCE 12 prelevements;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
 03109000;G9;2023;2023;7036;Indice Poisson Riviere;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
 03109000;G9;2023;2023;8353;Etat Biologique;NA;NA;NA;NA;
+03109000;G9;2024;2024;5856;IndiceBioDiat;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03109000;G9;2024;2024;2928;IBMR;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03109000;G9;2024;2024;5910;MPCE phases A+B;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03109000;G9;2024;2024;6951;MGCE 12 prelevements;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03109000;G9;2024;2024;7036;Indice Poisson Riviere;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03109000;G9;2024;2024;8353;Etat Biologique;NA;NA;NA;NA;
 03109019;TP9;2011;2011;5856;IndiceBioDiat;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
 03109019;TP9;2011;2011;2928;IBMR;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
 03109019;TP9;2011;2011;5910;MPCE phases A+B;9;0.5;MEDIOCRE;4;
@@ -18990,6 +19134,12 @@ CODE_STATION;TYPO_NATIONALE;PERIODE_DEBUT;PERIODE_FIN;CODE_PAR;LIB_PAR;RESULTAT;
 03118300;M9;2023;2023;6951;MGCE 12 prelevements;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
 03118300;M9;2023;2023;7036;Indice Poisson Riviere;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
 03118300;M9;2023;2023;8353;Etat Biologique;NA;NA;NA;NA;
+03118300;M9;2024;2024;5856;IndiceBioDiat;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03118300;M9;2024;2024;2928;IBMR;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03118300;M9;2024;2024;5910;MPCE phases A+B;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03118300;M9;2024;2024;6951;MGCE 12 prelevements;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03118300;M9;2024;2024;7036;Indice Poisson Riviere;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
+03118300;M9;2024;2024;8353;Etat Biologique;NA;NA;NA;NA;
 03118545;TP9;2016;2016;5856;IndiceBioDiat;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
 03118545;TP9;2016;2016;2928;IBMR;NA;NA;NA;NA;Aucunes donnees disponibles sur la periode d'evaluation definie
 03118545;TP9;2016;2016;5910;MPCE phases A+B;15;0.875;BON;2;
